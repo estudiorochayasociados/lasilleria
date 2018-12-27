@@ -1,13 +1,17 @@
 <?php
 $productos = new Clases\Productos();
-$imagenes  = new Clases\Imagenes();
-$zebra     = new Clases\Zebra_Image();
+$imagenes = new Clases\Imagenes();
+$zebra = new Clases\Zebra_Image();
 
-$cod       = $funciones->antihack_mysqli(isset($_GET["cod"]) ? $_GET["cod"] : '');
+$cod = $funciones->antihack_mysqli(isset($_GET["cod"]) ? $_GET["cod"] : '');
 $borrarImg = $funciones->antihack_mysqli(isset($_GET["borrarImg"]) ? $_GET["borrarImg"] : '');
 
 $productos->set("cod", $cod);
 $producto = $productos->view();
+
+$variable_1_explode = explode("||", $producto["variable1"]);
+$variable_2_explode = explode("||", $producto["variable2"]);
+
 $imagenes->set("cod", $producto["cod"]);
 $imagenes->set("link", "productos&accion=modificar");
 
@@ -17,20 +21,28 @@ $data = $categorias->list(array("area = 'productos'"));
 if ($borrarImg != '') {
     $imagenes->set("id", $borrarImg);
     $imagenes->delete();
-        $funciones->headerMove(URL . "/index.php?op=productos&accion=modificar&cod=$cod");
+    $funciones->headerMove(URL . "/index.php?op=productos&accion=modificar&cod=$cod");
 }
+
 
 if (isset($_POST["agregar"])) {
     $count = 0;
-    $cod   = $producto["cod"];
     $productos->set("id", $producto["id"]);
-    $productos->set("cod", $funciones->antihack_mysqli(isset($_POST["cod"]) ? $_POST["cod"] : ''));
     $productos->set("titulo", $funciones->antihack_mysqli(isset($_POST["titulo"]) ? $_POST["titulo"] : ''));
     $productos->set("cod_producto", $funciones->antihack_mysqli(isset($_POST["cod_producto"]) ? $_POST["cod_producto"] : ''));
     $productos->set("precio", $funciones->antihack_mysqli(isset($_POST["precio"]) ? $_POST["precio"] : ''));
     $productos->set("precioDescuento", $funciones->antihack_mysqli(isset($_POST["precioDescuento"]) ? $_POST["precioDescuento"] : ''));
     $productos->set("stock", $funciones->antihack_mysqli(isset($_POST["stock"]) ? $_POST["stock"] : ''));
     $productos->set("desarrollo", $funciones->antihack_mysqli(isset($_POST["desarrollo"]) ? $_POST["desarrollo"] : ''));
+
+    if (isset($_POST["variable1"])) {
+        $productos->set("variable1", mb_strtoupper(implode("||", isset($_POST["variable1"]) ? $_POST["variable1"] : '')));
+    }
+
+    if (isset($_POST["variable2"])) {
+        $productos->set("variable2", mb_strtoupper(implode("||", isset($_POST["variable2"]) ? $_POST["variable2"] : '')));
+    }
+
     $productos->set("categoria", $funciones->antihack_mysqli(isset($_POST["categoria"]) ? $_POST["categoria"] : ''));
     $productos->set("subcategoria", $funciones->antihack_mysqli(isset($_POST["subcategoria"]) ? $_POST["subcategoria"] : ''));
     $productos->set("keywords", $funciones->antihack_mysqli(isset($_POST["keywords"]) ? $_POST["keywords"] : ''));
@@ -41,23 +53,23 @@ if (isset($_POST["agregar"])) {
 
     foreach ($_FILES['files']['name'] as $f => $name) {
         $imgInicio = $_FILES["files"]["tmp_name"][$f];
-        $tucadena  = $_FILES["files"]["name"][$f];
-        $partes    = explode(".", $tucadena);
-        $dom       = (count($partes) - 1);
-        $dominio   = $partes[$dom];
-        $prefijo   = substr(md5(uniqid(rand())), 0, 10);
+        $tucadena = $_FILES["files"]["name"][$f];
+        $partes = explode(".", $tucadena);
+        $dom = (count($partes) - 1);
+        $dominio = $partes[$dom];
+        $prefijo = substr(md5(uniqid(rand())), 0, 10);
         if ($dominio != '') {
             $destinoFinal = "../assets/archivos/" . $prefijo . "." . $dominio;
             move_uploaded_file($imgInicio, $destinoFinal);
             chmod($destinoFinal, 0777);
             $destinoRecortado = "../assets/archivos/recortadas/a_" . $prefijo . "." . $dominio;
 
-            $zebra->source_path            = $destinoFinal;
-            $zebra->target_path            = $destinoRecortado;
-            $zebra->jpeg_quality           = 80;
-            $zebra->preserve_aspect_ratio  = true;
+            $zebra->source_path = $destinoFinal;
+            $zebra->target_path = $destinoRecortado;
+            $zebra->jpeg_quality = 80;
+            $zebra->preserve_aspect_ratio = true;
             $zebra->enlarge_smaller_images = true;
-            $zebra->preserve_time          = true;
+            $zebra->preserve_time = true;
 
             if ($zebra->resize(800, 700, ZEBRA_IMAGE_NOT_BOXED)) {
                 unlink($destinoFinal);
@@ -81,69 +93,114 @@ if (isset($_POST["agregar"])) {
     <hr/>
     <form method="post" class="row" enctype="multipart/form-data">
         <label class="col-md-4">Título:<br/>
-            <input type="text" name="titulo" value="<?=$producto["titulo"]?>">
+            <input type="text" name="titulo" value="<?= $producto["titulo"] ?>">
         </label>
         <label class="col-md-4">Categoría:<br/>
             <select name="categoria">
-               <?php
+                <?php
                 foreach ($data as $categoria) {
-                    if($producto["categoria"] == $categoria["cod"]) {
-                        echo "<option value='".$categoria["cod"]."' selected>".$categoria["titulo"]."</option>";
+                    if ($producto["categoria"] == $categoria["cod"]) {
+                        echo "<option value='" . $categoria["cod"] . "' selected>" . $categoria["titulo"] . "</option>";
                     } else {
-                        echo "<option value='".$categoria["cod"]."'>".$categoria["titulo"]."</option>";
-                    } 
+                        echo "<option value='" . $categoria["cod"] . "'>" . $categoria["titulo"] . "</option>";
+                    }
                 }
                 ?>
             </select>
         </label>
         <label class="col-md-4">Stock:<br/>
-            <input type="number" name="stock" value="<?=$producto["stock"]?>">
+            <input type="number" name="stock" value="<?= $producto["stock"] ?>">
         </label>
         <div class="clearfix"></div>
         <label class="col-md-3">Código:<br/>
-            <input type="text" name="cod_producto" value="<?=$producto["cod_producto"]?>">
+            <input type="text" name="cod_producto" value="<?= $producto["cod_producto"] ?>">
         </label>
         <label class="col-md-3">Precio:<br/>
-            <input type="text" name="precio" value="<?=$producto["precio"]?>">
+            <input type="text" name="precio" value="<?= $producto["precio"] ?>">
         </label>
         <label class="col-md-3">Precio Descuento:<br/>
-            <input type="text" name="precioDescuento" value="<?=$producto["precioDescuento"]?>">
+            <input type="text" name="precioDescuento" value="<?= $producto["precioDescuento"] ?>">
         </label>
         <label class="col-md-3">Url:<br/>
-            <input type="text" name="url" value="<?=$producto["url"]?>" id="url">
+            <input type="text" name="url" value="<?= $producto["url"] ?>" id="url">
         </label>
-        <div class="clearfix"></div>
+        <div class="mt-10 col-md-12">
+            Telas / Cuerinas
+            <button type="button" class="ml-10 mb-5 btn btn-info pull-right" onclick="agregar_input('variaciones1Input','variable1')"> +</button>
+            <div class="">
+                <div id="variaciones1Input" class="row">
+                    <?php
+                    if (count($variable_1_explode) >= 1) {
+                        foreach ($variable_1_explode as $var1) {
+                            $cod = rand(0, 999999999);
+                            if ($var1 != '') {
+                                ?>
+                                <div class="col-md-3 input-group" id="<?= $cod ?>"><input type="text" value="<?= $var1 ?>" class="form-control mb-10 mr-10" name="variable1[]">
+                                    <div class="input-group-addon"><a href="#" onclick="$('#<?= $cod ?>').remove()" class="btn btn-danger"> - </a></div>
+                                </div>
+                                <?php
+                            }
+                        }
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+        <div class="mt-10 col-md-12">
+            Lustres
+            <button type="button" class="ml-10 mb-5 btn btn-info pull-right" onclick="agregar_input('variaciones2Input','variable2')"> +</button>
+            <div class="">
+                <div id="variaciones2Input" class="row">
+                    <?php
+                    if (count($variable_2_explode) >= 1) {
+                        foreach ($variable_2_explode as $var2) {
+                            $cod = rand(0, 999999999);
+                            if ($var2 != '') {
+                                ?>
+                                <div class="col-md-3 input-group" id="<?= $cod ?>"><input type="text" value="<?= $var2 ?>" class="form-control mb-10 mr-10" name="variable2[]">
+                                    <div class="input-group-addon"><a href="#" onclick="$('#<?= $cod ?>').remove()" class="btn btn-danger"> - </a></div>
+                                </div>
+                                <?php
+                            }
+                        }
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
         <label class="col-md-12">Desarrollo:<br/>
-            <textarea name="desarrollo" class="ckeditorTextarea"><?=$producto["desarrollo"]?></textarea>
+            <textarea name="desarrollo" class="ckeditorTextarea"><?= $producto["desarrollo"] ?></textarea>
         </label>
         <div class="clearfix"></div>
         <label class="col-md-12">Palabras claves dividas por ,<br/>
-            <input type="text" name="keywords"  value="<?=$producto["keywords"]?>">
+            <input type="text" name="keywords" value="<?= $producto["keywords"] ?>">
         </label>
         <label class="col-md-12">Descripción breve<br/>
-            <textarea name="description"><?=$producto["description"]?></textarea>
+            <textarea name="description"><?= $producto["description"] ?></textarea>
         </label>
         <br/>
         <div class="col-md-12">
-           <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" id="meli">
-            <label class="form-check-label" for="meli">¿Publicar en MercadoLibre?</label>
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="meli">
+                <label class="form-check-label" for="meli">¿Publicar en MercadoLibre?</label>
+            </div>
         </div>
-    </div>
-    <br/>
-    <div class="col-md-12">
-        <div class="row">
-            <?php
-            $imagenes->imagenesAdmin();
-            ?>
+        <br/>
+        <div class="col-md-12">
+            <div class="row">
+                <?php
+                $imagenes->imagenesAdmin();
+                ?>
+            </div>
         </div>
-    </div>
-    <label class="col-md-7">Imágenes:<br/>
-        <input type="file" id="file" name="files[]" multiple="multiple" accept="image/*" />
-    </label>
-    <br/>
-    <div class="clearfix"><br/></div>
-    <div class="col-md-12">
-        <input type="submit" class="btn btn-primary" name="agregar" value="Modificar Productos" />
-    </div>
+        <label class="col-md-7">Imágenes:<br/>
+            <input type="file" id="file" name="files[]" multiple="multiple" accept="image/*"/>
+        </label>
+        <br/>
+        <div class="clearfix"><br/></div>
+        <div class="col-md-12">
+            <input type="submit" class="btn btn-primary" name="agregar" value="Modificar Productos"/>
+        </div>
 </div>

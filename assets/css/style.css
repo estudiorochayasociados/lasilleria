@@ -2053,7 +2053,7 @@ textarea.form-control:-ms-input-placeholder {
 }
 
 .ps-select button.btn.dropdown-toggle.btn-default {
-  height: 50px;
+  height: 30px;
   border: solid 1px #979797;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
@@ -4174,6 +4174,7 @@ textarea.form-control:-ms-input-placeholder {
 .ps-product {
   position: relative;
   margin-bottom: 50px;
+  min-height: 350px;
 }
 
 .ps-product:before {
@@ -4445,7 +4446,6 @@ textarea.form-control:-ms-input-placeholder {
   top: 100%;
   left: 0;
   width: 100%;
-  padding: 25px 0;
   z-index: 1000;
   visibility: hidden;
   opacity: 0;
@@ -5506,7 +5506,7 @@ textarea.form-control:-ms-input-placeholder {
 }
 
 .ps-hero {
-  padding: 90px 0;
+  padding: 40px 0;
 }
 
 .ps-hero h3 {
@@ -7003,7 +7003,7 @@ svg {
 }
 
 .ps-checkout__order > footer .paypal {
-  padding: 10px 30px;
+  padding: 0px 30px;
 }
 
 .ps-checkout__order > footer .paypal .ps-btn {
@@ -8422,6 +8422,7 @@ svg {
 .menu {
   display: inline-block;
   vertical-align: top;
+  float:right;
 }
 
 .menu::after {
@@ -8433,7 +8434,6 @@ svg {
 .menu > li {
   position: relative;
   display: inline-block;
-  float: left;
   margin-right: 10px;
 }
 
@@ -8559,6 +8559,7 @@ svg {
 @media (max-width: 1199px) {
   .menu {
     display: block;
+    float:none !important;
   }
   .menu > li {
     display: block;
@@ -9811,3 +9812,9 @@ html .bg--parallax {
 }
 
 /*# sourceMappingURL=style.css.map */
+
+
+
+.ps-hero {
+    background:#e1e1e1;
+}

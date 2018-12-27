@@ -39,7 +39,7 @@ class Carrito
             array_push($_SESSION["carrito"], $add);
         } else {
             for ($i = 0; $i < count($_SESSION["carrito"]); $i++) {
-                if ($_SESSION["carrito"][$i]["id"] == $this->id) {
+                if ($_SESSION["carrito"][$i]["id"] == $this->id && $_SESSION["carrito"][$i]["opciones"] == $this->opciones) {
                     $condition = $i;
                 }
             }
@@ -62,11 +62,11 @@ class Carrito
         }
     }
 
-    public function precioFinal()
+    public function precio_total()
     {
         $precio = 0;
         for ($i = 0; $i < count($_SESSION["carrito"]); $i++) {
-            $precio += $_SESSION["carrito"][$i]["precio"];
+            $precio += ($_SESSION["carrito"][$i]["precio"]*$_SESSION["carrito"][$i]["cantidad"]);
         }
         return $precio;
     }

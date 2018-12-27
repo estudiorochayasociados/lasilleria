@@ -1,15 +1,24 @@
 <?php
 $productos = new Clases\Productos();
-$imagenes  = new Clases\Imagenes();
-$zebra     = new Clases\Zebra_Image();
+$imagenes = new Clases\Imagenes();
+$zebra = new Clases\Zebra_Image();
 
 $categorias = new Clases\Categorias();
+$contenidos = new Clases\Contenidos();
+
+$contenidos->set("cod", "CUERINA/TELAS");
+$telas = $contenidos->view();
+$telas = explode("||", strip_tags($telas["contenido"]));
+
+$contenidos->set("cod", "LUSTRES");
+$lustre = $contenidos->view();
+$lustre = explode("||", strip_tags($lustre["contenido"]));
+
 $data = $categorias->list(array("area = 'productos'"));
 
 if (isset($_POST["agregar"])) {
     $count = 0;
-    $cod   = substr(md5(uniqid(rand())), 0, 10);
-
+    $cod = substr(md5(uniqid(rand())), 0, 10);
     $productos->set("cod", $funciones->antihack_mysqli(isset($cod) ? $cod : ''));
     $productos->set("titulo", $funciones->antihack_mysqli(isset($_POST["titulo"]) ? $_POST["titulo"] : ''));
     $productos->set("cod_producto", $funciones->antihack_mysqli(isset($_POST["cod_producto"]) ? $_POST["cod_producto"] : ''));
@@ -17,6 +26,15 @@ if (isset($_POST["agregar"])) {
     $productos->set("precioDescuento", $funciones->antihack_mysqli(isset($_POST["precioDescuento"]) ? $_POST["precioDescuento"] : ''));
     $productos->set("stock", $funciones->antihack_mysqli(isset($_POST["stock"]) ? $_POST["stock"] : ''));
     $productos->set("desarrollo", $funciones->antihack_mysqli(isset($_POST["desarrollo"]) ? $_POST["desarrollo"] : ''));
+
+    if (isset($_POST["variable1"])) {
+        $productos->set("variable1", mb_strtoupper(implode("||", isset($_POST["variable1"]) ? $_POST["variable1"] : '')));
+    }
+
+    if (isset($_POST["variable2"])) {
+        $productos->set("variable2", mb_strtoupper(implode("||", isset($_POST["variable2"]) ? $_POST["variable2"] : '')));
+    }
+
     $productos->set("categoria", $funciones->antihack_mysqli(isset($_POST["categoria"]) ? $_POST["categoria"] : ''));
     $productos->set("subcategoria", $funciones->antihack_mysqli(isset($_POST["subcategoria"]) ? $_POST["subcategoria"] : ''));
     $productos->set("keywords", $funciones->antihack_mysqli(isset($_POST["keywords"]) ? $_POST["keywords"] : ''));
@@ -27,13 +45,13 @@ if (isset($_POST["agregar"])) {
 
     foreach ($_FILES['files']['name'] as $f => $name) {
         $imgInicio = $_FILES["files"]["tmp_name"][$f];
-        $tucadena  = $_FILES["files"]["name"][$f];
-        $partes    = explode(".", $tucadena);
-        $dom       = (count($partes) - 1);
-        $dominio   = $partes[$dom];
-        $prefijo   = substr(md5(uniqid(rand())), 0, 10);
+        $tucadena = $_FILES["files"]["name"][$f];
+        $partes = explode(".", $tucadena);
+        $dom = (count($partes) - 1);
+        $dominio = $partes[$dom];
+        $prefijo = substr(md5(uniqid(rand())), 0, 10);
         if ($dominio != '') {
-            $destinoFinal     = "../assets/archivos/" . $prefijo . "." . $dominio;
+            $destinoFinal = "../assets/archivos/" . $prefijo . "." . $dominio;
             move_uploaded_file($imgInicio, $destinoFinal);
             chmod($destinoFinal, 0777);
             $destinoRecortado = "../assets/archivos/recortadas/a_" . $prefijo . "." . $dominio;
@@ -70,15 +88,15 @@ if (isset($_POST["agregar"])) {
     <form method="post" class="row" enctype="multipart/form-data">
         <label class="col-md-4">
             Título:<br/>
-            <input type="text" name="titulo">
+            <input type="text" name="titulo" required>
         </label>
         <label class="col-md-4">
             Categoría:<br/>
             <select name="categoria">
-                <option value="" disabled selected>-- categorías --</option> 
+                <option value="" disabled selected>-- categorías --</option>
                 <?php
                 foreach ($data as $categoria) {
-                    echo "<option value='".$categoria["cod"]."'>".$categoria["titulo"]."</option>";
+                    echo "<option value='" . $categoria["cod"] . "'>" . $categoria["titulo"] . "</option>";
                 }
                 ?>
             </select>
@@ -95,7 +113,7 @@ if (isset($_POST["agregar"])) {
         </label>
         <label class="col-md-3">
             Precio:<br/>
-            <input type="text" name="precio">
+            <input type="text" name="precio" required>
         </label>
         <label class="col-md-3">
             Precio Descuento:<br/>
@@ -105,6 +123,46 @@ if (isset($_POST["agregar"])) {
             Url:<br/>
             <input type="text" name="url" id="url">
         </label>
+        <div class="mt-10 col-md-12">
+            Telas/Cuerinas
+            <button type="button" class="ml-10 mb-5 btn btn-info pull-right" onclick="agregar_input('variaciones1Input','variable1')"> +</button>
+            <div class="">
+                <div id="variaciones1Input" class="row">
+                    <?php
+                    foreach ($telas as $var1) {
+                        $cod = rand(0, 999999999);
+                        if ($var1 != '') {
+                            ?>
+                            <div class="col-md-3 input-group" id="<?= $cod ?>"><input type="text" value="<?= $var1 ?>" class="form-control mb-10 mr-10" name="variable1[]">
+                                <div class="input-group-addon"><a href="#" onclick="$('#<?= $cod ?>').remove()" class="btn btn-danger"> - </a></div>
+                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+        <div class="mt-10 col-md-12">
+            Lustres
+            <button type="button" class="ml-10 mb-5 btn btn-info pull-right" onclick="agregar_input('variaciones2Input','variable2')"> +</button>
+            <div class="">
+                <div id="variaciones2Input" class="row">
+                    <?php
+                    foreach ($lustre as $var1) {
+                        $cod = rand(0, 999999999);
+                        if ($var1 != '') {
+                            ?>
+                            <div class="col-md-3 input-group" id="<?= $cod ?>"><input type="text" value="<?= $var1 ?>" class="form-control mb-10 mr-10" name="variable2[]">
+                                <div class="input-group-addon"><a href="#" onclick="$('#<?= $cod ?>').remove()" class="btn btn-danger"> - </a></div>
+                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
         <div class="clearfix">
         </div>
         <label class="col-md-12">
@@ -132,16 +190,16 @@ if (isset($_POST["agregar"])) {
                 </label>
             </div>
         </div>
-        
+
         <label class="col-md-7">
             Imágenes:<br/>
-            <input type="file" id="file" name="files[]" multiple="multiple" accept="image/*" />
+            <input type="file" id="file" name="files[]" multiple="multiple" accept="image/*"/>
         </label>
         <div class="clearfix">
         </div>
         <br/>
         <div class="col-md-12">
-            <input type="submit" class="btn btn-primary" name="agregar" value="Crear Productos" />
+            <input type="submit" class="btn btn-primary" name="agregar" value="Crear Productos"/>
         </div>
     </form>
 </div>

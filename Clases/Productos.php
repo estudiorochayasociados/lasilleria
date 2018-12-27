@@ -17,6 +17,16 @@ class Productos
     public $subcategoria;
     public $keywords;
     public $description;
+    public $variable1;
+    public $variable2;
+    public $variable3;
+    public $variable4;
+    public $variable5;
+    public $variable6;
+    public $variable7;
+    public $variable8;
+    public $variable9;
+    public $variable10;
     public $fecha;
     public $meli;
     public $url;
@@ -40,7 +50,7 @@ class Productos
 
     public function add()
     {
-        $sql   = "INSERT INTO `productos`(`cod`, `titulo`,`cod_producto`, `precio`, `precioDescuento`, `stock`, `desarrollo`, `categoria`, `subcategoria`, `keywords`, `description`, `fecha`, `meli`, `url`) VALUES ('{$this->cod}', '{$this->titulo}','{$this->cod_producto}', '{$this->precio}', '{$this->precioDescuento}', '{$this->stock}', '{$this->desarrollo}', '{$this->categoria}', '{$this->subcategoria}', '{$this->keywords}', '{$this->description}', '{$this->fecha}', '{$this->meli}', '{$this->url}')";
+        $sql = "INSERT INTO `productos`(`cod`, `titulo`,`cod_producto`, `precio`, `precioDescuento`, `stock`, `desarrollo`, `categoria`, `subcategoria`, `keywords`, `description`,`variable1`,`variable2`,`variable3`, `fecha`, `meli`, `url`) VALUES ('{$this->cod}', '{$this->titulo}','{$this->cod_producto}', '{$this->precio}', '{$this->precioDescuento}', '{$this->stock}', '{$this->desarrollo}', '{$this->categoria}', '{$this->subcategoria}', '{$this->keywords}', '{$this->description}','{$this->variable1}','{$this->variable2}','{$this->variable3}', '{$this->fecha}', '{$this->meli}', '{$this->url}')";
         $query = $this->con->sql($sql);
         return $query;
     }
@@ -58,6 +68,9 @@ class Productos
         `categoria` = '{$this->categoria}',
         `subcategoria` = '{$this->subcategoria}',
         `keywords` = '{$this->keywords}',
+        `variable1` = '{$this->variable1}',
+        `variable2` = '{$this->variable2}',
+        `variable3` = '{$this->variable3}',
         `description` = '{$this->description}',
         `fecha` = '{$this->fecha}',
         `meli` = '{$this->meli}',
@@ -69,40 +82,21 @@ class Productos
 
     public function delete()
     {
-        $sql   = "DELETE FROM `productos` WHERE `cod`  = '{$this->cod}'";
+        $sql = "DELETE FROM `productos` WHERE `cod`  = '{$this->cod}'";
         $query = $this->con->sql($sql);
         return $query;
     }
 
     public function view()
     {
-        $sql   = "SELECT * FROM `productos` WHERE id = '{$this->id}' ||  cod = '{$this->cod}' ORDER BY id DESC";
+        $sql = "SELECT * FROM `productos` WHERE id = '{$this->id}' ||  cod = '{$this->cod}' ORDER BY id DESC";
         $notas = $this->con->sqlReturn($sql);
-        $row   = mysqli_fetch_assoc($notas);
+        $row = mysqli_fetch_assoc($notas);
         return $row;
     }
 
-    function list($filter) {
-        $array = array();
-        if (is_array($filter)) {
-            $filterSql = "WHERE ";
-            $filterSql .= implode(" AND ", $filter);
-        } else {
-            $filterSql = '';
-        }
-
-        $sql   = "SELECT * FROM `productos` $filterSql  ORDER BY id DESC";
-        $notas = $this->con->sqlReturn($sql);
-
-        if ($notas) {
-            while ($row = mysqli_fetch_assoc($notas)) {
-                $array[] = $row;
-            }
-            return $array;
-        }
-    }
-
-    function listWithOps($filter,$order,$limit) {
+    function list($filter, $order, $limit)
+    {
         $array = array();
         if (is_array($filter)) {
             $filterSql = "WHERE ";
@@ -124,16 +118,17 @@ class Productos
         }
 
         $sql = "SELECT * FROM `productos` $filterSql  ORDER BY $orderSql $limitSql";
-        $notas = $this->con->sqlReturn($sql); 
+        $notas = $this->con->sqlReturn($sql);
         if ($notas) {
             while ($row = mysqli_fetch_assoc($notas)) {
                 $array[] = $row;
             }
-            return $array ;
-        } 
+            return $array;
+        }
     }
 
-    function paginador($filter,$cantidad) {
+    function paginador($filter, $cantidad)
+    {
         $array = array();
         if (is_array($filter)) {
             $filterSql = "WHERE ";
@@ -145,6 +140,6 @@ class Productos
         $contar = $this->con->sqlReturn($sql);
         $total = mysqli_num_rows($contar);
         $totalPaginas = $total / $cantidad;
-        return floor($totalPaginas);       
+        return floor($totalPaginas);
     }
 }

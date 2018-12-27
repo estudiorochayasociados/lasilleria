@@ -1,209 +1,101 @@
- <!-- PARTNERS -->
- <div id="sns_partners" class="wrap">
-                <div class="container">
-                    <div class="slider-wrap">
-                        <div class="partners_slider_in">
-                            <div id="partners_slider1" class="our_partners owl-carousel owl-theme owl-loaded" style="display: inline-block">
-                                <?php
-                                $galerias = new Clases\Galerias();
-                                $imgsFooter = new Clases\Imagenes();
-                                $galeriasData = $galerias->list('');
-                                foreach ($galeriasData as $gal) {
-                                    $imgsFooter->set("cod",$gal['cod']);
-                                    $imgFooter = $imgsFooter->view();    
-                                ?>
-                                    <div class="item">
-                                        <a class="banner11" href="#" target="_blank">
-                                            <img alt="" src="<?=URL. '/' . $imgFooter['ruta'] ?>">
-                                        </a>
-                                    </div>
-                                <?php
-                                }
-                                ?>
-                            </div>
+<footer class="ps-footer site-footer">
+    <div class="ps-footer__content">
+        <div class="ps-container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 ">
+                    <div class="ps-site-info site-info"><a class="ps-logo" href="index.html"><img src="<?= URL ?>/assets/images/logo.png" alt=""></a>
+                        <p>Furniture is a global shop destination for 20-somethings. We sell cutting-edge fashion and offer a wide variety of fashion-related content, making Furniture Store the hub of a thriving fashion community.</p>
+                        <div class="ps-site-info__contact">
+                            <h4>Contact Info</h4>
+                            <p>460 West 34th Street, 15th floor, New York</p>
+                            <p>(+84 ) 7534 9773, (+84 ) 874 548</p>
                         </div>
+                        <ul class="ps-social">
+                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+                        </ul>
                     </div>
                 </div>
-            <!-- AND PARTNERS -->
-
-           <!-- FOOTER MD LG -->
-            <div id="sns_footer" class="footer_style vesion2 wrap visible-md visible-lg">
-                <div id="sns_footer_top" class="footer">
-                    <div class="container">
-                        <div class="container_in">
-                            <div class="row">
-                                <div class="col-md-3 col-sm-12 col-xs-12 column0">
-                                    <div class="contact_us">
-                                        <h6>Contactanos</h6>
-                                        <ul class="fa-ul">
-                                            <li class="pd-right">
-                                                <i class="fa-li fa fw fa-home"> </i>
-                                                Las Malvinas 930 - San Francisco (CBA)
-                                            </li>
-                                            <li>
-                                                <i class="fa-li fa fw fa-phone"> </i>
-                                                <p>(03564) 438484</p>
-                                                <p>(03564) 443393</p>
-                                            </li>
-                                            <li>
-                                                <i class="fa-li fa fw fa-envelope"> </i>
-                                                <p>
-                                                    <a href="mailto:marketing@pintureriasariel.com.ar">marketing@pintureriasariel.com.ar</a>
-                                                </p>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <div class="col-phone-12 col-xs-6 col-sm-3 col-md-2 column column1">
-                                    <h6>Service</h6>
-                                    <ul>
-                                        <li>
-                                            <a href="#">rices & Currencies</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Secure Payment</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Delivery Times & Costs</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Returns & Exchanges</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">FAQ's</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="col-phone-12 col-xs-6 col-sm-3 col-md-2 column column2">
-                                    <h6>account</h6>
-                                    <ul>
-                                        <li>
-                                            <a href="#">My account</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Wishlist</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Order history</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Specials</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Gift vouchers</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="col-phone-12 col-xs-6 col-sm-3 col-md-2 column column3">
-                                    <h6>information</h6>
-                                    <ul>
-                                        <li>
-                                            <a href="#">My account</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Wishlist</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Order history</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Specials</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Gift vouchers</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="col-phone-12 col-xs-6 col-sm-3 col-md-3 column column4">
-                                    <div class="subcribe-footer">
-                                        <div class="block_border block-subscribe">
-                                            <div class="block_head">
-                                                <h6>Newsletter</h6>
-                                                <p>Register your email for news</p>
-                                            </div>
-                                            <form id="newsletter-validate-detail">
-                                                <div class="block_content">
-                                                    <div class="input-box">
-                                                        <div class="input_warp">
-                                                            <input id="newsletter" class="input-text required-entry validate-email" type="text" title="Sign up for our newsletter" placeholder="Your email here" name="email">
-                                                        </div>
-                                                        <div class="button_warp">
-                                                            <button class="button gfont" title="Subcribe" type="submit">
-                                                                <span>
-                                                                    <span>Subscribe</span>
-                                                                </span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 ">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 ">
+                            <div class="widget widget_footer widget_worktime">
+                                <h2 class="widget-title">Working Hour<span></span></h2>
+                                <p>Monday - Friday <br> 08:00 am - 08:30 pm</p>
+                                <p> ==== </p>
+                                <p>Satuday - Sunday <br> 10:00 am - 4:30 pm</p>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <div id="sns_footer_bottom" class="footer">
-                    <div class="container">
-                        <div class="row">
-                            <div class="bottom-pd1 col-sm-12">
-                                <div class="sns-copyright">
-                                    © 2018 Todos los derechos reservados, Pinturerías Ariel. Copyright by <a href="http://www.estudiorochayasoc.com" target="_blank">Estudio Rocha & Asociados</a>
-                                </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 ">
+                            <div class="ps-widget ps-widget--footer widget widget_footer">
+                                <h2 class="widget-title">Our Brand<span></span></h2>
+                                <ul class="ps-list--line">
+                                    <li><a href="#">DKNY</a></li>
+                                    <li><a href="#">Gucci</a></li>
+                                    <li><a href="#">Banana & Dolce</a></li>
+                                    <li><a href="#">Hermer</a></li>
+                                    <li><a href="#">Chanel</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 ">
+                            <div class="ps-widget ps-widget--footer widget widget_footer">
+                                <h2 class="widget-title">Your Account<span></span></h2>
+                                <ul class="ps-list--line">
+                                    <li><a href="#">Your account</a></li>
+                                    <li><a href="#">Newsletter</a></li>
+                                    <li><a href="#">Information</a></li>
+                                    <li><a href="#">Payment menthod</a></li>
+                                    <li><a href="#">Your wishlist</a></li>
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- AND FOOTER MD LG-->
-
-            <!-- FOOTER XS-->
-            <div id="sns_footer" class="footer_style vesion2 wrap visible-xs ">
-                <div id="sns_footer_top" class="footer">
-                    <div class="container">
-                        <div class="container_in">
-                            <div class="row">
-                                <div class="col-md-3 col-sm-12 col-xs-12 column0">
-                                    <div class="contact_us">
-                                        <h6>Contactanos</h6>
-                                        <ul class="fa-ul">
-                                            <li class="pd-right">
-                                                <i class="fa-li fa fw fa-home"> </i>
-                                                Las Malvinas 930 - San Francisco (CBA)
-                                            </li>
-                                            <li>
-                                                <i class="fa-li fa fw fa-phone"> </i>
-                                                <p>(03564) 438484</p>
-                                                <p>(03564) 443393</p>
-                                            </li>
-                                            <li>
-                                                <i class="fa-li fa fw fa-envelope"> </i>
-                                                <p>
-                                                    <a href="mailto:marketing@pintureriasariel.com.ar">marketing@pintureriasariel.com.ar</a>
-                                                </p>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        </div>
+    </div>
+    <div class="ps-footer__copyright">
+        <div class="ps-container">
+            <div class="row">
+                <div class="col-lg-8 col-md-7 col-sm-12 col-xs-12 ">
+                    <p>&copy; Copyright by <span>FURNITURE STORE</span>. Design by <a href="#">Alena Studio</a>.</p>
                 </div>
-
-                <div id="sns_footer_bottom" class="footer">
-                    <div class="container">
-                        <div class="row">
-                            <div class="bottom-pd1 col-sm-12">
-                                <div class="sns-copyright">
-                                    © 2018 Todos los derechos reservados, Pinturerías Ariel. Copyright by <a href="http://www.estudiorochayasoc.com" target="_blank">Estudio Rocha & Asociados</a>
-                                </div>
-                            </div>
-                        </div>
+                <div class="col-lg-4 col-md-5 col-sm-12 col-xs-12 ">
+                    <div class="ps-footer__payment-methods">
+                        <a href="#"><img src="<?= URL ?>/assets/images/payment-method/paypal.png" alt=""></a>
+                        <a href="#"><img src="<?= URL ?>/assets/images/payment-method/visa.png" alt=""></a>
+                        <a href="#"><img src="<?= URL ?>/assets/images/payment-method/master-card.png" alt=""></a>
                     </div>
                 </div>
             </div>
-            <!-- AND FOOTER MD LG-->
- </div>
+        </div>
+    </div>
+</footer>
+<div class="ps-loading">
+    <div class="loader ">
+        <div class="loader__item"></div>
+        <div class="loader__item"></div>
+        <div class="loader__item"></div>
+        <div class="loader__item"></div>
+        <div class="loader__item"></div>
+    </div>
+</div>
+<script src="<?= URL ?>/assets/plugins/jquery.min.js"></script>
+<script src="<?= URL ?>/assets/plugins/lightGallery-master/dist/js/lightgallery-all.min.js"></script>
+<script src="<?= URL ?>/assets/plugins/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="<?= URL ?>/assets/plugins/owl-carousel/owl.carousel.min.js"></script>
+<script src="<?= URL ?>/assets/plugins/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+<script src="<?= URL ?>/assets/plugins/jquery-bar-rating/dist/jquery.barrating.min.js"></script>
+<script src="<?= URL ?>/assets/plugins/imagesloaded.pkgd.js"></script>
+<script src="<?= URL ?>/assets/plugins/masonry.pkgd.min.js"></script>
+<script src="<?= URL ?>/assets/plugins/isotope.pkgd.min.js"></script>
+<script src="<?= URL ?>/assets/plugins/slick/slick/slick.min.js"></script>
+<script src="<?= URL ?>/assets/plugins/jquery.matchHeight-min.js"></script>
+<script src="<?= URL ?>/assets/plugins/elevatezoom/jquery.elevatezoom.js"></script>
+<script src="<?= URL ?>/assets/plugins/gmap3.min.js"></script>
+<script src="<?= URL ?>/assets/plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- Custom scripts-->
+<script src="<?= URL ?>/assets/js/main.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsUcTjt43mTheN9ruCsQVgBE-wgN6_AfY&amp;region=GB"></script>

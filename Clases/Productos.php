@@ -10,7 +10,9 @@ class Productos
     public $cod;
     public $titulo;
     public $precio;
-    public $precioDescuento;
+    public $precio_cuerina;
+    public $precio_telas;
+    public $precio_descuento;
     public $stock;
     public $desarrollo;
     public $categoria;
@@ -50,7 +52,7 @@ class Productos
 
     public function add()
     {
-        $sql = "INSERT INTO `productos`(`cod`, `titulo`,`cod_producto`, `precio`, `precioDescuento`, `stock`, `desarrollo`, `categoria`, `subcategoria`, `keywords`, `description`,`variable1`,`variable2`,`variable3`, `fecha`, `meli`, `url`) VALUES ('{$this->cod}', '{$this->titulo}','{$this->cod_producto}', '{$this->precio}', '{$this->precioDescuento}', '{$this->stock}', '{$this->desarrollo}', '{$this->categoria}', '{$this->subcategoria}', '{$this->keywords}', '{$this->description}','{$this->variable1}','{$this->variable2}','{$this->variable3}', '{$this->fecha}', '{$this->meli}', '{$this->url}')";
+        $sql = "INSERT INTO `productos`(`cod`, `titulo`,`cod_producto`, `precio`, `precio_cuerina`, `precio_telas`, `precio_descuento`, `stock`, `desarrollo`, `categoria`, `subcategoria`, `keywords`, `description`,`variable1`,`variable2`,`variable3`, `fecha`, `meli`, `url`) VALUES ('{$this->cod}', '{$this->titulo}','{$this->cod_producto}', '{$this->precio}','{$this->precio_cuerina}', '{$this->precio_telas}', '{$this->precio_descuento}', '{$this->stock}', '{$this->desarrollo}', '{$this->categoria}', '{$this->subcategoria}', '{$this->keywords}', '{$this->description}','{$this->variable1}','{$this->variable2}','{$this->variable3}', '{$this->fecha}', '{$this->meli}', '{$this->url}')";
         $query = $this->con->sql($sql);
         return $query;
     }
@@ -62,7 +64,9 @@ class Productos
         `titulo` = '{$this->titulo}',
         `precio` = '{$this->precio}',
         `cod_producto` = '{$this->cod_producto}',
-        `precioDescuento` = '{$this->precioDescuento}',
+        `precio_telas` = '{$this->precio_telas}',
+        `precio_cuerina` = '{$this->precio_cuerina}',
+        `precio_descuento` = '{$this->precio_descuento}',
         `stock` = '{$this->stock}',
         `desarrollo` = '{$this->desarrollo}',
         `categoria` = '{$this->categoria}',

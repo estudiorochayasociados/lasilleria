@@ -11,6 +11,7 @@ $producto = $productos->view();
 
 $variable_1_explode = explode("||", $producto["variable1"]);
 $variable_2_explode = explode("||", $producto["variable2"]);
+$variable_3_explode = explode("||", $producto["variable3"]);
 
 $imagenes->set("cod", $producto["cod"]);
 $imagenes->set("link", "productos&accion=modificar");
@@ -24,15 +25,17 @@ if ($borrarImg != '') {
     $funciones->headerMove(URL . "/index.php?op=productos&accion=modificar&cod=$cod");
 }
 
-
 if (isset($_POST["agregar"])) {
     $count = 0;
     $productos->set("id", $producto["id"]);
     $productos->set("titulo", $funciones->antihack_mysqli(isset($_POST["titulo"]) ? $_POST["titulo"] : ''));
     $productos->set("cod_producto", $funciones->antihack_mysqli(isset($_POST["cod_producto"]) ? $_POST["cod_producto"] : ''));
     $productos->set("precio", $funciones->antihack_mysqli(isset($_POST["precio"]) ? $_POST["precio"] : ''));
-    $productos->set("precioDescuento", $funciones->antihack_mysqli(isset($_POST["precioDescuento"]) ? $_POST["precioDescuento"] : ''));
+    $productos->set("precio_cuerina", $funciones->antihack_mysqli(isset($_POST["precio_cuerina"]) ? $_POST["precio_cuerina"] : ''));
+    $productos->set("precio_telas", $funciones->antihack_mysqli(isset($_POST["precio_telas"]) ? $_POST["precio_telas"] : ''));
+    $productos->set("precio_descuento", $funciones->antihack_mysqli(isset($_POST["precio_descuento"]) ? $_POST["precio_descuento"] : ''));
     $productos->set("stock", $funciones->antihack_mysqli(isset($_POST["stock"]) ? $_POST["stock"] : ''));
+    $productos->set("variable4", $funciones->antihack_mysqli(isset($_POST["peso"]) ? $_POST["peso"] : ''));
     $productos->set("desarrollo", $funciones->antihack_mysqli(isset($_POST["desarrollo"]) ? $_POST["desarrollo"] : ''));
 
     if (isset($_POST["variable1"])) {
@@ -42,6 +45,11 @@ if (isset($_POST["agregar"])) {
     if (isset($_POST["variable2"])) {
         $productos->set("variable2", mb_strtoupper(implode("||", isset($_POST["variable2"]) ? $_POST["variable2"] : '')));
     }
+
+    if (isset($_POST["variable3"])) {
+        $productos->set("variable3", mb_strtoupper(implode("||", isset($_POST["variable3"]) ? $_POST["variable3"] : '')));
+    }
+
 
     $productos->set("categoria", $funciones->antihack_mysqli(isset($_POST["categoria"]) ? $_POST["categoria"] : ''));
     $productos->set("subcategoria", $funciones->antihack_mysqli(isset($_POST["subcategoria"]) ? $_POST["subcategoria"] : ''));
@@ -92,10 +100,10 @@ if (isset($_POST["agregar"])) {
     <h4>Productos</h4>
     <hr/>
     <form method="post" class="row" enctype="multipart/form-data">
-        <label class="col-md-4">Título:<br/>
+        <label class="col-md-3">Título:<br/>
             <input type="text" name="titulo" value="<?= $producto["titulo"] ?>">
         </label>
-        <label class="col-md-4">Categoría:<br/>
+        <label class="col-md-3">Categoría:<br/>
             <select name="categoria">
                 <?php
                 foreach ($data as $categoria) {
@@ -108,8 +116,11 @@ if (isset($_POST["agregar"])) {
                 ?>
             </select>
         </label>
-        <label class="col-md-4">Stock:<br/>
+        <label class="col-md-3">Stock:<br/>
             <input type="number" name="stock" value="<?= $producto["stock"] ?>">
+        </label>
+        <label class="col-md-3">Peso:<br/>
+            <input type="number" name="peso" value="<?= $producto["peso"] ?>">
         </label>
         <div class="clearfix"></div>
         <label class="col-md-3">Código:<br/>
@@ -118,14 +129,14 @@ if (isset($_POST["agregar"])) {
         <label class="col-md-3">Precio:<br/>
             <input type="text" name="precio" value="<?= $producto["precio"] ?>">
         </label>
-        <label class="col-md-3">Precio Descuento:<br/>
-            <input type="text" name="precioDescuento" value="<?= $producto["precioDescuento"] ?>">
+        <label class="col-md-3">Precio Cuerina:<br/>
+            <input type="text" name="precio_cuerina" value="<?= $producto["precio_cuerina"] ?>">
         </label>
-        <label class="col-md-3">Url:<br/>
-            <input type="text" name="url" value="<?= $producto["url"] ?>" id="url">
+        <label class="col-md-3">Precio Telas:<br/>
+            <input type="text" name="precio_telas" value="<?= $producto["precio_telas"] ?>">
         </label>
         <div class="mt-10 col-md-12">
-            Telas / Cuerinas
+            Cuerinas
             <button type="button" class="ml-10 mb-5 btn btn-info pull-right" onclick="agregar_input('variaciones1Input','variable1')"> +</button>
             <div class="">
                 <div id="variaciones1Input" class="row">
@@ -147,17 +158,39 @@ if (isset($_POST["agregar"])) {
             </div>
         </div>
         <div class="mt-10 col-md-12">
-            Lustres
+            Telas
             <button type="button" class="ml-10 mb-5 btn btn-info pull-right" onclick="agregar_input('variaciones2Input','variable2')"> +</button>
             <div class="">
                 <div id="variaciones2Input" class="row">
                     <?php
-                    if (count($variable_2_explode) >= 1) {
+                    if (count($variable_2_explode) >= 2) {
                         foreach ($variable_2_explode as $var2) {
                             $cod = rand(0, 999999999);
                             if ($var2 != '') {
                                 ?>
                                 <div class="col-md-3 input-group" id="<?= $cod ?>"><input type="text" value="<?= $var2 ?>" class="form-control mb-10 mr-10" name="variable2[]">
+                                    <div class="input-group-addon"><a href="#" onclick="$('#<?= $cod ?>').remove()" class="btn btn-danger"> - </a></div>
+                                </div>
+                                <?php
+                            }
+                        }
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+        <div class="mt-10 col-md-12">
+            Lustres
+            <button type="button" class="ml-10 mb-5 btn btn-info pull-right" onclick="agregar_input('variaciones3Input','variable3')"> +</button>
+            <div class="">
+                <div id="variaciones3Input" class="row">
+                    <?php
+                    if (count($variable_3_explode) >= 1) {
+                        foreach ($variable_3_explode as $var3) {
+                            $cod = rand(0, 999999999);
+                            if ($var3 != '') {
+                                ?>
+                                <div class="col-md-3 input-group" id="<?= $cod ?>"><input type="text" value="<?= $var3 ?>" class="form-control mb-10 mr-10" name="variable3[]">
                                     <div class="input-group-addon"><a href="#" onclick="$('#<?= $cod ?>').remove()" class="btn btn-danger"> - </a></div>
                                 </div>
                                 <?php

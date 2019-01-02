@@ -30,9 +30,12 @@ class autoload
     public static function runAdmin()
     {
         session_start();
-        define('URLSITE',"http://".$_SERVER['HTTP_HOST']."/sanjosemuebles/admin");
+        define('URLSITE',"http://".$_SERVER['HTTP_HOST']."/sanjosemuebles");
         define('URL', "http://".$_SERVER['HTTP_HOST']."/sanjosemuebles/admin");
+        define('CANONICAL', "http://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]);
+
         require_once "../Clases/Zebra_Image.php";
+        require_once "../Clases/Meli.php";
         spl_autoload_register(
             function ($clase)
             {

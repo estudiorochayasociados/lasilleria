@@ -17,7 +17,8 @@ $carro = $carrito->return();
                 </div>
                 <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12 ">
                     <div class="header__actions">
-                        <a href="#">Login & Regiser</a>
+                        <a href="#" data-toggle="modal" data-target="#myModal">Iniciar sesión</a>
+                        <a href="<?= URL ?>/usuarios">Registro</a>
                     </div>
                 </div>
             </div>

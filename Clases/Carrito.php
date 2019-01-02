@@ -9,6 +9,7 @@ class Carrito
     public $titulo;
     public $cantidad;
     public $precio;
+    public $peso;
     public $opciones;
     private $con;
 
@@ -33,7 +34,7 @@ class Carrito
     {
         $condition = '';
 
-        $add = array('id' => $this->id, 'titulo' => $this->titulo, 'cantidad' => $this->cantidad, 'precio' => $this->precio, 'opciones' => $this->opciones);
+        $add = array('id' => $this->id, 'titulo' => $this->titulo, 'cantidad' => $this->cantidad, 'precio' => $this->precio,'peso' => $this->peso, 'opciones' => $this->opciones);
 
         if (count($_SESSION["carrito"]) == 0) {
             array_push($_SESSION["carrito"], $add);
@@ -61,6 +62,16 @@ class Carrito
             return $_SESSION["carrito"];
         }
     }
+
+    public function peso_final()
+    {
+        $peso = 0;
+        foreach ($_SESSION["carrito"] as $carrito) {
+            $peso += ($carrito["peso"]*$carrito["cantidad"]);
+        }
+        return $peso;
+    }
+
 
     public function precio_total()
     {

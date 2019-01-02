@@ -37,41 +37,55 @@ class Pedidos
 
     public function add()
     {
-        $sql   = "INSERT INTO `pedidos`(`cod`, `producto`,`cantidad`,`precio`, `estado`, `tipo`, `usuario`, `detalle`, `fecha`) VALUES ('{$this->cod}', '{$this->producto}','{$this->cantidad}','{$this->precio}', '{$this->estado}', '{$this->tipo}', '{$this->usuario}', '{$this->detalle}', '{$this->fecha}')";
+        $sql = "INSERT INTO `pedidos`(`cod`, `producto`,`cantidad`,`precio`, `estado`, `tipo`, `usuario`, `detalle`, `fecha`) VALUES ('{$this->cod}', '{$this->producto}','{$this->cantidad}','{$this->precio}', '{$this->estado}', '{$this->tipo}', '{$this->usuario}', '{$this->detalle}', '{$this->fecha}')";
         $query = $this->con->sql($sql);
         return $query;
     }
 
     public function edit()
     {
-        $sql   = "UPDATE `pedidos` SET  `producto`='{$this->producto}',`cantidad`='{$this->cantidad}',`precio`='{$this->precio}',`estado`='{$this->estado}',`tipo`='{$this->tipo}',`usuario`='{$this->usuario}',`detalle`='{$this->detalle}',`fecha`='{$this->fecha}' WHERE `id`='{$this->id}'";
+        $sql = "UPDATE `pedidos` SET  `producto`='{$this->producto}',`cantidad`='{$this->cantidad}',`precio`='{$this->precio}',`estado`='{$this->estado}',`tipo`='{$this->tipo}',`usuario`='{$this->usuario}',`detalle`='{$this->detalle}',`fecha`='{$this->fecha}' WHERE `id`='{$this->id}'";
         $query = $this->con->sql($sql);
         return $query;
     }
 
     public function cambiar_estado()
     {
-        $sql   = "UPDATE `pedidos` SET `estado`='{$this->estado}',`tipo`='{$this->tipo}',`usuario`='{$this->usuario}' WHERE `cod`='{$this->cod}'";
+        $sql = "UPDATE `pedidos` SET `estado`='{$this->estado}',`tipo`='{$this->tipo}',`usuario`='{$this->usuario}' WHERE `cod`='{$this->cod}'";
         $query = $this->con->sql($sql);
         return $query;
     }
 
     public function delete()
     {
-        $sql   = "DELETE FROM `pedidos` WHERE `cod`  = '{$this->cod}'";
+        $sql = "DELETE FROM `pedidos` WHERE `cod`  = '{$this->cod}'";
         $query = $this->con->sql($sql);
         return $query;
     }
 
     public function view()
     {
-        $sql   = "SELECT * FROM `pedidos` WHERE cod = '{$this->cod}' ORDER BY id DESC";
-        $notas = $this->con->sqlReturn($sql);
-        $row   = mysqli_fetch_assoc($notas);
+        $sql = "SELECT * FROM `pedidos` WHERE cod = '{$this->cod}' ORDER BY id DESC";
+        $pedidos = $this->con->sqlReturn($sql);
+        if ($pedidos) {
+            while ($row = mysqli_fetch_assoc($pedidos)) {
+                $array[] = $row;
+            }
+            sort($array);
+            return $array;
+        }
+    }
+
+    public function info()
+    {
+        $sql = "SELECT * FROM `pedidos` WHERE cod = '{$this->cod}' GROUP BY cod";
+        $pedidos = $this->con->sqlReturn($sql);
+        $row = mysqli_fetch_assoc($pedidos);
         return $row;
     }
 
-    function list($filter) {
+    function list($filter)
+    {
         $array = array();
         if (is_array($filter)) {
             $filterSql = "WHERE ";
@@ -80,11 +94,11 @@ class Pedidos
             $filterSql = '';
         }
 
-        $sql   = "SELECT * FROM `pedidos` $filterSql  ORDER BY id DESC";
-        $notas = $this->con->sqlReturn($sql);
+        $sql = "SELECT * FROM `pedidos` $filterSql  ORDER BY id DESC";
+        $pedidos = $this->con->sqlReturn($sql);
 
-        if ($notas) {
-            while ($row = mysqli_fetch_assoc($notas)) {
+        if ($pedidos) {
+            while ($row = mysqli_fetch_assoc($pedidos)) {
                 $array[] = $row;
             }
             return $array;

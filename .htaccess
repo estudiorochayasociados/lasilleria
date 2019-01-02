@@ -1,0 +1,12 @@
+Options +FollowSymLinks
+RewriteEngine on
+
+RewriteCond %{SCRIPT_FILENAME} !-d
+RewriteCond %{SCRIPT_FILENAME} !-f
+RewriteRule ^(.*)$ $1.php
+
+RewriteRule ^productos/(.*)/(.*)$ ./productos.php?categoria=$2
+RewriteRule ^producto/(.*)/(.*)$ ./producto.php?id=$2
+RewriteRule ^c/(.*)/(.*)$ ./contenidos.php?id=$2
+RewriteRule ^checkout(.*)/(.*)/(.*)$ ./checkout.php?cod_pedido=$2&tipo_pedido=$3
+RewriteRule ^blog/(.*)/(.*)$ ./blog.php?id=$2

@@ -3535,16 +3535,16 @@ textarea.form-control:-ms-input-placeholder {
   background-color: transparent;
 }
 
-.ps-breadcrumb .breadcrumb li {
+.ps-breadcrumb .breadcrumb li , .breadcrumb>.active,.breadcrumb li a {
   font-size: 14px;
-  color: #323232;
+  color: #fff !important;
   text-transform: uppercase;
 }
 
 .ps-breadcrumb .breadcrumb li:before {
   content: "\f105";
   font-family: FontAwesome;
-  color: #323232;
+  color: #fff ;
 }
 
 .ps-breadcrumb .breadcrumb li:first-child:before {
@@ -5214,8 +5214,7 @@ textarea.form-control:-ms-input-placeholder {
 }
 
 .ps-product--banner {
-  padding-top: 80px;
-  padding-bottom: 80px;
+  border-top:4px solid #59AB02;
   padding-left: calc((100% - 1440px) / 2);
   padding-right: calc((100% - 1440px) / 2);
   display: -webkit-box;
@@ -5505,14 +5504,20 @@ textarea.form-control:-ms-input-placeholder {
 }
 
 .ps-hero {
+  background:url("../images/hero/bread-2.jpg") !important;
   padding: 40px 0;
 }
 
-.ps-hero h3 {
+.ps-hero h3,.ps-hero  {
   font-size: 36px;
   font-weight: 600;
-  color: #323232;
+  color: #fff !important;
+  text-shadow:0px 0px 10px #000;
   text-transform: uppercase;
+}
+
+.ps-hero h4 {
+  color:#fff;
 }
 
 .ps-banner__content {
@@ -9797,11 +9802,14 @@ html .bg--parallax {
   background-repeat: no-repeat !important;
   background-size: cover !important;
   background-position: 50% 50%;
+  background-position: bottom bottom !important;
+
 }
 
 .bg--cover {
-  background-position: 50% 50% !important;
+  background-position: bottom bottom !important;
   background-size: cover !important;
+  background-attachment: fixed !important;
 }
 
 .ps-sidebar ul, .ps-block--contact ul, .ps-filter ul, .widget_category ul, .ps-checkout__order ul, .header ul, .header--sidebar ul, .ps-footer ul, .ps-sidebar ol, .ps-block--contact ol, .ps-filter ol, .widget_category ol, .ps-checkout__order ol, .header ol, .header--sidebar ol, .ps-footer ol {

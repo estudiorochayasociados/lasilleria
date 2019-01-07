@@ -211,3 +211,13 @@ $foldershistory[] = "giletta deportes/sitio/archivos/image";
         $useruploadpath = $usersiteroot."$useruploadfolder/";
         $foldershistory[] = "../archivos";
         
+
+        $useruploadfolder = "../assets/archivos";
+        $useruploadpath = $usersiteroot."$useruploadfolder/";
+        $foldershistory[] = "../assets/archivos";
+        
+
+        $useruploadfolder = "sanjosemuebles/assets/archivos";
+        $useruploadpath = $usersiteroot."$useruploadfolder/";
+        $foldershistory[] = "sanjosemuebles/assets/archivos";
+        

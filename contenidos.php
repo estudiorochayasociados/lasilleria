@@ -5,35 +5,45 @@ $template = new Clases\TemplateSite();
 $funciones = new Clases\PublicFunction();
 $contenidos = new Clases\Contenidos();
 
-$template->set("title", "Pinturería Ariel | Inicio");
+$template->set("title", "SAN JOSÉ MUEBLES");
 $template->set("description", "");
 $template->set("keywords", "");
 $template->set("favicon", LOGO);
 $template->themeInit();
 
 $id = isset($_GET["id"]) ? $_GET["id"] : '';
-$contenidos->set("cod", $id);
+$replace_id = str_replace('-',' ',$id);
+$contenidos->set("cod", $replace_id);
 $contenido = $contenidos->view();
 ?>
     <div class="ps-hero bg--cover mb-60" >
         <div class="ps-container">
-            <h3>Shop Page</h3>
+            <h3><?php if ($contenido!=null) {echo $contenido['cod']; } else{ echo "ERROR";} ?></h3>
             <div class="ps-breadcrumb">
                 <ol class="breadcrumb">
-                    <li><a href="index.html">Home</a></li>
-                    <li class="active">Shop Page</li>
+                    <li><a href="<?= URL ?>/index">Inicio</a></li>
+                    <li class="active"><?php if ($contenido!=null) {echo $contenido['cod']; } else{ echo "ERROR";} ?></li>
                 </ol>
             </div>
         </div>
     </div>
     <main class="container-fluid">
         <div class="ps-container">
-            <div class="ps-404">
-                <div class="container">
-                    <h1>404 <span> Page not found</h1>
-                    <p>We are looking for your page … but we can’t find it</p><a class="ps-btn" href="#">Back to Home</a><br><img src="images/404.png" alt="">
+            <?php
+            if ($contenido!=null){
+                echo $contenido['contenido'];
+            }else{
+                ?>
+                <div class="ps-404">
+                    <div class="container">
+                        <h1>404 <span> Página </h1>
+                        <p>Ocurrió un error</p><a class="ps-btn" href="<?= URL ?>/index">Volver al inicio</a><br>
+                    </div>
                 </div>
-            </div>
+                <?php
+            }
+            ?>
+
         </div>
     </main>
 <?php

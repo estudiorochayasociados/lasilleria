@@ -2,7 +2,7 @@
 $categorias = new Clases\Categorias();
 $carrito = new Clases\Carrito();
 $funciones = new Clases\PublicFunction();
-$categorias_side = $categorias->list('');
+$categorias_side = $categorias->list(array('area = "productos"'));
 $carro = $carrito->return();
 ?>
 <div class="header--sidebar"></div>
@@ -12,12 +12,12 @@ $carro = $carrito->return();
         <div class="ps-container">
             <div class="row">
                 <div class="col-lg-6 col-md-8 col-sm-6 col-xs-12 ">
-                    <p>460 West 34th Street, 15th floor, New York - Hotline: 804-377-3580 - 804-399-3580</p>
+                    <p><?= DIRECCION.", ".PROVINCIA.", ".CIUDAD." - ".TELEFONO ?></p>
                     <i class="furniture-market"></i>
                 </div>
                 <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12 ">
                     <div class="header__actions">
-                        <a href="#" data-toggle="modal" data-target="#myModal">Iniciar sesión</a>
+                        <a href="<?= URL ?>/login">Iniciar sesión</a>
                         <a href="<?= URL ?>/usuarios">Registro</a>
                     </div>
                 </div>
@@ -26,7 +26,7 @@ $carro = $carrito->return();
     </div>
     <nav class="navigation">
         <div class="ps-container">
-            <a class="ps-logo" href="index.html">
+            <a class="ps-logo" href="<?= URL ?>/index">
                 <img src="<?= URL ?>/assets/images/logo.png" alt="">
             </a>
             <div class="menu-toggle">
@@ -73,6 +73,16 @@ $carro = $carrito->return();
                     <a href="<?= URL ?>/c/empresa">Empresa</a>
                 </li>
                 <li class="menu-item-has-children">
+                    <a href="#">Tapizados</a>
+                    <ul class="sub-menu">
+                        <li  class="menu-item-has-children"><a href="<?= URL ?>/c/cuerinas-para-tapizados">Cuerinas</a></li>
+                        <li  class="menu-item-has-children"><a href="<?= URL ?>/c/telas-para-tapizados">Telas</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="<?= URL ?>/c/lustres-para-madera">Lustres</a>
+                </li>
+                <li class="menu-item-has-children">
                     <a href="#">Productos</a>
                     <ul class="sub-menu">
                         <?php
@@ -83,7 +93,10 @@ $carro = $carrito->return();
                     </ul>
                 </li>
                 <li>
-                    <a href="#">Contacto</a>
+                    <a href="<?=URL?>/blog">Blog</a>
+                </li>
+                <li>
+                    <a href="<?=URL?>/contacto">Contacto</a>
                 </li>
             </ul>
         </div>

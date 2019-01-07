@@ -3,14 +3,17 @@ require_once "Config/Autoload.php";
 Config\Autoload::runSitio();
 $template = new Clases\TemplateSite();
 $funciones = new Clases\PublicFunction();
-$template->set("title", "Admin");
-$template->set("description", "Admin");
-$template->set("keywords", "Inicio");
+$template->set("title", "SAN JOSÉ MUEBLES - USUARIOS");
+$template->set("description", "Registrate como cliente y obtené grandes beneficios por ser usuario mayorista");
+$template->set("keywords","madera guatambu,sillas de madera, sillas, fabrica de sillas,comprar sillas online");
 $template->set("favicon", LOGO);
 $template->themeInit();
 $carrito = new Clases\Carrito();
 $usuarios = new Clases\Usuarios();
 $usuarioSesion = $usuarios->view_sesion();
+if (count($usuarioSesion) != 0) {
+    $funciones->headerMove(URL . "/sesion");
+}
 ?>
     <div class="ps-hero bg--cover mb-60">
         <div class="ps-container">
@@ -20,6 +23,8 @@ $usuarioSesion = $usuarios->view_sesion();
     </div>
     <div id="sns_wrapper">
     <div class="ps-container mt-30">
+        <h4>¿Ya tenés tu cuenta de cliente? Ingresá haciendo <a href="<?= URL ?>/login" style="color:forestgreen"><b>click aquí</b></a>.<hr/></h4>
+        <div class="mb-20"><b>En caso de no tener cuenta y queres crear una cuenta como usuario recurrente, únicamente tenes que completar el siguiente formulario con tus datos.</b></div>
         <?php
         if (isset($_POST["registrarmeBtn"])) {
             $error = 0;
@@ -45,7 +50,7 @@ $usuarioSesion = $usuarios->view_sesion();
             $usuarios->set("apellido", $apellido);
             $usuarios->set("doc", $doc);
             $usuarios->set("email", $email);
-            $usuarios->set("password1", $password1);
+            $usuarios->set("password", $password1);
             $usuarios->set("postal", $postal);
             $usuarios->set("localidad", $localidad);
             $usuarios->set("provincia", $provincia);
@@ -64,11 +69,7 @@ $usuarioSesion = $usuarios->view_sesion();
                     $error = 0;
                     $usuarios->add();
                 }
-            } else {
-                if ($error == 0) {
-                    $usuarios->invitado_sesion();
-                }
-            }
+            }  
 
             $funciones->headerMove(URL . "/sesion");
         }
@@ -99,10 +100,10 @@ $usuarioSesion = $usuarios->view_sesion();
                         <input class="form-control  mb-10" type="text" value="<?php echo isset($_POST["direccion"]) ? $_POST["direccion"] : '' ?>" placeholder="Escribir dirección" name="direccion" required/>
                     </div>
                     <div class="col-md-6 col-xs-6 password">Contraseña:<br/>
-                        <input class="form-control  mb-10" type="password" value="<?php echo isset($_POST["password1"]) ? $_POST["password1"] : '' ?>" placeholder="Escribir password" name="password1"/>
+                        <input class="form-control  mb-10" type="password" value="<?php echo isset($_POST["password1"]) ? $_POST["password1"] : '' ?>" placeholder="Escribir password" name="password1" required/>
                     </div>
                     <div class="col-md-6 col-xs-6 password">Repetir Contraseña:<br/>
-                        <input class="form-control  mb-10" type="password" value="<?php echo isset($_POST["password2"]) ? $_POST["password2"] : '' ?>" placeholder="Escribir repassword" name="password2"/>
+                        <input class="form-control  mb-10" type="password" value="<?php echo isset($_POST["password2"]) ? $_POST["password2"] : '' ?>" placeholder="Escribir repassword" name="password2" required/>
                     </div>
 
                     <label class="col-md-12 col-xs-12 mt-10 mb-10" style="font-size:16px">

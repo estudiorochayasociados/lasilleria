@@ -9,14 +9,14 @@ class autoload
         define('URL', "http://".$_SERVER['HTTP_HOST']."/sanjosemuebles");
         define('CANONICAL', "http://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]);
         define('TITULO', "San José Muebles");
-        define('TELEFONO', "");
+        define('TELEFONO', "(03564) 481249 / 481166 / 15631300");
         define('CIUDAD', "Devoto");
-        define('PROVINCIA', "Cordoba");
-        define('EMAIL', "");
+        define('PROVINCIA', "Córdoba");
+        define('EMAIL', "sanjosemueblesdevoto@gmail.com");
         define('PASS_EMAIL', "");
         define('SMTP_EMAIL', "");
-        define('DIRECCION', "");
-        define('LOGO', URL . "/assets/img/logo.png");
+        define('DIRECCION', "25 de Mayo 339");
+        define('LOGO', URL . "/assets/images/logo.png");
         define('APP_ID_FB', "");
         spl_autoload_register(
             function($clase)

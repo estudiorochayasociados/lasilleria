@@ -22,6 +22,8 @@ $tipo_pedido = $_POST["metodos-pago"];
     </div>
     <div id="sns_wrapper">
     <div class="ps-container mt-30">
+        <h4>¿Ya tenés tu cuenta de cliente? Ingresá haciendo <a href="<?= URL ?>/login" style="color:forestgreen"><b>click aquí</b></a>.<hr/></h4>
+        <div class="mb-20"><b>En caso de no tener cuenta y queres realizar esta compra, únicamente tenes que completar el siguiente formulario con tus datos.</b></div>
         <?php
         if (count($usuarioSesion) != 0) {
             $funciones->headerMove(URL . "/checkout/" . $cod_pedido . "/" . $tipo_pedido);
@@ -50,7 +52,7 @@ $tipo_pedido = $_POST["metodos-pago"];
             $usuarios->set("apellido", $apellido);
             $usuarios->set("doc", $doc);
             $usuarios->set("email", $email);
-            $usuarios->set("password1", $password1);
+            $usuarios->set("password", $password1);
             $usuarios->set("postal", $postal);
             $usuarios->set("localidad", $localidad);
             $usuarios->set("provincia", $provincia);

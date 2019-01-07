@@ -3,37 +3,29 @@ require_once "Config/Autoload.php";
 Config\Autoload::runSitio();
 $template = new Clases\TemplateSite();
 $funciones = new Clases\PublicFunction();
-$template->set("title", "Pinturería Ariel | Inicio");
-$template->set("description", "");
-$template->set("keywords", "");
-$template->set("favicon", LOGO);
-//
+$productos = new Clases\Productos();
+$categorias = new Clases\Categorias();
+$imagenes = new Clases\Imagenes();
+
 $pagina = isset($_GET["pagina"]) ? $_GET["pagina"] : '0';
 $categoria = isset($_GET["categoria"]) ? $_GET["categoria"] : '';
-$subcategoria = isset($_GET["subcategoria"]) ? $_GET["subcategoria"] : '';
+$categorias_side = $categorias->list(array('area = "productos"'));
+
 $filter = array();
 
-//$filter = '';
 if ($categoria != '') {
     array_push($filter, "categoria = '$categoria'");
 }
 
-//Clases
-$productos = new Clases\Productos();
-$categorias = new Clases\Categorias();
-$imagenes = new Clases\Imagenes();
 $productos_data = $productos->list($filter, '', (24 * $pagina) . ',' . 24);
+$categorias->set("cod",$categoria);
+$categoria__ = $categorias->view();
 $productos_paginador = $productos->paginador($filter, 24);
 
-if (@count($_GET) == 0) {
-    $anidador = "?";
-} else {
-    if ($pagina >= 0) {
-        $anidador = "&";
-    } else {
-        $anidador = "?";
-    }
-}
+$template->set("title", "SAN JOSÉ MUEBLES - ".$categoria__["titulo"]);
+$template->set("description", "");
+$template->set("keywords", $categoria__["titulo"].",madera guatambu,sillas de madera, sillas, fabrica de sillas,comprar sillas online");
+$template->set("favicon", LOGO);
 
 $template->themeInit();
 ?>
@@ -56,7 +48,6 @@ $template->themeInit();
                         <h3 class="widget-title">Categorias</h3>
                         <ul class="ps-list--checked">
                             <?php
-                            $categorias_side = $categorias->list('');
                             foreach ($categorias_side as $categorias_) {
                                 if ($categorias_["cod"] == $categoria) {
                                     $current = "current";
@@ -71,7 +62,7 @@ $template->themeInit();
 
                     <aside class="widget widget_sidebar widget_category hidden-lg hidden-md">
                         <h3 class="widget-title">Categorias</h3>
-                        <select name="categoria">
+                        <select name="categoria" onchange="">
                             <?php
                             $categorias_side = $categorias->list('');
                             foreach ($categorias_side as $categorias_) {
@@ -91,10 +82,12 @@ $template->themeInit();
                             //$imagenes_productos = $imagenes->view();
                             $imagenes_productos = $imagenes->listForProduct();
                             ?>
-                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 ">
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6 ">
                                 <div class="ps-product">
                                     <div class="ps-product__thumbnail">
+                                        <a href="<?= URL . "/producto/" . $funciones->normalizar_link($producto["titulo"]) . "/" . $producto["id"] ?>">
                                         <div style="background:url('<?= URL ?>/<?= $imagenes_productos[0]["ruta"] ?>') no-repeat center center/contain;width:100%;height:200px"></div>
+                                        </a>
                                         <div class="ps-product__content full">
                                             <a class="ps-product__title" href="<?= URL . "/producto/" . $funciones->normalizar_link($producto["titulo"]) . "/" . $producto["id"] ?>">
                                                 <?= $producto["titulo"] ?>
@@ -126,32 +119,6 @@ $template->themeInit();
                             <?php
                         }
                         ?>
-                    </div>
-                    <div class="ps-pagination mb-70">
-                        <ul class="pagination">
-                            <li><a href="#"><i class="fa fa-angle-left"></i></a></li>
-                            <?php
-                            if ($productos_paginador != 1 && $productos_paginador != 0) {
-                                $links = '';
-                                $links .= "<li><a href='" . CANONICAL . "" . $anidador . "pagina=1'>1</a></li>";
-                                $i = max(2, $pagina - 5);
-
-                                if ($i > 2) {
-                                    $links .= "<li><a href='#'>...</a></li>";
-                                }
-                                for (; $i < min($pagina + 6, $productos_paginador); $i++) {
-                                    $links .= "<li><a href='" . CANONICAL . "" . $anidador . "pagina=" . $i . "'>" . $i . "</a></li>";
-                                }
-                                if ($i != $productos_paginador) {
-                                    $links .= "<li><a href='#'>...</a></li>";
-                                    $links .= "<li><a href='" . CANONICAL . "" . $anidador . "pagina=" . $productos_paginador . "'>" . $productos_paginador . "</a></li>";
-                                }
-                                echo $links;
-                                echo "";
-                            }
-                            ?>
-                            <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
-                        </ul>
                     </div>
                 </div>
             </div>

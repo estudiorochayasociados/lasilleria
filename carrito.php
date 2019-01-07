@@ -6,10 +6,11 @@ $funciones = new Clases\PublicFunction();
 $carrito = new Clases\Carrito();
 $envios= new Clases\Envios();
 
-$template->set("title", "Pinturería Ariel | Inicio");
-$template->set("description", "");
-$template->set("keywords", "");
+$template->set("title", "SAN JOSÉ MUEBLES - CARRITO");
+$template->set("description", "Finalizá tu carrito de compra");
+$template->set("keywords", "comprar sillas de madera guatambu, sillas de madera guatambu en el interior, compra sillas online");
 $template->set("favicon", LOGO);
+
 $template->themeInit();
 $precio_final = 0;
 $carro = $carrito->return();

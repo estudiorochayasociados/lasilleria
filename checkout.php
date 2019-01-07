@@ -3,9 +3,9 @@ require_once "Config/Autoload.php";
 Config\Autoload::runSitio();
 $template = new Clases\TemplateSite();
 $funciones = new Clases\PublicFunction();
-$template->set("title", "Admin");
-$template->set("description", "Admin");
-$template->set("keywords", "Inicio");
+$template->set("title", "SAN JOSÉ MUEBLES - PAGAR");
+$template->set("description", "Gracias por tu compra online");
+$template->set("keywords", "comprar sillas con tarjetas de créditos, compra de sillas en 12 cuotas");
 $template->set("favicon", LOGO);
 $template->themeInit();
 

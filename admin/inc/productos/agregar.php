@@ -1,5 +1,5 @@
 <?php
-$_SESSION["cod_mercadolibre"] = isset($_GET["code"]) ? $_GET["code"] : $_SESSION["cod_mercadolibre"];
+$code_mercadolibre = isset($_GET["code"]) ? $_GET["code"] : '';
 
 $productos = new Clases\Productos();
 $imagenes = new Clases\Imagenes();
@@ -44,7 +44,6 @@ $context = stream_context_create(array(
 
 $resp = json_decode(file_get_contents($url, FALSE, $context));
 $meli = new Meli($appId, $secretKey, $resp->access_token, $resp->refresh_token);
-echo '<a href="' . $meli->getAuthUrl($redirectURI, Meli::$AUTH_URL['MLA']) . '" class="btn btn-info pull-right btn-sm">¡Quiero publicarlo en MercadoLibre!</a>';
 
 if (isset($_POST["agregar"])) {
     $count = 0;
@@ -72,6 +71,10 @@ if (isset($_POST["agregar"])) {
     }
 
     $productos->set("variable4", $funciones->antihack_mysqli(isset($_POST["peso"]) ? $_POST["peso"] : ''));
+
+    $productos->set("variable5", $funciones->antihack_mysqli(isset($_POST["altura"]) ? $_POST["altura"] : ''));
+    $productos->set("variable6", $funciones->antihack_mysqli(isset($_POST["ancho"]) ? $_POST["ancho"] : ''));
+    $productos->set("variable7", $funciones->antihack_mysqli(isset($_POST["profundidad"]) ? $_POST["profundidad"] : ''));
 
 
     $productos->set("categoria", $funciones->antihack_mysqli(isset($_POST["categoria"]) ? $_POST["categoria"] : ''));
@@ -115,7 +118,7 @@ if (isset($_POST["agregar"])) {
         $count++;
     }
 
-    if ($_POST["meli"]) {
+    if (isset($_POST["meli"])) {
         $user = $meli->authorize($_GET["code"], $redirectURI);
         $_SESSION['access_token'] = $user['body']->access_token;
         $_SESSION['expires_in'] = $user['body']->expires_in;
@@ -137,21 +140,200 @@ if (isset($_POST["agregar"])) {
             "listing_type_id" => "gold_special",
             "condition" => "new",
             "description" => "",
-            "pictures" => array(//  $imgMELI
+            "shipping" => array(
+                "mode" => "me2",
+                "dimensions" => $_POST["ancho"] . "x" . $_POST["altura"] . "x" . $_POST["profundidad"] . "," . $_POST["peso"] . "",
+                "local_pick_up" => true,
+                "free_shipping" => false,
+                "logistic_type" => "cross_docking",
+                "store_pick_up" => false
+            ),
+            "attributes" => array(
+                array(
+                    "id" => "UPHOLSTERED",
+                    "name" => "Tapizado",
+                    "value_id" => null,
+                    "value_name" => "SI",
+                    "value_struct" => null,
+                    "attribute_group_id" => "DFLT",
+                    "attribute_group_name" => "Otros"
+                ),
+                array(
+                    "id" => "BRAND",
+                    "name" => "Marca",
+                    "value_id" => null,
+                    "value_name" => "SAN JOSÉ MUEBLES",
+                    "value_struct" => null,
+                    "attribute_group_id" => "OTHERS",
+                    "attribute_group_name" => "Otros"
+                ),
+                array(
+                    "id" => "CHAIR_DESIGN",
+                    "name" => "Diseño de la silla",
+                    "value_id" => null,
+                    "value_name" => "RT",
+                    "value_struct" => null,
+                    "attribute_group_id" => "OTHERS",
+                    "attribute_group_name" => "Otros"
+                ),
+                array(
+                    "id" => "CHAIR_HEIGHT",
+                    "name" => "Altura total",
+                    "value_id" => null,
+                    "value_name" => $_POST["altura"] . " cm",
+                    "value_struct" => array(
+                        "number" => $_POST["altura"],
+                        "unit" => "cm"
+                    ),
+                    "attribute_group_id" => "OTHERS",
+                    "attribute_group_name" => "Otros"
+                ),
+                array(
+                    "id" => "CHAIR_WIDTH",
+                    "name" => "Ancho de la silla",
+                    "value_id" => null,
+                    "value_name" => $_POST["altura"] . " cm",
+                    "value_struct" => array(
+                        "number" => $_POST["altura"],
+                        "unit" => "cm"
+                    ),
+                    "attribute_group_id" => "OTHERS",
+                    "attribute_group_name" => "Otros"
+                ),
+                array(
+                    "id" => "CHAIR_DEPTH",
+                    "name" => "Profundidad de la silla",
+                    "value_id" => null,
+                    "value_name" => $_POST["profundidad"] . " cm",
+                    "value_struct" => array(
+                        "number" => $_POST["profundidad"],
+                        "unit" => "cm"
+                    ),
+                    "attribute_group_id" => "OTHERS",
+                    "attribute_group_name" => "Otros"
+                ),
+                array(
+                    "id" => "GTIN",
+                    "name" => "Código universal de producto",
+                    "value_id" => "-1",
+                    "value_name" => null,
+                    "value_struct" => null,
+                    "attribute_group_id" => "OTHERS",
+                    "attribute_group_name" => "Otros"
+                ),
+                array(
+                    "id" => "INCLUDES_UPHOLSTERY",
+                    "name" => "Incluye tapizado",
+                    "value_id" => "242085",
+                    "value_name" => "Sí",
+                    "value_struct" => null,
+                    "attribute_group_id" => "OTHERS",
+                    "attribute_group_name" => "Otros"
+                ),
+                array(
+                    "id" => "ITEM_CONDITION",
+                    "name" => "Condición del ítem",
+                    "value_id" => "2230284",
+                    "value_name" => "Nuevo",
+                    "value_struct" => null,
+                    "attribute_group_id" => "OTHERS",
+                    "attribute_group_name" => "Otros"
+                ),
+                array(
+                    "id" => "MANUFACTURER",
+                    "name" => "Fabricante",
+                    "value_id" => null,
+                    "value_name" => "SAN JOSÉ MUEBLES",
+                    "value_struct" => null,
+                    "attribute_group_id" => "OTHERS",
+                    "attribute_group_name" => "Otros"
+                ),
+                array(
+                    "id" => "MODEL",
+                    "name" => "Modelo",
+                    "value_id" => null,
+                    "value_name" => $_POST["titulo"],
+                    "value_struct" => null,
+                    "attribute_group_id" => "OTHERS",
+                    "attribute_group_name" => "Otros"
+                ),
+                array(
+                    "id" => "NUMBER_OF_CHAIRS_BY_SET",
+                    "name" => "Número de sillas por set",
+                    "value_id" => "-1",
+                    "value_name" => null,
+                    "value_struct" => null,
+                    "attribute_group_id" => "OTHERS",
+                    "attribute_group_name" => "Otros"
+                ),
+                array(
+                    "id" => "SEAT_MATERIAL",
+                    "name" => "Material del asiento",
+                    "value_id" => null,
+                    "value_name" => "SILLA EN GUATAMBU TAPIZADO",
+                    "value_struct" => null,
+                    "attribute_group_id" => "OTHERS",
+                    "attribute_group_name" => "Otros"
+                ),
+                array(
+                    "id" => "SEAT_MATERIAL",
+                    "name" => "Material del asiento",
+                    "value_id" => null,
+                    "value_name" => "SILLA EN GUATAMBU TAPIZADO",
+                    "value_struct" => null,
+                    "attribute_group_id" => "OTHERS",
+                    "attribute_group_name" => "Otros"
+                ),
+                array(
+                    "id" => "STRUCTURE_MATERIALS",
+                    "name" => "Materiales de la estructura",
+                    "value_id" => "432174",
+                    "value_name" => "Madera",
+                    "value_struct" => null,
+                    "attribute_group_id" => "OTHERS",
+                    "attribute_group_name" => "Otros"
+                ),
+                array(
+                    "id" => "NUMBER_OF_CHAIRS_BY_SET",
+                    "name" => "Número de sillas por set",
+                    "value_id" => null,
+                    "value_name" => "1",
+                    "value_struct" => null,
+                    "attribute_group_id" => "OTHERS",
+                    "attribute_group_name" => "Otros"
+                ),
+                array(
+                    "id" => "UPHOLSTERY_FABRIC",
+                    "name" => "Tela del tapizado",
+                    "value_id" => null,
+                    "value_name" => "Tela/Cuerina/Madera",
+                    "value_struct" => null,
+                    "attribute_group_id" => "OTHERS",
+                    "attribute_group_name" => "Otros"
+                )
+            ),
+            "pictures" => array(//$imgMELI
             ));
         $valor = $meli->post('/items', $itemAdd, array('access_token' => $_SESSION['access_token']));
         if ($valor["httpCode"] != "200" || $valor["httpCode"] != "201") {
-            var_dump($valor);
+            echo $valor["body"]->id;
+            $productos->set("meli", $valor["body"]->id);
         }
     }
     $productos->add();
-    // $funciones->headerMove(URL . "/index.php?op=productos");
+    $funciones->headerMove(URL . "/index.php?op=productos");
 }
 ?>
 
 <div class="col-md-12">
     <h4>
         Productos
+        <div class="pull-right">
+            <input type="checkbox" class="form-check-input mt-10" name="meli" id="meli">
+            <a href="<?= $meli->getAuthUrl($redirectURI, Meli::$AUTH_URL['MLA']) ?>" class="btn">
+                ¿Publicar en MercadoLibre?
+            </a>
+        </div>
     </h4>
     <hr/>
     <form method="post" class="row" enctype="multipart/form-data">
@@ -174,28 +356,41 @@ if (isset($_POST["agregar"])) {
             Stock:<br/>
             <input type="number" name="stock">
         </label>
-        <label class="col-md-4">
-            Peso:<br/>
-            <input type="number" name="peso">
-        </label>
-        <div class="clearfix">
-        </div>
         <label class="col-md-3">
             Código:<br/>
             <input type="text" name="cod_producto">
         </label>
-        <label class="col-md-3">
+        <label class="col-md-4">
             Precio:<br/>
             <input type="text" name="precio" required>
         </label>
-        <label class="col-md-3">
+        <label class="col-md-4">
             Precio Cuerina:<br/>
             <input type="text" name="precio_cuerina" required>
         </label>
-        <label class="col-md-3">
+        <label class="col-md-4">
             Precio Tela:<br/>
             <input type="text" name="precio_tela" required>
         </label>
+        <div class="clearfix"></div>
+        <label class="col-md-3">
+            Altura: (cm)<br/>
+            <input type="number" name="altura" required>
+        </label>
+        <label class="col-md-3">
+            Ancho: (cm)<br/>
+            <input type="number" name="ancho" required>
+        </label>
+        <label class="col-md-3">
+            Profundidad: (cm)<br/>
+            <input type="number" name="profundidad" required>
+        </label>
+        <label class="col-md-3">
+            Peso: (cm)<br/>
+            <input type="number" name="peso" required>
+        </label>
+        <div class="clearfix">
+        </div>
         <div class="mt-10 col-md-12">
             Cuerinas
             <button type="button" class="ml-10 mb-5 btn btn-info pull-right" onclick="agregar_input('variaciones1Input','variable1')"> +</button>
@@ -275,15 +470,6 @@ if (isset($_POST["agregar"])) {
             </textarea>
         </label>
         <br/>
-        <div class="col-md-12">
-            <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" name="meli" id="meli">
-                <label class="form-check-label" for="meli">
-                    ¿Publicar en MercadoLibre?
-                </label>
-            </div>
-        </div>
-
         <label class="col-md-7">
             Imágenes:<br/>
             <input type="file" id="file" name="files[]" multiple="multiple" accept="image/*"/>

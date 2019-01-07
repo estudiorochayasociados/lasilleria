@@ -17,6 +17,11 @@ class TemplateSite
         echo '<!--[if IE 7]><html class="ie ie7" ><![endif]--><!--[if IE 8]><html class="ie ie8" ><![endif]--><!--[if IE 9]><html class="ie ie9" ><![endif]-->';
         echo '<html lang = "en" >';
         echo '<head >';
+        echo '<meta name="author" content="San José Muebles">';
+        echo '<meta name="keywords" content="'.$this->keywords.'">';
+        echo '<meta name="description" content="'.$this->description.'">';
+        echo '<link href="'.LOGO.'" rel="icon">';
+        echo '<title>'.$this->title.'</title>';
         include("assets/inc/header.inc.php");
         echo '</head>';
         echo '<!--[if IE 7]><body class="ie7 lt-ie8 lt-ie9 lt-ie10"><![endif]--><!--[if IE 8]><body class="ie8 lt-ie9 lt-ie10"><![endif]--><!--[if IE 9]><body class="ie9 lt-ie10"><![endif]-->';

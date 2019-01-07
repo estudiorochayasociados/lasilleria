@@ -4,11 +4,6 @@
 <meta name="format-detection" content="telephone=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link href="apple-touch-icon.png" rel="apple-touch-icon">
-<link href="favicon.png" rel="icon">
-<meta name="author" content="">
-<meta name="keywords" content="">
-<meta name="description" content="">
-<title> Flourish Store - HTML Template </title>
 <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700%7CLibre+Baskerville:400,700" rel="stylesheet">
 <link rel="stylesheet" href="<?= URL ?>/assets/plugins/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="<?= URL ?>/assets/plugins/furniture-icon/style.css">
@@ -20,6 +15,7 @@
 <link rel="stylesheet" href="<?= URL ?>/assets/plugins/jquery-ui/jquery-ui.min.css">
 <link rel="stylesheet" href="<?= URL ?>/assets/plugins/lightGallery-master/dist/css/lightgallery.min.css">
 <link rel="stylesheet" href="<?= URL ?>/assets/css/style.css">
+<link rel="stylesheet" href="<?= URL ?>/assets/css/estilos.css">
 <link rel="stylesheet" href="<?= URL ?>/assets/css/main-rocha.css">
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>

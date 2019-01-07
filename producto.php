@@ -7,7 +7,6 @@ $template->set("title", "Pinturería Ariel | Inicio");
 $template->set("description", "");
 $template->set("keywords", "");
 $template->set("favicon", LOGO);
-$template->themeInit();
 //
 $producto_id = isset($_GET["id"]) ? $_GET["id"] : '0';
 
@@ -37,8 +36,16 @@ sort($variable_3_explode);
 
 $carro = $carrito->return();
 $carroEnvio = $carrito->checkEnvio();
+
+$template->set("title", $producto["titulo"]." - SAN JOSÉ MUEBLES");
+$template->set("description", $producto["description"]);
+$template->set("keywords", $producto["keywords"]);
+$template->set("favicon", LOGO);
+
+$template->themeInit();
+
 ?>
-    <div class="ps-hero bg--cover" data-background="<?= URL ?>/assets/images/hero/bread-2.jpg">
+    <div class="ps-hero bg--cover" data-background="">
         <div class="ps-container">
             <h3>Shop Page</h3>
             <div class="ps-breadcrumb">
@@ -104,7 +111,7 @@ $carroEnvio = $carrito->checkEnvio();
                                     $carrito->set("peso", $producto['variable4']);
                                     $opciones = isset($_POST["cuerina"]) ? $_POST["cuerina"] : $_POST["telas"];
                                     $opciones_tipo = isset($_POST["cuerina"]) ? "CUERINA: " : "TELA: ";
-                                    $carrito->set("opciones", array($opciones_tipo.$opciones, "LUSTRE: ".$_POST["lustre"]));
+                                    $carrito->set("opciones", array($opciones_tipo . $opciones, "LUSTRE: " . $_POST["lustre"]));
                                     $carrito->set("precio", $_POST["precio"]);
                                     $carrito->add();
 
@@ -194,7 +201,11 @@ $carroEnvio = $carrito->checkEnvio();
                 </div>
 
                 <div class="col-md-12 mt-20">
-                    <?= "<h3>Descripción</h3>" . $producto["desarrollo"]; ?>
+                    <?php
+                    if ($producto["desarrollo"] != '') {
+                        echo "<h3>Descripción</h3>" . $producto["desarrollo"];
+                    }
+                    ?>
                 </div>
             </div>
         </div>

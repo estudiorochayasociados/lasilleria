@@ -122,6 +122,7 @@ class Productos
         }
 
         $sql = "SELECT * FROM `productos` $filterSql  ORDER BY $orderSql $limitSql";
+
         $notas = $this->con->sqlReturn($sql);
         if ($notas) {
             while ($row = mysqli_fetch_assoc($notas)) {
@@ -129,6 +130,7 @@ class Productos
             }
             return $array;
         }
+
     }
 
     function paginador($filter, $cantidad)

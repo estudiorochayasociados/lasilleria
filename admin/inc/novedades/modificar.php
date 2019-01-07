@@ -8,7 +8,6 @@ $borrarImg = $funciones->antihack_mysqli(isset($_GET["borrarImg"]) ? $_GET["borr
 
 $novedades->set("cod", $cod);
 $novedad = $novedades->view();
-
 $categorias = new Clases\Categorias();
 $data = $categorias->list(array("area = 'novedades'"));
 

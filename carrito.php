@@ -4,7 +4,7 @@ Config\Autoload::runSitio();
 $template = new Clases\TemplateSite();
 $funciones = new Clases\PublicFunction();
 $carrito = new Clases\Carrito();
-$envios= new Clases\Envios();
+$envios = new Clases\Envios();
 
 $template->set("title", "SAN JOSÉ MUEBLES - CARRITO");
 $template->set("description", "Finalizá tu carrito de compra");
@@ -39,15 +39,15 @@ if ($remover != '') {
             <div class="col-md-12">
                 <div class="envio">
                     <?php
-                    $metodos_de_envios = $envios->list(array("peso >= ".$carrito->peso_final()." OR peso = 0"));
+                    $metodos_de_envios = $envios->list(array("peso >= " . $carrito->peso_final() . " OR peso = 0"));
                     if ($carroEnvio == '') {
                         echo "<h3>Seleccioná el envió que más te convenga:</h3>";
                         if (isset($_POST["envio"])) {
                             if ($carroEnvio != '') {
                                 $carrito->delete($carroEnvio);
                             }
-                            $envio_final =$_POST["envio"];
-                            $envios->set("cod",$envio_final);
+                            $envio_final = $_POST["envio"];
+                            $envios->set("cod", $envio_final);
                             $envio_final_ = $envios->view();
                             $carrito->set("id", "Envio-Seleccion");
                             $carrito->set("cantidad", 1);
@@ -62,12 +62,12 @@ if ($remover != '') {
                                 <option value="" selected disabled>Elegir envío</option>
                                 <?php
                                 foreach ($metodos_de_envios as $metodos_de_envio_) {
-                                    if($metodos_de_envio_["precio"] == 0) {
+                                    if ($metodos_de_envio_["precio"] == 0) {
                                         $metodos_de_envio_precio = "¡Gratis!";
                                     } else {
-                                        $metodos_de_envio_precio = "$".$metodos_de_envio_["precio"];
+                                        $metodos_de_envio_precio = "$" . $metodos_de_envio_["precio"];
                                     }
-                                    echo "<option value='".$metodos_de_envio_["cod"]."'>".$metodos_de_envio_["titulo"]." -> ".$metodos_de_envio_precio."</option>";
+                                    echo "<option value='" . $metodos_de_envio_["cod"] . "'>" . $metodos_de_envio_["titulo"] . " -> " . $metodos_de_envio_precio . "</option>";
                                 }
                                 ?>
                             </select>
@@ -77,7 +77,7 @@ if ($remover != '') {
                     }
                     ?>
                 </div>
-                <table class="table table-hover">
+                <table class="table table-hover hidden-xs hidden-sm">
                     <thead>
                     <th>PRODUCTO</th>
                     <th>PRECIO UNITARIO</th>
@@ -127,35 +127,72 @@ if ($remover != '') {
                     ?>
                     </tbody>
                 </table>
-            </div>
-            <form class="form-right pull-right col-md-6 well well-lg mb-50 col-xs-12" method="post" action="<?= URL ?>/pagar">
-                <div class="form-bd">
-                    <h3 class="mb-0">
-                        <span class="text3"><b>TOTAL A PAGAR:</b> $<?= number_format($carrito->precio_total(), "2", ",", "."); ?></span>
-                    </h3>
-                    <?php if ($carroEnvio == '') { ?>
-                        <a href="#envioA" class="btn btn-default mt-10 mb-10" onclick="$('#envio').addClass('alert alert-danger');">¿DECIDISTE EL ENVÍO DEL PEDIDO?</a><br/>
-                        <b>¡Necesitamos que nos digas como querés realizar tu envío para que lo tengas listo cuanto antes!</b>
-                    <?php } else { ?>
-                        <div class="radioButtonPay mt-20 mb-10">
-                            <input type="radio" id="0" name="metodos-pago" value="0">
-                            <label for="0">Transferencia Bancaria</label>
+                <div class="table table-hover hidden-lg hidden-md">
+                    <?php
+                    if (isset($_POST["eliminarCarrito"])) {
+                        $carrito->delete($_POST["eliminarCarrito"]);
+                    }
+                    $i = 0;
+                    $precio = 0;
+                    foreach ($carro as $key => $carroItem) {
+                        $precio += ($carroItem["precio"] * $carroItem["cantidad"]);
+                        $opciones = @implode(" - ", $carroItem["opciones"]);
+                        if ($carroItem["id"] == "Envio-Seleccion") {
+                            $clase = "text-bold";
+                            $none = "hidden";
+                        } else {
+                            $clase;
+                            $none;
+                        }
+                        ?>
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <b><?= $carroItem["titulo"]; ?></b><br/><?= $opciones ?><br/>
+                                <span class="<?= $none ?>"><?= "$" . $carroItem["precio"]; ?> x <?= $carroItem["cantidad"]; ?></span><br/>
+                                <?php
+                                if ($carroItem["precio"] != 0) {
+                                    echo "$" . ($carroItem["precio"] * $carroItem["cantidad"]);
+                                } else {
+                                    echo "¡Gratis!";
+                                }
+                                ?>
+                            </div>
+                            <div class="col-xs-1"><a href="<?= URL ?>/carrito.php?remover=<?= $key ?>"><i class="fa fa-remove"></i></a></div>
                         </div>
-                        <div class="radioButtonPay mt-20 mb-10">
-                            <input type="radio" id="1" name="metodos-pago" value="1">
-                            <label for="1">Coordinar con vendedor</label>
-                        </div>
-                        <div class="radioButtonPay mt-20 mb-10">
-                            <input type="radio" id="2" name="metodos-pago" value="2" checked>
-                            <label for="2">Tarjeta de crédito o débito
-                                <div class="hidden-xs hidden-sm"><span class="fa fa-arrow-right"></span> <b class="ml-5">¡Recomendado!</b></div>
-                            </label>
-                        </div>
-                        <button type="submit" name="pagar" class="mb-10 mt-10 btn btn-success btn-lg pull-left">PAGAR EL CARRITO</button>
-                    <?php } ?>
+                         <hr/>
+                        <?php
+                        $i++;
+                    }
+                    ?>
                 </div>
-            </form>
-        </div>
+                <form class="form-right pull-right col-md-6 well well-lg mb-50 col-xs-12" method="post" action="<?= URL ?>/pagar">
+                    <div class="form-bd">
+                        <h3 class="mb-0">
+                            <span class="text3"><b>TOTAL A PAGAR:</b> $<?= number_format($carrito->precio_total(), "2", ",", "."); ?></span>
+                        </h3>
+                        <?php if ($carroEnvio == '') { ?>
+                            <a href="#envioA" class="btn btn-default mt-10 mb-10" onclick="$('#envio').addClass('alert alert-danger');">ELEGÍ EL ENVÍO DEL PEDIDO</a><br/>
+                            <b>¡Necesitamos que nos digas como querés realizar tu envío para que lo tengas listo cuanto antes!</b>
+                        <?php } else { ?>
+                            <div class="radioButtonPay mt-20 mb-10">
+                                <input type="radio" id="0" name="metodos-pago" value="0">
+                                <label for="0">Transferencia Bancaria</label>
+                            </div>
+                            <div class="radioButtonPay mt-20 mb-10">
+                                <input type="radio" id="1" name="metodos-pago" value="1">
+                                <label for="1">Coordinar con vendedor</label>
+                            </div>
+                            <div class="radioButtonPay mt-20 mb-10">
+                                <input type="radio" id="2" name="metodos-pago" value="2" checked>
+                                <label for="2">Tarjeta de crédito o débito
+                                    <div class="hidden-xs hidden-sm"><span class="fa fa-arrow-right"></span> <b class="ml-5">¡Recomendado!</b></div>
+                                </label>
+                            </div>
+                            <button type="submit" name="pagar" class="mb-10 mt-10 btn btn-success btn-lg pull-left">PAGAR EL CARRITO</button>
+                        <?php } ?>
+                    </div>
+                </form>
+            </table>
     </main>
 <?php
 $template->themeEnd();

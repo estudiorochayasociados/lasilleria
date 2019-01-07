@@ -14,38 +14,21 @@ $slider = new Clases\Sliders();
 $categorias = new Clases\Categorias();
 $imagenes = new Clases\Imagenes();
 $novedades = new Clases\Novedades();
-$productos_data = $productos->list('', '', '0,8');
-$novedades_data = $novedades->listWithOps('', '', '5');
+$productos_data = $productos->list('', '', '0,12');
+$novedades_data = $novedades->listWithOps('', '', '4');
 $sliders = $slider->list('');
 $template->themeInit();
 ?>
-    <div class="ps-slider--banner owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="9000"
-         data-owl-gap="0" data-owl-nav="false" data-owl-dots="true" data-owl-item="1" data-owl-item-xs="1"
-         data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="1000"
+    <div class="ps-slider--banner owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="2000"
+         data-owl-gap="0" data-owl-nav="false" data-owl-dots="false" data-owl-item="1" data-owl-item-xs="1"
+         data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="500"
          data-owl-mousedrag="on">
         <?php
         foreach ($sliders as $sliders_) {
             $imagenes->set("cod", $sliders_['cod']);
             $img = $imagenes->view();
             ?>
-            <div class="ps-product--banner">
-                <div class="ps-product__thumbnail"
-                     style="background:url('<?= URL . "/" . $img["ruta"]; ?>') no-repeat center center/cover;height:500px;width:100%"></div>
-                <div class="ps-product__content">
-                    <h3><?= $sliders_["titulo"] ?></h3>
-                    <select class="ps-rating">
-                        <option value="1">1</option>
-                        <option value="1">2</option>
-                        <option value="1">3</option>
-                        <option value="1">4</option>
-                        <option value="1">5</option>
-                    </select>
-                    <p><?= $sliders_["subtitulo"] ?></p>
-                    <div class="ps-product__actions">
-                        <a class="ps-btn" href="<?= URL . "/produtos"; ?>">Más información</a>
-                    </div>
-                </div>
-            </div>
+            <img src="<?= URL . "/" . $img["ruta"]; ?>" width="100%" />
             <?php
         }
         ?>
@@ -65,7 +48,7 @@ $template->themeInit();
                         $categoria = $categorias->view();
                         $imagenes_productos = $imagenes->listForProduct();
                         ?>
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 ">
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-12 ">
                             <div class="ps-product">
                                 <div class="ps-product__thumbnail">
                                     <div style="background:url('<?= URL ?>/<?= $imagenes_productos[0]["ruta"] ?>') no-repeat center center/contain;width:100%;height:200px"></div>
@@ -106,6 +89,7 @@ $template->themeInit();
                     }
                     ?>
                 </div>
+                <div class="text-center mt-65"><a class="ps-btn" href="<?= URL ?>/blog">Ver todos los productos</a></div>
             </div>
         </div>
     </div>
@@ -229,6 +213,8 @@ if (@count($novedades_data) > 1) {
                         </div>
                     </div>
                 </div>
+                <div class="text-center mt-65"><a class="ps-btn" href="<?= URL ?>/blog">Ver todas las novedades</a></div>
+
             </div>
         </div>
     </div>

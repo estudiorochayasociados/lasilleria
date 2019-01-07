@@ -56,7 +56,7 @@ switch ($pedido_info["tipo"]) {
                     <b>Estado:</b> <?= $estado ?><br/>
                     <b>Método de pago:</b> <?= $tipo ?>
                 </p>
-                <table class="table table-hover text-left">
+                <table class="table table-hover text-left hidden-xs hidden-sm">
                     <thead>
                     <th><b>PRODUCTO</b></th>
                     <th><b>PRECIO UNITARIO</b></th>
@@ -103,6 +103,44 @@ switch ($pedido_info["tipo"]) {
                     </tr>
                     </tbody>
                 </table>
+                <div class="table table-hover hidden-lg hidden-md">
+                    <?php
+                    if (isset($_POST["eliminarCarrito"])) {
+                        $carrito->delete($_POST["eliminarCarrito"]);
+                    }
+                    $i = 0;
+                    $precio = 0;
+                    foreach ($pedido as $pedido_) {
+                        $precio += ($pedido_["precio"] * $pedido_["cantidad"]);
+                        $opciones = @implode(" - ", $pedido_["opciones"]);
+                        if ($pedido_["id"] == "Envio-Seleccion") {
+                            $clase = "text-bold";
+                            $none = "hidden";
+                        } else {
+                            $clase;
+                            $none;
+                        }
+                        ?>
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <b><?= $pedido_["producto"]; ?></b><br/><?= $opciones ?><br/>
+                                <span class="<?= $none ?>"><?= "$" . $pedido_["precio"]; ?> x <?= $pedido_["cantidad"]; ?></span><br/>
+                                <?php
+                                if ($pedido_["precio"] != 0) {
+                                    echo "$" . ($pedido_["precio"] * $pedido_["cantidad"]);
+                                } else {
+                                    echo "¡Gratis!";
+                                }
+                                ?>
+                            </div>
+                            <div class="col-xs-1"><a href="<?= URL ?>/carrito.php?remover=<?= $key ?>"><i class="fa fa-remove"></i></a></div>
+                        </div>
+                        <hr/>
+                        <?php
+                        $i++;
+                    }
+                    ?>
+                </div>
             </div>
         </div>
     </div>

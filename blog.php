@@ -93,7 +93,7 @@ $numeroPaginas = $novedades->paginador("", $cantidad);
                         break;
                 }
                 ?>
-                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ">
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 nota ">
                     <article class="ps-post--vertical">
                         <div class="ps-post__thumbnail" style="  height:200px; background:url(<?= URL . '/' . $img['ruta'] ?>) no-repeat center center/cover;" ><a class="ps-post__overlay" href="<?= URL . '/nota/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>"></a>
                         </div>

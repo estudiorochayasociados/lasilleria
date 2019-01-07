@@ -18,24 +18,25 @@ if ($categoria != '') {
 }
 
 $productos_data = $productos->list($filter, '', (24 * $pagina) . ',' . 24);
-$categorias->set("cod",$categoria);
+$categorias->set("cod", $categoria);
 $categoria__ = $categorias->view();
 $productos_paginador = $productos->paginador($filter, 24);
 
-$template->set("title", "SAN JOSÉ MUEBLES - ".$categoria__["titulo"]);
+
+$template->set("title", "SAN JOSÉ MUEBLES - " . $categoria__["titulo"]);
 $template->set("description", "");
-$template->set("keywords", $categoria__["titulo"].",madera guatambu,sillas de madera, sillas, fabrica de sillas,comprar sillas online");
+$template->set("keywords", $categoria__["titulo"] . ",madera guatambu,sillas de madera, sillas, fabrica de sillas,comprar sillas online");
 $template->set("favicon", LOGO);
 
 $template->themeInit();
 ?>
-    <div class="ps-hero bg--cover mb-60" >
+    <div class="ps-hero bg--cover mb-60">
         <div class="ps-container">
-            <h3>Shop Page</h3>
+            <h1><?= strtoupper($categoria__["titulo"]); ?> DE MADERA GUATAMBÚ</h1>
             <div class="ps-breadcrumb">
                 <ol class="breadcrumb">
-                    <li><a href="index.html">Home</a></li>
-                    <li class="active">Shop Page</li>
+                    <li><a href="<?= URL ?>/productos">Productos</a></li>
+                    <li class="active"><?= strtoupper($categoria__["titulo"]); ?></li>
                 </ol>
             </div>
         </div>
@@ -59,18 +60,23 @@ $template->themeInit();
                             ?>
                         </ul>
                     </aside>
-
-                    <aside class="widget widget_sidebar widget_category hidden-lg hidden-md">
-                        <h3 class="widget-title">Categorias</h3>
-                        <select name="categoria" onchange="">
+                </aside>
+                <aside class="hidden-lg hidden-md">
+                    <h3 class="widget-title">Categorias</h3>
+                    <form method="get" action="<?= URL ?>/productos">
+                        <select name="categoria" class="form-control" onChange='this.form.submit()'>
+                            <option>Elegí la categoría que estás buscando</option>
                             <?php
-                            $categorias_side = $categorias->list('');
                             foreach ($categorias_side as $categorias_) {
-                                echo '<option value="' . $categorias_['cod'] . '">' . $categorias_['titulo'] . '</option>';
+                                if ($categorias_["cod"] == $categoria) {
+                                    echo '<option value="' . $categorias_['cod'] . '" selected>' . strtoupper($categorias_['titulo']) . '</option>';
+                                } else {
+                                    echo '<option value="' . $categorias_['cod'] . '">' . strtoupper($categorias_['titulo']) . '</option>';
+                                }
                             }
                             ?>
                         </select>
-                    </aside>
+                    </form>
                 </aside>
                 <div class="col-md-9 col-sm-12">
                     <div class="ps-row">
@@ -86,7 +92,7 @@ $template->themeInit();
                                 <div class="ps-product">
                                     <div class="ps-product__thumbnail">
                                         <a href="<?= URL . "/producto/" . $funciones->normalizar_link($producto["titulo"]) . "/" . $producto["id"] ?>">
-                                        <div style="background:url('<?= URL ?>/<?= $imagenes_productos[0]["ruta"] ?>') no-repeat center center/contain;width:100%;height:200px"></div>
+                                            <div style="background:url('<?= URL ?>/<?= $imagenes_productos[0]["ruta"] ?>') no-repeat center center/contain;width:100%;height:200px"></div>
                                         </a>
                                         <div class="ps-product__content full">
                                             <a class="ps-product__title" href="<?= URL . "/producto/" . $funciones->normalizar_link($producto["titulo"]) . "/" . $producto["id"] ?>">

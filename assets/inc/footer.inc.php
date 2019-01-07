@@ -1,6 +1,6 @@
-<footer class="ps-footer site-footer">
-    <div class="ps-footer__content">
-        <div class="ps-container">
+<footer class="ps-footer site-footer   ">
+    <div class="ps-footer__content  hidden-lg hidden-md">
+        <div class="ps-container hidden-lg hidden-md">
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 ">
                     <div class="ps-site-info site-info"><a class="ps-logo" href="index.html"><img src="<?= URL ?>/assets/images/logo.png" alt=""></a>
@@ -60,12 +60,11 @@
         <div class="ps-container">
             <div class="row">
                 <div class="col-lg-8 col-md-7 col-sm-12 col-xs-12 ">
-                    <p>&copy; Copyright by <span>FURNITURE STORE</span>. Design by <a href="#">Alena Studio</a>.</p>
+                    <p>&copy; Copyright by <span>San José Muebles</span>. <a href="http://www.estudiorochayasoc.com.ar" target="_blank">Estudio Rocha & Asociados</a>.</p>
                 </div>
                 <div class="col-lg-4 col-md-5 col-sm-12 col-xs-12 ">
                     <div class="ps-footer__payment-methods">
-                        <a href="#"><img src="<?= URL ?>/assets/images/payment-method/paypal.png" alt=""></a>
-                        <a href="#"><img src="<?= URL ?>/assets/images/payment-method/visa.png" alt=""></a>
+                         <a href="#"><img src="<?= URL ?>/assets/images/payment-method/visa.png" alt=""></a>
                         <a href="#"><img src="<?= URL ?>/assets/images/payment-method/master-card.png" alt=""></a>
                     </div>
                 </div>

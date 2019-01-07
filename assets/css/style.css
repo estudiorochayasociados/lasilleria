@@ -5214,10 +5214,7 @@ textarea.form-control:-ms-input-placeholder {
 }
 
 .ps-product--banner {
-  border-top:4px solid #59AB02;
-  padding-left: calc((100% - 1440px) / 2);
-  padding-right: calc((100% - 1440px) / 2);
-  display: -webkit-box;
+   display: -webkit-box;
   display: -moz-box;
   display: box;
   display: -webkit-flex;
@@ -5508,7 +5505,7 @@ textarea.form-control:-ms-input-placeholder {
   padding: 40px 0;
 }
 
-.ps-hero h3,.ps-hero  {
+.ps-hero h3,.ps-hero,.ps-hero h1 {
   font-size: 36px;
   font-weight: 600;
   color: #fff !important;
@@ -8576,7 +8573,7 @@ svg {
     padding: 5px 10px;
     line-height: 20px;
     font-weight: 500;
-    font-size: 12px;
+    font-size: 16px;
   }
   .menu > li > a:before {
     visibility: visible;
@@ -8782,7 +8779,7 @@ svg {
 
 .navigation .ps-logo {
   position: relative;
-  top: -15px;
+  top: -7px;
   margin-bottom: -15px;
   max-width: 190px;
   margin-right: 50px;
@@ -9012,7 +9009,6 @@ svg {
 
 .ps-footer {
   position: relative;
-  padding-top: 60px;
   background-color: #f8f8f8;
 }
 
@@ -9824,4 +9820,8 @@ html .bg--parallax {
 
 .ps-hero {
     background:#e1e1e1;
+}
+
+.nota {
+  height:500px;
 }

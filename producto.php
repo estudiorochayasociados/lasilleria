@@ -47,11 +47,11 @@ $template->themeInit();
 ?>
     <div class="ps-hero bg--cover" data-background="">
         <div class="ps-container">
-            <h3>Shop Page</h3>
+            <h1><?= $producto["titulo"] ?></h1>
             <div class="ps-breadcrumb">
                 <ol class="breadcrumb">
-                    <li><a href="index.html">Home</a></li>
-                    <li class="active">Shop Page</li>
+                    <li><a href="<?= URL ?>">Productos</a></li>
+                    <li class="active"><?= $producto["titulo"] ?></li>
                 </ol>
             </div>
         </div>
@@ -118,7 +118,7 @@ $template->themeInit();
                                     $funciones->headerMove(CANONICAL . "?success");
                                 }
                                 if (strpos(CANONICAL, "success") == true) {
-                                    echo "<div class='alert alert-success'>Agregaste un producto a tu carrito, querés <a href='" . URL . "/carrito'>pasar por caja</a> o <a href='" . URL . "/productos'>seguir comprando</a></div>";
+                                    echo "<div class='alert alert-success'>Agregaste un producto a tu carrito, querés <a href='" . URL . "/carrito'><b>pasar por caja</b></a> o <a href='" . URL . "/productos'><b>seguir comprando</b></a></div>";
                                 }
                                 ?>
                                 <input type="hidden" value="" id="precioForm" name="precio"/>
@@ -140,7 +140,7 @@ $template->themeInit();
                                             }
                                             ?>
                                         </select>
-                                        <a href="<?= URL ?>/c/telas-y-cuerinas" target="_blank"><i>* Ver Cuerinas</i></a>
+                                        <a href="<?= URL ?>/c/cuerinas-para-tapizados" target="_blank"><i>* Ver Cuerinas</i></a>
                                     </div>
                                     <div class="col-md-6">
                                         <h5>Telas</h5>
@@ -160,7 +160,7 @@ $template->themeInit();
                                             ?>
                                         </select>
                                         <div class="clearfix"></div>
-                                        <a href="<?= URL ?>/c/telas" target="_blank"><i>* Ver Telas</i></a>
+                                        <a href="<?= URL ?>/c/telas-para-tapizados" target="_blank"><i>* Ver Telas</i></a>
                                     </div>
                                     <div class="col-md-12">
                                         <h5 class="mt-20">Lustre</h5>
@@ -180,7 +180,7 @@ $template->themeInit();
                                             ?>
                                         </select>
                                         <div class="clearfix"></div>
-                                        <a href="<?= URL ?>/c/tipos-de-lustres" target="_blank"><i>* Ver lustres</i></a>
+                                        <a href="<?= URL ?>/c/lustres-para-madera" target="_blank"><i>* Ver lustres</i></a>
                                     </div>
                                 </div>
                                 <h5 class="mt-20">Cantidad</h5>

@@ -68,7 +68,7 @@ class Sliders
             $filterSql = '';
         }
 
-        $sql   = "SELECT * FROM `sliders` $filterSql  ORDER BY id DESC";
+        $sql   = "SELECT * FROM `sliders` $filterSql  ORDER BY id asc";
         $notas = $this->con->sqlReturn($sql);
 
         if ($notas) {

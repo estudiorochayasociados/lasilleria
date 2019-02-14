@@ -5,8 +5,9 @@ $template = new Clases\TemplateSite();
 $funciones = new Clases\PublicFunction();
 $carrito = new Clases\Carrito();
 $envios = new Clases\Envios();
+$pagos = new Clases\Pagos();
 
-$template->set("title", "SAN JOSÉ MUEBLES - CARRITO");
+$template->set("title", "La Sillería - CARRITO");
 $template->set("description", "Finalizá tu carrito de compra");
 $template->set("keywords", "comprar sillas de madera guatambu, sillas de madera guatambu en el interior, compra sillas online");
 $template->set("favicon", LOGO);
@@ -77,7 +78,7 @@ if ($remover != '') {
                     }
                     ?>
                 </div>
-                <table class="table table-hover hidden-xs hidden-sm">
+                <table class="table table-hover">
                     <thead>
                     <th>PRODUCTO</th>
                     <th>PRECIO UNITARIO</th>
@@ -87,25 +88,25 @@ if ($remover != '') {
                     </thead>
                     <tbody>
                     <?php
-                    if (isset($_POST["eliminarCarrito"])) {
-                        $carrito->delete($_POST["eliminarCarrito"]);
+                    if (isset($_GET["remover"])) {
+                        $carrito->delete($_GET["remover"]);
+                        $funciones->headerMove(URL . "/carrito");
                     }
-
                     $i = 0;
                     $precio = 0;
                     foreach ($carro as $key => $carroItem) {
                         $precio += ($carroItem["precio"] * $carroItem["cantidad"]);
                         $opciones = @implode(" - ", $carroItem["opciones"]);
-                        if ($carroItem["id"] == "Envio-Seleccion") {
+                        if ($carroItem["id"] == "Envio-Seleccion" || $carroItem["id"] == "Metodo-Pago") {
                             $clase = "text-bold";
                             $none = "hidden";
                         } else {
-                            $clase;
-                            $none;
+                            $clase = '';
+                            $none = '';
                         }
                         ?>
                         <tr class="<?= $clase ?>">
-                            <td><b><?= $carroItem["titulo"]; ?></b><br/><?= $opciones ?></td>
+                            <td><b><?= mb_strtoupper($carroItem["titulo"]); ?></b><br/><?= mb_strtoupper($opciones) ?></td>
                             <td><span class="<?= $none ?>"><?= "$" . $carroItem["precio"]; ?></span></td>
                             <td><span class="<?= $none ?>"><?= $carroItem["cantidad"]; ?></span></td>
                             <td>
@@ -127,71 +128,69 @@ if ($remover != '') {
                     ?>
                     </tbody>
                 </table>
-                <div class="table table-hover hidden-lg hidden-md">
-                    <?php
-                    if (isset($_POST["eliminarCarrito"])) {
-                        $carrito->delete($_POST["eliminarCarrito"]);
-                    }
-                    $i = 0;
-                    $precio = 0;
-                    foreach ($carro as $key => $carroItem) {
-                        $precio += ($carroItem["precio"] * $carroItem["cantidad"]);
-                        $opciones = @implode(" - ", $carroItem["opciones"]);
-                        if ($carroItem["id"] == "Envio-Seleccion") {
-                            $clase = "text-bold";
-                            $none = "hidden";
+            </div>
+            <form class="form-right pull-right col-md-6 jumbotron" method="post" action="<?= URL ?>/carrito">
+                <?php
+                $metodo = isset($_POST["metodos-pago"]) ? $_POST["metodos-pago"] : '';
+                $metodo_get = isset($_GET["metodos-pago"]) ? $_GET["metodos-pago"] : '';
+                if ($metodo != '') {
+                    $key_metodo = $carrito->checkPago();
+                    $carrito->delete($key_metodo);
+                    $pagos->set("cod", $metodo);
+                    $pago__ = $pagos->view();
+                    $precio_final_metodo = $carrito->precio_total();
+                    if ($pago__["aumento"] != 0 || $pago__["disminuir"] != 0) {
+                        if ($pago__["aumento"]) {
+                            $numero = (($precio_final_metodo * $pago__["aumento"]) / 100);
+                            $carrito->set("id", "Metodo-Pago");
+                            $carrito->set("cantidad", 1);
+                            $carrito->set("titulo", "CARGO +" . $pago__['aumento'] . "% / " . mb_strtoupper($pago__["titulo"]));
+                            $carrito->set("precio", $numero);
+                            $carrito->add();
                         } else {
-                            $clase;
-                            $none;
+                            $numero = (($precio_final_metodo * $pago__["disminuir"]) / 100);
+                            $carrito->set("id", "Metodo-Pago");
+                            $carrito->set("cantidad", 1);
+                            $carrito->set("titulo", "DESCUENTO -" . $pago__['disminuir'] . "% / " . mb_strtoupper($pago__["titulo"]));
+                            $carrito->set("precio", "-" . $numero);
+                            $carrito->add();
+                        }
+                    }
+                    $funciones->headerMove(CANONICAL . "/" . $metodo);
+                }
+                ?>
+                <div class="form-bd">
+                    <h3 class="mb-0">
+                        <span class="text3"><b>TOTAL:</b></span>
+                        <span class="text4">$<?= number_format($carrito->precio_total(), "2", ",", "."); ?></span>
+                    </h3>
+                    <?php
+                    if ($carroEnvio == '') {
+                        ?>
+                        <span class="btn btn-default mt-10 mb-10 style-bd" onclick="$('#envio').addClass('alert alert-danger');">¿CÓMO PEREFERÍS EL ENVÍO DEL PEDIDO?</span>
+                        <span><br/>¡Necesitamos que nos digas como querés realizar <br/>tu envío para que lo tengas listo cuanto antes!</span>
+                        <?php
+                    } else {
+                        echo "<p class='mt-10'><b>Seleccioná tu medio de pago</b></p>";
+                        $lista_pagos = $pagos->list(array(" estado = 0 "));
+                        foreach ($lista_pagos as $pago) {
+                            ?>
+                            <div class="radioButtonPay mt-10 mb-10">
+                                <input type="radio" id="<?= ($pago["cod"]) ?>" name="metodos-pago" value="<?= ($pago["cod"]) ?>" onclick="this.form.submit()" <?php if ($metodo_get === $pago["cod"]) {
+                                    echo " checked ";
+                                } ?>>
+                                <label for="<?= ($pago["cod"]) ?>"><b><?= mb_strtoupper($pago["titulo"]) ?></b></label>
+                                <span><br/><?= $pago["leyenda"] ?></span>
+                            </div>
+                            <?php
                         }
                         ?>
-                        <div class="row">
-                            <div class="col-xs-10">
-                                <b><?= $carroItem["titulo"]; ?></b><br/><?= $opciones ?><br/>
-                                <span class="<?= $none ?>"><?= "$" . $carroItem["precio"]; ?> x <?= $carroItem["cantidad"]; ?></span><br/>
-                                <?php
-                                if ($carroItem["precio"] != 0) {
-                                    echo "$" . ($carroItem["precio"] * $carroItem["cantidad"]);
-                                } else {
-                                    echo "¡Gratis!";
-                                }
-                                ?>
-                            </div>
-                            <div class="col-xs-1"><a href="<?= URL ?>/carrito.php?remover=<?= $key ?>"><i class="fa fa-remove"></i></a></div>
-                        </div>
-                         <hr/>
-                        <?php
-                        $i++;
-                    }
-                    ?>
+                    <?php } ?>
+                    <?php if ($metodo_get != '') { ?>
+                        <a href="<?= URL ?>/pagar/<?= $metodo_get ?>" class="mb-40 btn btn-success mt-20"><i class="fa fa-shopping-cart"></i> IR A PAGAR EL CARRITO</a>
+                    <?php } ?>
                 </div>
-                <form class="form-right pull-right col-md-6 well well-lg mb-50 col-xs-12" method="post" action="<?= URL ?>/pagar">
-                    <div class="form-bd">
-                        <h3 class="mb-0">
-                            <span class="text3"><b>TOTAL A PAGAR:</b> $<?= number_format($carrito->precio_total(), "2", ",", "."); ?></span>
-                        </h3>
-                        <?php if ($carroEnvio == '') { ?>
-                            <a href="#envioA" class="btn btn-default mt-10 mb-10" onclick="$('#envio').addClass('alert alert-danger');">ELEGÍ EL ENVÍO DEL PEDIDO</a><br/>
-                            <b>¡Necesitamos que nos digas como querés realizar tu envío para que lo tengas listo cuanto antes!</b>
-                        <?php } else { ?>
-                            <div class="radioButtonPay mt-20 mb-10">
-                                <input type="radio" id="0" name="metodos-pago" value="0">
-                                <label for="0">Transferencia Bancaria</label>
-                            </div>
-                            <div class="radioButtonPay mt-20 mb-10">
-                                <input type="radio" id="1" name="metodos-pago" value="1">
-                                <label for="1">Coordinar con vendedor</label>
-                            </div>
-                            <div class="radioButtonPay mt-20 mb-10">
-                                <input type="radio" id="2" name="metodos-pago" value="2" checked>
-                                <label for="2">Tarjeta de crédito o débito
-                                    <div class="hidden-xs hidden-sm"><span class="fa fa-arrow-right"></span> <b class="ml-5">¡Recomendado!</b></div>
-                                </label>
-                            </div>
-                            <button type="submit" name="pagar" class="mb-10 mt-10 btn btn-success btn-lg pull-left">PAGAR EL CARRITO</button>
-                        <?php } ?>
-                    </div>
-                </form>
+            </form>
             </table>
     </main>
 <?php

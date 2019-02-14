@@ -5,7 +5,7 @@ $template = new Clases\TemplateSite();
 $funciones = new Clases\PublicFunction();
 $contenidos = new Clases\Contenidos();
 
-$template->set("title", "SAN JOSÉ MUEBLES");
+$template->set("title", "La Sillería");
 $template->set("description", "");
 $template->set("keywords", "");
 $template->set("favicon", LOGO);

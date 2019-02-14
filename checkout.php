@@ -1,83 +1,66 @@
 <?php
 require_once "Config/Autoload.php";
-Config\Autoload::runSitio();
-$template = new Clases\TemplateSite();
-$funciones = new Clases\PublicFunction();
-$template->set("title", "SAN JOSÉ MUEBLES - PAGAR");
-$template->set("description", "Gracias por tu compra online");
-$template->set("keywords", "comprar sillas con tarjetas de créditos, compra de sillas en 12 cuotas");
-$template->set("favicon", LOGO);
-$template->themeInit();
+Config\Autoload::runSitio(); 
 
 $cod_pedido = isset($_GET["cod_pedido"]) ? $_GET["cod_pedido"] : '';
 $tipo_pedido = isset($_GET["tipo_pedido"]) ? $_GET["tipo_pedido"] : '';
+
+$template = new Clases\TemplateSite();
+$funciones = new Clases\PublicFunction();
 $carrito = new Clases\Carrito();
 $pedidos = new Clases\Pedidos();
+$usuarios = new Clases\Usuarios();
+$pagos = new Clases\Pagos();
+
 $pedidos->set("cod", $cod_pedido);
 $pedido = $pedidos->view();
-$usuarios = new Clases\Usuarios();
+$pagos->set("cod", $tipo_pedido);
+$pago = $pagos->view();
 $usuarioSesion = $usuarios->view_sesion();
 $carro = $carrito->return();
 $precio = $carrito->precio_total();
-$pedidos = new Clases\Pedidos();
-if (is_array($pedido)) {
+$fecha = date("Y-m-j H:i:s");
+
+if (count($pedido) != 0) {
     $pedidos->set("cod", $cod_pedido);
     $pedidos->delete();
     foreach ($carro as $carroItem) {
-        $opciones = @implode(",", $carroItem["opciones"]);
         $pedidos->set("cod", $cod_pedido);
-        if ($opciones != '') {
-            $pedidos->set("producto", mb_strtoupper($carroItem["titulo"] . " - " . $opciones));
-        } else {
-            $pedidos->set("producto", mb_strtoupper($carroItem["titulo"]));
-        }
+        $pedidos->set("producto", mb_strtoupper($carroItem["titulo"]));
         $pedidos->set("cantidad", $carroItem["cantidad"]);
         $pedidos->set("precio", $carroItem["precio"]);
         $pedidos->set("estado", 0);
-        $pedidos->set("tipo", $tipo_pedido);
+        $pedidos->set("tipo", $pago["titulo"]);
         $pedidos->set("usuario", $usuarioSesion["cod"]);
         $pedidos->set("detalle", "");
-        $pedidos->set("fecha", date('Y-m-d'));
+        $pedidos->set("fecha", $fecha);
         $pedidos->add();
     }
 } else {
     foreach ($carro as $carroItem) {
-        $opciones = @implode(",", $carroItem["opciones"]);
         $pedidos->set("cod", $cod_pedido);
-        if ($opciones != '') {
-            $pedidos->set("producto", mb_strtoupper($carroItem["titulo"] . " - " . $opciones));
-        } else {
-            $pedidos->set("producto", mb_strtoupper($carroItem["titulo"]));
-        }
+        $pedidos->set("producto", mb_strtoupper($carroItem["titulo"]));
         $pedidos->set("cantidad", $carroItem["cantidad"]);
         $pedidos->set("precio", $carroItem["precio"]);
         $pedidos->set("estado", 0);
-        $pedidos->set("tipo", $tipo_pedido);
+        $pedidos->set("tipo", $pago["titulo"]);
         $pedidos->set("usuario", $usuarioSesion["cod"]);
         $pedidos->set("detalle", "");
-        $pedidos->set("fecha", date('Y-m-d'));
+        $pedidos->set("fecha", $fecha);
         $pedidos->add();
     }
 }
 
-switch ($tipo_pedido) {
+switch ($pago["tipo"]) {
     case 0:
-        //Transferencia o depósito bancario
         $pedidos->set("cod", $cod_pedido);
-        $pedidos->set("estado", 0);
+        $pedidos->set("estado", $pago["defecto"]);
         $pedidos->cambiar_estado();
         $funciones->headerMove(URL . "/compra-finalizada.php");
         break;
     case 1:
-        //Coordinar con el vendedor
-        $pedidos->set("cod", $cod_pedido);
-        $pedidos->set("estado", 0);
-        $pedidos->cambiar_estado();
-        $funciones->headerMove(URL . "/compra-finalizada.php");
-        break;
-    case 2:
-        include("vendor/mercadopago/sdk/lib/mercadopago.php");
-        $mp = new MP ("3087431389449841", "8V6jXmINfMLcpoEqV1cnVGQbEMnVwyjK");
+        include "vendor/mercadopago/sdk/lib/mercadopago.php";
+        $mp = new MP("6889860707289024", "S05Ws0XaD6xdupuJJoeh1yMtHBHNtTG5");
         $preference_data = array(
             "items" => array(
                 array(
@@ -86,17 +69,17 @@ switch ($tipo_pedido) {
                     "quantity" => 1,
                     "currency_id" => "ARS",
                     "unit_price" => $precio
-                )
+                ),
             ),
             "payer" => array(
                 "name" => $usuarioSesion["nombre"],
                 "surname" => $usuarioSesion["apellido"],
-                "email" => $usuarioSesion["email"]
+                "email" => $usuarioSesion["email"],
             ),
             "back_urls" => array(
-                "success" => "/compra-finalizada.php?estado=1",
-                "pending" => "/compra-finalizada.php?estado=0",
-                "failure" => "/compra-finalizada.php?estado=2"
+                "success" => URL . "/compra-finalizada.php?estado=2",
+                "pending" => URL . "/compra-finalizada.php?estado=1",
+                "failure" => URL . "/compra-finalizada.php?estado=4",
             ),
             "external_reference" => $cod_pedido,
             "auto_return" => "all",
@@ -105,13 +88,14 @@ switch ($tipo_pedido) {
                 "excluded_payment_methods" => array(),
                 "excluded_payment_types" => array(
                     array("id" => "ticket"),
-                    array("id" => "atm")
-                )
-            )
+                    array("id" => "atm"),
+                ),
+            ),
         );
         $preference = $mp->create_preference($preference_data);
-        echo "<iframe src='" . $preference["response"]["sandbox_init_point"] . "' width='100%' height='700px'></iframe>";
+        $template->themeInit();
+        echo "<iframe src='" . $preference["response"]["sandbox_init_point"] . "' width='100%' height='700px' style='border:0;margin:0'></iframe>";
+        $template->themeEnd();
         break;
 }
-$template->themeEnd();
-?>
+ 

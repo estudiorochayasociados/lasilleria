@@ -10,6 +10,7 @@ class Imagenes
     public $link;
     public $ruta;
     public $cod;
+    public $orden;
     private $con;
 
     //Metodos
@@ -66,39 +67,33 @@ class Imagenes
 
     public function view()
     {
-        $sql      = "SELECT * FROM `imagenes` WHERE cod = '{$this->cod}' ORDER BY id ASC";
+        $sql      = "SELECT * FROM `imagenes` WHERE cod = '{$this->cod}' ORDER BY orden DESC";
         $imagenes = $this->con->sqlReturn($sql);
         $row      = mysqli_fetch_assoc($imagenes);
         if ($row===NULL) {
             $row['ruta']      =  "assets/archivos/sin_imagen.jpg";
-        return $row;
+            return $row;
         }else {
-        return $row;
+            return $row;
         }
     }
 
     function listForProduct() {
         $array = array();
-        $sql   = "SELECT * FROM `imagenes` WHERE cod = '{$this->cod}' ORDER BY id ASC";
-        $notas = $this->con->sqlReturn($sql);
+        $sql   = "SELECT * FROM `imagenes` WHERE cod = '{$this->cod}' ORDER BY orden DESC";
+        $imagenes = $this->con->sqlReturn($sql);
 
-       // if ($notas) {
-       //     while ($row = mysqli_fetch_assoc($notas)) {
-       //         $array[] = $row;
-       //     }
-       //     return $array;
-       // }
-        if ($notas===NULL) {
+        if($imagenes===NULL) {
             $row['ruta']      =  "assets/archivos/sin_imagen.jpg";
-        return $row;
-        }else {
-            while ($row = mysqli_fetch_assoc($notas)) {
-                 $array[] = $row;
-             }
-             return $array;
+            return $row;
+        } else {
+            while ($row = mysqli_fetch_assoc($imagenes)) {
+                $array[] = $row;
+            }
+            return $array;
         }
     }
-    
+
     function list($filter) {
         $array = array();
         if (is_array($filter)) {
@@ -108,25 +103,58 @@ class Imagenes
             $filterSql = '';
         }
 
-        $sql   = "SELECT * FROM `imagenes` $filterSql  ORDER BY id ASC";
-        $notas = $this->con->sqlReturn($sql);
+        $sql   = "SELECT * FROM `imagenes` $filterSql  ORDER BY orden DESC";
+        $imagenes = $this->con->sqlReturn($sql);
 
-        if ($notas) {
-            while ($row = mysqli_fetch_assoc($notas)) {
+        if ($imagenes) {
+            while ($row = mysqli_fetch_assoc($imagenes)) {
                 $array[] = $row;
             }
             return $array;
         }
     }
 
+    function list_meli($filter) {
+        $array = array();
+        if (is_array($filter)) {
+            $filterSql = "WHERE ";
+            $filterSql .= implode(" AND ", $filter);
+        } else {
+            $filterSql = '';
+        }
+
+        $sql   = "SELECT * FROM `imagenes` $filterSql  ORDER BY orden DESC";
+        $imagenes = $this->con->sqlReturn($sql);
+        $img = '';
+        if ($imagenes) {
+            while ($row = mysqli_fetch_assoc($imagenes)) {
+                $img .= '{"source":"' . URLSITE . "/" .$row["ruta"] . '"},';
+            }
+            return $img;
+        }
+    }
+
+    public function orden() {
+        $sql   = "UPDATE `imagenes` SET orden = 0 WHERE cod = '{$this->cod}'";
+        $query = $this->con->sql($sql);
+        $sql   = "UPDATE `imagenes` SET orden = 1 WHERE id = '{$this->id}'";
+        $query = $this->con->sql($sql);
+        return $query;
+    }
+
     public function imagenesAdmin()
     {
-        $sql      = "SELECT * FROM `imagenes` WHERE cod = '{$this->cod}' ORDER BY id DESC";
+        $sql      = "SELECT * FROM `imagenes` WHERE cod = '{$this->cod}' ORDER BY orden DESC";
         $imagenes = $this->con->sqlReturn($sql);
         while ($row = mysqli_fetch_assoc($imagenes)) {
             echo "<div class='col-md-2 mb-20 mt-20'>";
             echo "<img src='../" . $row["ruta"] . "' width='100%'  class='mb-20' />";
-            echo "<a href='" . URL . "/index.php?op={$this->link}&cod=" . $row["cod"] . "&borrarImg=" . $row["id"] . "' class='btn btn-primary'>BORRAR IMAGEN</a>";
+            echo "<a href='" . URL . "/index.php?op={$this->link}&cod=" . $row["cod"] . "&borrarImg=" . $row["id"] . "' class='btn btn-sm pull-left btn-danger'>BORRAR IMAGEN</a>";
+            if($row["orden"] == 0) {
+            echo "<a href='" . URL . "/index.php?op={$this->link}&cod=" . $row["cod"] . "&ordenImg=" . $row["id"] . "' class='btn btn-sm pull-right btn-warning'><i class='fa fa-star'></i></a>";
+            } else {
+            echo "<a href='#' class='btn btn-sm pull-right btn-success'><i class='fa fa-star'></i></a>";
+            }
             echo "<div class='clearfix'></div>";
             echo "</div>";
         };

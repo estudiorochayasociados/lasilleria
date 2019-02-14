@@ -22,9 +22,9 @@ $lustre = explode("||", strip_tags($lustre["contenido"]));
 
 $data = $categorias->list(array("area = 'productos'"));
 
-$appId = '2850401307770843';
-$secretKey = 'FAyHI1wvuM4Q0ylT0YrlaKh4uBmv1ZNv';
-$redirectURI = "http://localhost/sanjosemuebles/admin/index.php?op=productos&accion=agregar";
+$appId = MELI_ID;
+$secretKey = MELI_SECRET;
+$redirectURI = URL . "/index.php?op=productos&accion=agregar";
 $siteId = 'MLA';
 $url = 'https://api.mercadolibre.com/oauth/token';
 $context = stream_context_create(array(
@@ -35,14 +35,14 @@ $context = stream_context_create(array(
             array(
                 'grant_type' => 'client_credentials',
                 'client_id' => $appId,
-                'client_secret' => $secretKey
+                'client_secret' => $secretKey,
             )
         ),
-        'timeout' => 60
-    )
+        'timeout' => 60,
+    ),
 ));
 
-$resp = json_decode(file_get_contents($url, FALSE, $context));
+$resp = json_decode(file_get_contents($url, false, $context));
 $meli = new Meli($appId, $secretKey, $resp->access_token, $resp->refresh_token);
 
 if (isset($_POST["agregar"])) {
@@ -52,9 +52,7 @@ if (isset($_POST["agregar"])) {
     $productos->set("titulo", $funciones->antihack_mysqli(isset($_POST["titulo"]) ? $_POST["titulo"] : ''));
     $productos->set("cod_producto", $funciones->antihack_mysqli(isset($_POST["cod_producto"]) ? $_POST["cod_producto"] : ''));
     $productos->set("precio", $funciones->antihack_mysqli(isset($_POST["precio"]) ? $_POST["precio"] : ''));
-    $productos->set("precio_cuerina", $funciones->antihack_mysqli(isset($_POST["precio_cuerina"]) ? $_POST["precio_cuerina"] : ''));
-    $productos->set("precio_telas", $funciones->antihack_mysqli(isset($_POST["precio_tela"]) ? $_POST["precio_tela"] : ''));
-    $productos->set("precio_descuento", $funciones->antihack_mysqli(isset($_POST["precio_descuento"]) ? $_POST["precio_descuento"] : ''));
+    $productos->set("precio_descuento", $funciones->antihack_mysqli(isset($_POST["precio_descuento"]) ? $_POST["precio_descuento"] : '0'));
     $productos->set("stock", $funciones->antihack_mysqli(isset($_POST["stock"]) ? $_POST["stock"] : ''));
     $productos->set("desarrollo", $funciones->antihack_mysqli(isset($_POST["desarrollo"]) ? $_POST["desarrollo"] : ''));
 
@@ -71,11 +69,9 @@ if (isset($_POST["agregar"])) {
     }
 
     $productos->set("variable4", $funciones->antihack_mysqli(isset($_POST["peso"]) ? $_POST["peso"] : ''));
-
     $productos->set("variable5", $funciones->antihack_mysqli(isset($_POST["altura"]) ? $_POST["altura"] : ''));
     $productos->set("variable6", $funciones->antihack_mysqli(isset($_POST["ancho"]) ? $_POST["ancho"] : ''));
     $productos->set("variable7", $funciones->antihack_mysqli(isset($_POST["profundidad"]) ? $_POST["profundidad"] : ''));
-
 
     $productos->set("categoria", $funciones->antihack_mysqli(isset($_POST["categoria"]) ? $_POST["categoria"] : ''));
     $productos->set("subcategoria", $funciones->antihack_mysqli(isset($_POST["subcategoria"]) ? $_POST["subcategoria"] : ''));
@@ -84,7 +80,7 @@ if (isset($_POST["agregar"])) {
     $productos->set("fecha", $funciones->antihack_mysqli(isset($_POST["fecha"]) ? $_POST["fecha"] : date("Y-m-d")));
     $productos->set("meli", $funciones->antihack_mysqli(isset($_POST["meli"]) ? $_POST["meli"] : ''));
     $productos->set("url", $funciones->antihack_mysqli(isset($_POST["url"]) ? $_POST["url"] : ''));
-
+    $img_meli = '';
     foreach ($_FILES['files']['name'] as $f => $name) {
         $imgMELI = array();
         $imgInicio = $_FILES["files"]["tmp_name"][$f];
@@ -112,214 +108,19 @@ if (isset($_POST["agregar"])) {
 
             $imagenes->set("cod", $cod);
             $imagenes->set("ruta", str_replace("../", "", $destinoRecortado));
+            $img_meli .= '{"source":"' . URLSITE . str_replace("../", "/", $destinoRecortado) . '"},';
             $imagenes->add();
-            array_push($imgMELI, array("source" => URLSITE . '/' . str_replace("../", "", $destinoRecortado)));
+
         }
         $count++;
     }
 
-    if (isset($_POST["meli"])) {
-        $user = $meli->authorize($_GET["code"], $redirectURI);
-        $_SESSION['access_token'] = $user['body']->access_token;
-        $_SESSION['expires_in'] = $user['body']->expires_in;
-        $_SESSION['refresh_token'] = $user['body']->refresh_token;
-        if ($_SESSION['expires_in'] + time() + 1 < time()) {
-            try {
-                print_r($meli->refreshAccessToken());
-            } catch (Exception $e) {
-                echo "Exception: ", $e->getMessage(), "\n";
-            }
-        }
-        $itemAdd = array(
-            "title" => $_POST["titulo"],
-            "category_id" => "MLA1627",
-            "price" => $_POST["precio"],
-            "currency_id" => "ARS",
-            "available_quantity" => $_POST["stock"],
-            "buying_mode" => "buy_it_now",
-            "listing_type_id" => "gold_special",
-            "condition" => "new",
-            "description" => "",
-            "shipping" => array(
-                "mode" => "me2",
-                "dimensions" => $_POST["ancho"] . "x" . $_POST["altura"] . "x" . $_POST["profundidad"] . "," . $_POST["peso"] . "",
-                "local_pick_up" => true,
-                "free_shipping" => false,
-                "logistic_type" => "cross_docking",
-                "store_pick_up" => false
-            ),
-            "attributes" => array(
-                array(
-                    "id" => "UPHOLSTERED",
-                    "name" => "Tapizado",
-                    "value_id" => null,
-                    "value_name" => "SI",
-                    "value_struct" => null,
-                    "attribute_group_id" => "DFLT",
-                    "attribute_group_name" => "Otros"
-                ),
-                array(
-                    "id" => "BRAND",
-                    "name" => "Marca",
-                    "value_id" => null,
-                    "value_name" => "SAN JOSÉ MUEBLES",
-                    "value_struct" => null,
-                    "attribute_group_id" => "OTHERS",
-                    "attribute_group_name" => "Otros"
-                ),
-                array(
-                    "id" => "CHAIR_DESIGN",
-                    "name" => "Diseño de la silla",
-                    "value_id" => null,
-                    "value_name" => "RT",
-                    "value_struct" => null,
-                    "attribute_group_id" => "OTHERS",
-                    "attribute_group_name" => "Otros"
-                ),
-                array(
-                    "id" => "CHAIR_HEIGHT",
-                    "name" => "Altura total",
-                    "value_id" => null,
-                    "value_name" => $_POST["altura"] . " cm",
-                    "value_struct" => array(
-                        "number" => $_POST["altura"],
-                        "unit" => "cm"
-                    ),
-                    "attribute_group_id" => "OTHERS",
-                    "attribute_group_name" => "Otros"
-                ),
-                array(
-                    "id" => "CHAIR_WIDTH",
-                    "name" => "Ancho de la silla",
-                    "value_id" => null,
-                    "value_name" => $_POST["altura"] . " cm",
-                    "value_struct" => array(
-                        "number" => $_POST["altura"],
-                        "unit" => "cm"
-                    ),
-                    "attribute_group_id" => "OTHERS",
-                    "attribute_group_name" => "Otros"
-                ),
-                array(
-                    "id" => "CHAIR_DEPTH",
-                    "name" => "Profundidad de la silla",
-                    "value_id" => null,
-                    "value_name" => $_POST["profundidad"] . " cm",
-                    "value_struct" => array(
-                        "number" => $_POST["profundidad"],
-                        "unit" => "cm"
-                    ),
-                    "attribute_group_id" => "OTHERS",
-                    "attribute_group_name" => "Otros"
-                ),
-                array(
-                    "id" => "GTIN",
-                    "name" => "Código universal de producto",
-                    "value_id" => "-1",
-                    "value_name" => null,
-                    "value_struct" => null,
-                    "attribute_group_id" => "OTHERS",
-                    "attribute_group_name" => "Otros"
-                ),
-                array(
-                    "id" => "INCLUDES_UPHOLSTERY",
-                    "name" => "Incluye tapizado",
-                    "value_id" => "242085",
-                    "value_name" => "Sí",
-                    "value_struct" => null,
-                    "attribute_group_id" => "OTHERS",
-                    "attribute_group_name" => "Otros"
-                ),
-                array(
-                    "id" => "ITEM_CONDITION",
-                    "name" => "Condición del ítem",
-                    "value_id" => "2230284",
-                    "value_name" => "Nuevo",
-                    "value_struct" => null,
-                    "attribute_group_id" => "OTHERS",
-                    "attribute_group_name" => "Otros"
-                ),
-                array(
-                    "id" => "MANUFACTURER",
-                    "name" => "Fabricante",
-                    "value_id" => null,
-                    "value_name" => "SAN JOSÉ MUEBLES",
-                    "value_struct" => null,
-                    "attribute_group_id" => "OTHERS",
-                    "attribute_group_name" => "Otros"
-                ),
-                array(
-                    "id" => "MODEL",
-                    "name" => "Modelo",
-                    "value_id" => null,
-                    "value_name" => $_POST["titulo"],
-                    "value_struct" => null,
-                    "attribute_group_id" => "OTHERS",
-                    "attribute_group_name" => "Otros"
-                ),
-                array(
-                    "id" => "NUMBER_OF_CHAIRS_BY_SET",
-                    "name" => "Número de sillas por set",
-                    "value_id" => "-1",
-                    "value_name" => null,
-                    "value_struct" => null,
-                    "attribute_group_id" => "OTHERS",
-                    "attribute_group_name" => "Otros"
-                ),
-                array(
-                    "id" => "SEAT_MATERIAL",
-                    "name" => "Material del asiento",
-                    "value_id" => null,
-                    "value_name" => "SILLA EN GUATAMBU TAPIZADO",
-                    "value_struct" => null,
-                    "attribute_group_id" => "OTHERS",
-                    "attribute_group_name" => "Otros"
-                ),
-                array(
-                    "id" => "SEAT_MATERIAL",
-                    "name" => "Material del asiento",
-                    "value_id" => null,
-                    "value_name" => "SILLA EN GUATAMBU TAPIZADO",
-                    "value_struct" => null,
-                    "attribute_group_id" => "OTHERS",
-                    "attribute_group_name" => "Otros"
-                ),
-                array(
-                    "id" => "STRUCTURE_MATERIALS",
-                    "name" => "Materiales de la estructura",
-                    "value_id" => "432174",
-                    "value_name" => "Madera",
-                    "value_struct" => null,
-                    "attribute_group_id" => "OTHERS",
-                    "attribute_group_name" => "Otros"
-                ),
-                array(
-                    "id" => "NUMBER_OF_CHAIRS_BY_SET",
-                    "name" => "Número de sillas por set",
-                    "value_id" => null,
-                    "value_name" => "1",
-                    "value_struct" => null,
-                    "attribute_group_id" => "OTHERS",
-                    "attribute_group_name" => "Otros"
-                ),
-                array(
-                    "id" => "UPHOLSTERY_FABRIC",
-                    "name" => "Tela del tapizado",
-                    "value_id" => null,
-                    "value_name" => "Tela/Cuerina/Madera",
-                    "value_struct" => null,
-                    "attribute_group_id" => "OTHERS",
-                    "attribute_group_name" => "Otros"
-                )
-            ),
-            "pictures" => array(//$imgMELI
-            ));
-        $valor = $meli->post('/items', $itemAdd, array('access_token' => $_SESSION['access_token']));
-        if ($valor["httpCode"] != "200" || $valor["httpCode"] != "201") {
-            echo $valor["body"]->id;
-            $productos->set("meli", $valor["body"]->id);
-        }
+    if ($meli != '') {
+        $productos->set("img", substr($img_meli, 0, -1));
+        $add_meli = $productos->add_meli();
+        $productos->set("meli", $add_meli["id"]);
     }
+
     $productos->add();
     $funciones->headerMove(URL . "/index.php?op=productos");
 }
@@ -364,72 +165,24 @@ if (isset($_POST["agregar"])) {
             Precio:<br/>
             <input type="text" name="precio" required>
         </label>
-        <label class="col-md-4">
-            Precio Cuerina:<br/>
-            <input type="text" name="precio_cuerina" required>
-        </label>
-        <label class="col-md-4">
-            Precio Tela:<br/>
-            <input type="text" name="precio_tela" required>
-        </label>
         <div class="clearfix"></div>
-        <label class="col-md-3">
+        <label class="col-md-2">
             Altura: (cm)<br/>
             <input type="number" name="altura" required>
         </label>
-        <label class="col-md-3">
+        <label class="col-md-2">
             Ancho: (cm)<br/>
             <input type="number" name="ancho" required>
         </label>
-        <label class="col-md-3">
+        <label class="col-md-2">
             Profundidad: (cm)<br/>
             <input type="number" name="profundidad" required>
         </label>
-        <label class="col-md-3">
-            Peso: (cm)<br/>
+        <label class="col-md-2">
+            Peso: (kg)<br/>
             <input type="number" name="peso" required>
         </label>
         <div class="clearfix">
-        </div>
-        <div class="mt-10 col-md-12">
-            Cuerinas
-            <button type="button" class="ml-10 mb-5 btn btn-info pull-right" onclick="agregar_input('variaciones1Input','variable1')"> +</button>
-            <div class="">
-                <div id="variaciones1Input" class="row">
-                    <?php
-                    foreach ($cuerinas as $var1) {
-                        $cod = rand(0, 999999999);
-                        if ($var1 != '') {
-                            ?>
-                            <div class="col-md-3 input-group" id="<?= $cod ?>"><input type="text" value="<?= $var1 ?>" class="form-control mb-10 mr-10" name="variable1[]">
-                                <div class="input-group-addon"><a href="#" onclick="$('#<?= $cod ?>').remove()" class="btn btn-danger"> - </a></div>
-                            </div>
-                            <?php
-                        }
-                    }
-                    ?>
-                </div>
-            </div>
-        </div>
-        <div class="mt-10 col-md-12">
-            Telas
-            <button type="button" class="ml-10 mb-5 btn btn-info pull-right" onclick="agregar_input('variaciones2Input','variable2')"> +</button>
-            <div class="">
-                <div id="variaciones2Input" class="row">
-                    <?php
-                    foreach ($telas as $var2) {
-                        $cod = rand(0, 999999999);
-                        if ($var2 != '') {
-                            ?>
-                            <div class="col-md-3 input-group" id="<?= $cod ?>"><input type="text" value="<?= $var2 ?>" class="form-control mb-10 mr-10" name="variable2[]">
-                                <div class="input-group-addon"><a href="#" onclick="$('#<?= $cod ?>').remove()" class="btn btn-danger"> - </a></div>
-                            </div>
-                            <?php
-                        }
-                    }
-                    ?>
-                </div>
-            </div>
         </div>
         <div class="mt-10 col-md-12">
             Lustres
@@ -456,6 +209,20 @@ if (isset($_POST["agregar"])) {
         <label class="col-md-12">
             Desarrollo:<br/>
             <textarea name="desarrollo" class="ckeditorTextarea">
+                <h1><span style="font-size:16px">SILLAS DE MADERA GUATAMBÚ</span></h1>
+                <b>MODELO:</b><br/>
+                <b>DIMENSIONES:</b><br/>
+                ALTO: cm<br/>
+                ANCHO: cm<br/>
+                PROFUNDIDAD: cm
+                <hr/>
+                LAS SILLAS DE <a href="https://lasilleria.com.ar" target="_blank">LASILLERIA.COM.AR</a> SON LA CONJUNCION DEL DISEÑO Y CALIDAD.<br/>
+                CONSTRUIDA INTEGRAMENTE EN MADERA DE GUATAMBÚ SELECCIONADO DE PRIMERA CALIDAD CON SECADO NATURAL, LO QUE ASEGURA SU VIDA ETERNA.<br/>
+                TONOS DE LUSTRE Y TAPIZADOS A ELECCIÓN INGRESANDO EN:<br/>
+                <a href="https://lasilleria.com.ar/c/lustres-para-madera" target="_blank">https://lasilleria.com.ar/c/lustres-para-madera</a><br/><br/>
+                POR TRATARSE DE <b>PRODUCTOS 100% PERSONALIZADOS ROGAMOS A LOS INTERESADOS CONSULTAR POR LA DEMORA EN LA ENTREGA.</b><br/>
+                LAS SILLAS SE ENTREGAN EMBALADAS DE A DOS EN CAJAS DE CARTÓN CORRUGADO DE DOBLE FAZ ESPECIALMENTE DISEÑADAS PARA PROTEGERLAS EN EL TRAYECTO DESDE FÁBRICA HASTA SU HOGAR.<br/>
+                PAGALAS HASTA EN <b>12 CUOTAS</b><br/>
             </textarea>
         </label>
         <div class="clearfix">
@@ -469,7 +236,38 @@ if (isset($_POST["agregar"])) {
             <textarea name="description">
             </textarea>
         </label>
-        <br/>
+        <div class="col-md-12">
+            <div class="form-group form-check">
+                <?php
+                if (isset($_GET['code']) || isset($_SESSION['access_token'])) {
+                    if (isset($_GET['code']) && !isset($_SESSION['access_token'])) {
+                        try {
+                            $user = $meli->authorize($_GET["code"], $redirectURI);
+                            $_SESSION['access_token'] = $user['body']->access_token;
+                            $_SESSION['expires_in'] = time() + $user['body']->expires_in;
+                            $_SESSION['refresh_token'] = $user['body']->refresh_token;
+                        } catch (Exception $e) {
+                            echo "Exception: ", $e->getMessage(), "\n";
+                        }
+                    } else {
+                        if ($_SESSION['expires_in'] < time()) {
+                            try {
+                                $refresh = $meli->refreshAccessToken();
+                                $_SESSION['access_token'] = $refresh['body']->access_token;
+                                $_SESSION['expires_in'] = time() + $refresh['body']->expires_in;
+                                $_SESSION['refresh_token'] = $refresh['body']->refresh_token;
+                            } catch (Exception $e) {
+                                echo "Exception: ", $e->getMessage(), "\n";
+                            }
+                        }
+                    }
+                    echo '<input type="checkbox" class="form-check-input" id="meli" name="meli"> <label class="form-check-label" for="meli">¿Publicar en MercadoLibre?</label>';
+                } else {
+                    echo '<div class="ml-0 pl-0 mt-20 mb-20"><a  target="_blank" href="' . $meli->getAuthUrl($redirectURI, Meli::$AUTH_URL[$siteId]) . '"><img src="' . URL . '/img/meli.png" width="30" /> ¿Ingresar a Mercadolibre para publicar el producto <i class="fa fa-square green">?</i></a></div>';
+                }
+                ?>
+            </div>
+        </div>
         <label class="col-md-7">
             Imágenes:<br/>
             <input type="file" id="file" name="files[]" multiple="multiple" accept="image/*"/>

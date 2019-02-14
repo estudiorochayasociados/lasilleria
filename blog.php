@@ -3,7 +3,7 @@ require_once "Config/Autoload.php";
 Config\Autoload::runSitio();
 $template = new Clases\TemplateSite();
 $funciones = new Clases\PublicFunction();
-$template->set("title", "SAN JOSÉ MUEBLES - BLOG");
+$template->set("title", "La Sillería - BLOG");
 $template->set("description", "Enterate de las mejores novedades sobres las sillas , banquetas y bancos de guatambu");
 $template->set("keywords", "novedades de sillas de madera,tendencias de sillas de madera,sillas de madera guatambu");
 $template->set("favicon", LOGO);
@@ -95,7 +95,7 @@ $numeroPaginas = $novedades->paginador("", $cantidad);
                 ?>
                 <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 nota ">
                     <article class="ps-post--vertical">
-                        <div class="ps-post__thumbnail" style="  height:200px; background:url(<?= URL . '/' . $img['ruta'] ?>) no-repeat center center/cover;" ><a class="ps-post__overlay" href="<?= URL . '/nota/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>"></a>
+                        <div class="ps-post__thumbnail" style="  height:200px; background:url(<?= URL . '/' . $img['ruta'] ?>) no-repeat center center/cover;" ><a class="ps-post__overlay" href="<?= URL . '/blog/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>"></a>
                         </div>
                         <div class="ps-post__content">
                             <div class="ps-post__meta">
@@ -104,10 +104,10 @@ $numeroPaginas = $novedades->paginador("", $cantidad);
                             </div>
                             <div class="ps-block__container">
                                 <h3 class="ps-post__title"><a
-                                            href="<?= URL . '/nota/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>"><?= ucfirst(substr(strip_tags($novedad['titulo']), 0, 50)); ?>…</a>
+                                            href="<?= URL . '/blog/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>"><?= ucfirst(substr(strip_tags($novedad['titulo']), 0, 50)); ?>…</a>
                                 </h3>
                                 <p><?= ucfirst(substr(strip_tags($novedad['desarrollo']), 0, 200)); ?>…</p><a
-                                        class="ps-post__morelink" href="<?= URL . '/nota/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>">Ver más</a>
+                                        class="ps-post__morelink" href="<?= URL . '/blog/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>">Ver más</a>
                             </div>
                         </div>
                     </article>

@@ -19,32 +19,28 @@ if ($estado_get != '') {
     $pedidos->cambiar_estado();
 }
 
-$pedido = $pedidos->view();
-$pedido_info = $pedidos->info();
+echo $estado_get;
 
-switch ($pedido_info["estado"]) {
-    case 0:
+$pedido = $pedidos->view();
+
+switch ($pedido[0]["estado"]) {
+    case "0":
+        $estado = "Carrito No Cerrado";
+        break;
+    case "1":
         $estado = "Pendiente";
         break;
-    case 1:
+    case "2":
         $estado = "Exitoso";
         break;
-    case 2:
+    case "3":
+        $estado = "Enviado";
+    break;
+    case "4":
         $estado = "Rechazado";
         break;
 }
 
-switch ($pedido_info["tipo"]) {
-    case 0:
-        $tipo = "Transferencia/Depósito Bancario";
-        break;
-    case 1:
-        $tipo = "Coordinar con vendedor";
-        break;
-    case 2:
-        $tipo = "Tarjeta de crédito";
-        break;
-}
 ?>
     <div class="ps-404">
         <div class="container">
@@ -54,7 +50,7 @@ switch ($pedido_info["tipo"]) {
                     CÓDIGO: <span> <?= $cod_pedido ?></span></h2>
                 <p>
                     <b>Estado:</b> <?= $estado ?><br/>
-                    <b>Método de pago:</b> <?= $tipo ?>
+                    <b>Método de pago:</b> <?= $pedido[0]["tipo"] ?>
                 </p>
                 <table class="table table-hover text-left hidden-xs hidden-sm">
                     <thead>

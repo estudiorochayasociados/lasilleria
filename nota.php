@@ -12,7 +12,7 @@ $novedad=$novedades->view();
 $imagenes->set("cod",$cod);
 $img = $imagenes->view();
 
-$template->set("title", $novedad["titulo"]." - SAN JOSÉ MUEBLES");
+$template->set("title", $novedad["titulo"]." - La Sillería");
 $template->set("description", $novedad["description"]);
 $template->set("keywords", $novedad["keywords"]);
 $template->set("favicon", LOGO);
@@ -61,6 +61,37 @@ switch ($fecha[1]) {
         break;
 }
 ?>
+
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "NewsArticle",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://google.com/article"
+        },
+        "headline": "<?= $novedad['titulo'] ?>",
+        "image": [
+            "<?=URL .'/'.$img['ruta'] ?>"
+        ],
+        "datePublished": "<?= $novedad['fecha'] ?>",
+        "dateModified": "<?= $novedad['fecha'] ?>",
+        "author": {
+            "@type": "Person",
+            "name": "La Silleria"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "La Silleria",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "<?= LOGO ?>"
+            }
+        },
+        "description": "<?= $novedad['description'] ?>"
+    }
+</script>
+
 <div class="ps-hero bg--cover" data-background="<?=URL?>/assets/images/hero/bread-1.jpg">
     <div class="ps-container">
         <h3><?=ucfirst($novedad['titulo'])?></h3>

@@ -2,21 +2,21 @@
 
 class Conexion
 {
-    private $datos = array("host"=> "localhost","user"=> "root","pass"=> "","db"  => "sanjosemueblessite");
+    private $datos = array("host" => "localhost", "user" => "root", "pass" => "root", "db" => "lasilleria");
 
     private $con;
 
     public function __construct()
     {
         $this->con = mysqli_connect($this->datos["host"], $this->datos["user"], $this->datos["pass"], $this->datos["db"]);
-        mysqli_set_charset($this->con,'utf8');
+        mysqli_set_charset($this->con, 'utf8');
 
     }
 
     public function con()
     {
         $conexion = mysqli_connect($this->datos["host"], $this->datos["user"], $this->datos["pass"], $this->datos["db"]);
-        mysqli_set_charset($conexion,'utf8');
+        mysqli_set_charset($conexion, 'utf8');
         return $conexion;
     }
 
@@ -31,7 +31,8 @@ class Conexion
         return $dato;
     }
 
-    public function backup($archivo, $sql, $compress) {
+    public function backup($archivo, $sql, $compress)
+    {
         if ($compress) {
             if (!($zf = gzopen($archivo, 'w9'))) {
                 $this->error = 'Can\'t create the output file.';

@@ -8,11 +8,19 @@ $borrarImg = $funciones->antihack_mysqli(isset($_GET["borrarImg"]) ? $_GET["borr
 
 $novedades->set("cod", $cod);
 $novedad = $novedades->view();
+
 $categorias = new Clases\Categorias();
 $data = $categorias->list(array("area = 'novedades'"));
 
 $imagenes->set("cod", $novedad["cod"]);
 $imagenes->set("link", "novedades&accion=modificar");
+
+if (isset($_GET["ordenImg"]) && isset($_GET["cod"])) {
+    $imagenes->set("cod", $_GET["cod"]);
+    $imagenes->set("id", $_GET["ordenImg"]);
+    $imagenes->orden();
+    $funciones->headerMove(URL . "/index.php?op=novedades&accion=modificar&cod=$cod");
+}
 
 if ($borrarImg != '') {
     $imagenes->set("id", $borrarImg);
@@ -114,7 +122,9 @@ if (isset($_POST["agregar"])) {
         </label>
         <label class="col-md-12">
             Descripción breve<br/>
-            <textarea name="description"><?=$novedad["description"]?></textarea>
+            <textarea name="description">
+                <?=$novedad["description"]?>
+            </textarea>
         </label>
         <br/>
         <div class="col-md-12">

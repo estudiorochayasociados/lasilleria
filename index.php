@@ -4,7 +4,7 @@ Config\Autoload::runSitio();
 $template = new Clases\TemplateSite();
 $funciones = new Clases\PublicFunction();
 
-$template->set("title", "SAN JOSÉ MUEBLES");
+$template->set("title", "La Sillería");
 $template->set("description", "Fábrica de sillas de madera guatambú muy resistentes");
 $template->set("keywords", "fábrica de sillas de madera guatambu,mayorista de sillas de madera guatambu,comprar sillas de madera online");
 $template->set("favicon", LOGO);
@@ -14,7 +14,7 @@ $slider = new Clases\Sliders();
 $categorias = new Clases\Categorias();
 $imagenes = new Clases\Imagenes();
 $novedades = new Clases\Novedades();
-$productos_data = $productos->list('', '', '0,12');
+$productos_data = $productos->list_opciones('', '', '0,12');
 $novedades_data = $novedades->listWithOps('', '', '4');
 $sliders = $slider->list('');
 $template->themeInit();
@@ -53,12 +53,12 @@ $template->themeInit();
                                 <div class="ps-product__thumbnail">
                                     <div style="background:url('<?= URL ?>/<?= $imagenes_productos[0]["ruta"] ?>') no-repeat center center/contain;width:100%;height:200px"></div>
                                     <div class="ps-product__content full">
-                                        <a class="ps-product__title"
-                                           href="<?= URL . "/producto/" . $funciones->normalizar_link($producto["titulo"]) . "/" . $producto["id"] ?>">
+                                        <a class="ps-product__title" href="<?= URL . "/producto/" . $funciones->normalizar_link($producto["titulo"]) . "/" . $producto["id"] ?>">
                                             <?= $producto["titulo"] ?>
                                         </a>
-                                        <div class="ps-product__categories"><a
-                                                    href="<?= URL . "/productos/" . $funciones->normalizar_link($categoria["titulo"]) ?>"><?= $categoria["titulo"] ?></a>
+                                        <div class="ps-product__categories">
+                                        <a href="<?= URL . "/productos/" . $funciones->normalizar_link($categoria["titulo"]) ?>"><?= $categoria["titulo"] ?>
+                                        </a>
                                         </div>
                                         <p class="ps-product__price">
                                             $<?= $producto["precio"] ?>
@@ -115,7 +115,7 @@ if (@count($novedades_data) > 1) {
                                     <div class="ps-post__thumbnail"
                                          style="  height:500px; background:url(<?= URL . '/' . $img['ruta'] ?>) no-repeat center center/cover;">
                                         <a class="ps-post__overlay"
-                                           href="<?= URL . '/nota/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>"></a>
+                                           href="<?= URL . '/blog/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>"></a>
                                     </div>
                                     <div class="ps-post__content"><span
                                                 class="ps-post__meta"><?= $fecha[2] . '/' . $fecha[1] . '/' . $fecha[0] ?></span><a
@@ -124,7 +124,7 @@ if (@count($novedades_data) > 1) {
                                             …</a>
                                         <p><?= ucfirst(substr(strip_tags($novedad['desarrollo']), 0, 200)); ?>…</p><a
                                                 class="ps-post__morelink"
-                                                href="<?= URL . '/nota/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>">Ver
+                                                href="<?= URL . '/blog/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>">Ver
                                             más</a>
                                     </div>
                                 </div>
@@ -142,17 +142,17 @@ if (@count($novedades_data) > 1) {
                                 <div class="ps-post__thumbnail hidden-xs"
                                      style="  height:510px; background:url(<?= URL . '/' . $img['ruta'] ?>) no-repeat center center/cover;">
                                     <a class="ps-post__overlay"
-                                       href="<?= URL . '/nota/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>"></a>
+                                       href="<?= URL . '/blog/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>"></a>
                                 </div>
                                 <div class="ps-post__content"><span
                                             class="ps-post__meta"><?= $fecha[2] . '/' . $fecha[1] . '/' . $fecha[0] ?></span><a
                                             class="ps-post__title"
-                                            href="<?= URL . '/nota/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>"><?= ucfirst(substr(strip_tags($novedad['titulo']), 0, 50)); ?>
+                                            href="<?= URL . '/blog/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>"><?= ucfirst(substr(strip_tags($novedad['titulo']), 0, 50)); ?>
                                         …</a>
                                     <p><?= ucfirst(substr(strip_tags($novedad['desarrollo']), 0, 200)); ?>…</p>
                                     <a
                                             class="ps-post__morelink"
-                                            href="<?= URL . '/nota/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>">Ver
+                                            href="<?= URL . '/blog/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>">Ver
                                         más</a>
                                 </div>
                             </div>
@@ -162,17 +162,17 @@ if (@count($novedades_data) > 1) {
                                 <div class="ps-post__thumbnail hidden-xs"
                                      style="  height:240px; background:url(<?= URL . '/' . $img['ruta'] ?>) no-repeat center center/cover;">
                                     <a class="ps-post__overlay"
-                                       href="<?= URL . '/nota/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>"></a>
+                                       href="<?= URL . '/blog/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>"></a>
                                 </div>
                                 <div class="ps-post__content"><span
                                             class="ps-post__meta"><?= $fecha[2] . '/' . $fecha[1] . '/' . $fecha[0] ?></span><a
                                             class="ps-post__title"
-                                            href="<?= URL . '/nota/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>"><?= ucfirst(substr(strip_tags($novedad['titulo']), 0, 50)); ?>
+                                            href="<?= URL . '/blog/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>"><?= ucfirst(substr(strip_tags($novedad['titulo']), 0, 50)); ?>
                                         …</a>
                                     <p><?= ucfirst(substr(strip_tags($novedad['desarrollo']), 0, 200)); ?>…</p>
                                     <a
                                             class="ps-post__morelink"
-                                            href="<?= URL . '/nota/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>">Ver
+                                            href="<?= URL . '/blog/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>">Ver
                                         más</a>
                                 </div>
                             </div>
@@ -194,14 +194,14 @@ if (@count($novedades_data) > 1) {
                                         <div class="ps-post__thumbnail"
                                              style="  height:240px; background:url(<?= URL . '/' . $img['ruta'] ?>) no-repeat center center/cover;">
                                             <a class="ps-post__overlay"
-                                               href="<?= URL . '/nota/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>"></a>
+                                               href="<?= URL . '/blog/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>"></a>
                                         </div>
                                         <div class="ps-post__content"><span
                                                     class="ps-post__meta"><?= $fecha[2] . '/' . $fecha[1] . '/' . $fecha[0] ?></span><a
                                                     class="ps-post__title"
-                                                    href="<?= URL . '/nota/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>"><?= ucfirst(substr(strip_tags($novedad['titulo']), 0, 50)); ?></a><a
+                                                    href="<?= URL . '/blog/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>"><?= ucfirst(substr(strip_tags($novedad['titulo']), 0, 50)); ?></a><a
                                                     class="ps-post__morelink"
-                                                    href="<?= URL . '/nota/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>">Ver
+                                                    href="<?= URL . '/blog/' . $funciones->normalizar_link($novedad["titulo"]) . '/' . $novedad['cod'] ?>">Ver
                                                 más</a>
                                         </div>
                                     </div>

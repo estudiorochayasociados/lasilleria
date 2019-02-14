@@ -8442,7 +8442,7 @@ svg {
   position: relative;
   display: inline-block;
   padding: 6px 20px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   line-height: 20px;
   z-index: 10;
@@ -8651,7 +8651,7 @@ svg {
 .header__actions > a, .header__actions .ps-dropdown > a {
   display: inline-block;
   padding: 0 15px;
-  font-size: 13px;
+  font-size: 12px;
   text-align: center;
   color: #333;
   font-weight: 500;

@@ -8,8 +8,8 @@ class Carrito
     public $id;
     public $titulo;
     public $cantidad;
-    public $precio;
     public $peso;
+    public $precio;
     public $opciones;
     private $con;
 
@@ -34,7 +34,7 @@ class Carrito
     {
         $condition = '';
 
-        $add = array('id' => $this->id, 'titulo' => $this->titulo, 'cantidad' => $this->cantidad, 'precio' => $this->precio,'peso' => $this->peso, 'opciones' => $this->opciones);
+        $add = array('id' => $this->id, 'titulo' => $this->titulo, 'cantidad' => $this->cantidad, 'precio' => $this->precio, 'peso' => $this->peso, 'opciones' => $this->opciones);
 
         if (count($_SESSION["carrito"]) == 0) {
             array_push($_SESSION["carrito"], $add);
@@ -72,12 +72,20 @@ class Carrito
         return $peso;
     }
 
-
     public function precio_total()
     {
         $precio = 0;
         for ($i = 0; $i < count($_SESSION["carrito"]); $i++) {
             $precio += ($_SESSION["carrito"][$i]["precio"]*$_SESSION["carrito"][$i]["cantidad"]);
+        }
+        return $precio;
+    }
+
+    public function precioFinal()
+    {
+        $precio = 0;
+        for ($i = 0; $i < count($_SESSION["carrito"]); $i++) {
+            $precio += $_SESSION["carrito"][$i]["precio"];
         }
         return $precio;
     }
@@ -105,6 +113,16 @@ class Carrito
     {
         foreach ($_SESSION["carrito"] as $key => $val) {
             if ($val['id'] === "Envio-Seleccion") {
+                return $key;
+            }
+        }
+        return null;
+    }
+
+    public function checkPago()
+    {
+        foreach ($_SESSION["carrito"] as $key => $val) {
+            if ($val['id'] === "Metodo-Pago") {
                 return $key;
             }
         }

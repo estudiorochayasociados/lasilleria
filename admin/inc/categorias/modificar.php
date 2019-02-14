@@ -21,6 +21,13 @@ $borrarImg = $funciones->antihack_mysqli(isset($_GET["borrarImg"]) ? $_GET["borr
 $imagenes->set("cod", $data['cod']);
 $imagenes->set("link", "modificar");
 
+if (isset($_GET["ordenImg"]) && isset($_GET["cod"])) {
+    $imagenes->set("cod", $_GET["cod"]);
+    $imagenes->set("id", $_GET["ordenImg"]);
+    $imagenes->orden();
+    $funciones->headerMove(URL . "/index.php?op=categorias&accion=modificar&cod=$cod");
+}
+
 
 if ($borrarImg != '') {
     $imagenes->set("id", $borrarImg);
@@ -57,6 +64,7 @@ if (isset($_POST["agregar"])) {
                 <option value="servicios">Servicios</option>
                 <option value="galerias">Galerias</option>
                 <option value="productos">Productos</option>
+                <option value="landing">Landing</option>
             </select>
         </label> 
         <div class="clearfix"></div>

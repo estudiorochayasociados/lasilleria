@@ -28,9 +28,3 @@ $(document).ready(function() {
         });
     });
 });
-
-function agregar_input(div, name) {
-    var cod = 1 + Math.floor(Math.random() * 999999);
-    $('#' + div).append('<div class="col-md-3 input-group" id="' + cod + '"><input type="text" class="form-control mb-10 mr-10"  name="' + name + '[]"></div>');
-    $('#' + cod).append(' <div class="input-group-addon"><a href="#" onclick="$(\'#' + cod + '\').remove()" class="btn btn-danger"> - </a> </div>');
-}

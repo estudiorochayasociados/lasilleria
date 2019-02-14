@@ -36,8 +36,9 @@ sort($variable_3_explode);
 
 $carro = $carrito->return();
 $carroEnvio = $carrito->checkEnvio();
+$carroPago = $carrito->checkPago();
 
-$template->set("title", $producto["titulo"]." - SAN JOSÉ MUEBLES");
+$template->set("title", $producto["titulo"] . " - La Sillería");
 $template->set("description", $producto["description"]);
 $template->set("keywords", $producto["keywords"]);
 $template->set("favicon", LOGO);
@@ -60,14 +61,18 @@ $template->themeInit();
         <div class="ps-container">
             <div class="ps-product--detail">
                 <div class="row">
-                    <div class="col-lg-8 col-md-7 col-sm-12 col-xs-12 ">
+                    <div class="col-lg-5 col-md-7 col-sm-12 col-xs-12 ">
                         <div class="ps-product__thumbnail">
                             <div class="ps-product__image">
                                 <?php
                                 if ($contar_imagenes >= 1) {
                                     foreach ($imagenes_productos as $imagen) {
                                         ?>
-                                        <div class="item"><a href="<?= URL ?>/<?= $imagen["ruta"] ?>" alt="<?= $producto["titulo"] ?>"><img src="<?= URL ?>/<?= $imagen["ruta"] ?>" alt="<?= $producto["titulo"] ?>"></a></div>
+                                        <div class="item">
+                                            <a href="<?= URL ?>/<?= $imagen["ruta"] ?>" alt="<?= $producto["titulo"] ?>">
+                                                <img src="<?= URL ?>/<?= $imagen["ruta"] ?>" alt="<?= $producto["titulo"] ?>" width="100%">
+                                            </a>
+                                        </div>
                                         <?php
                                     }
                                 }
@@ -79,7 +84,9 @@ $template->themeInit();
                                     if ($contar_imagenes >= 1) {
                                         foreach ($imagenes_productos as $imagen) {
                                             ?>
-                                            <div class="item"><img src="<?= URL ?>/<?= $imagen["ruta"] ?>" alt="<?= $producto["titulo"] ?>" alt=""></div>
+                                            <div class="item">
+                                                <img src="<?= URL ?>/<?= $imagen["ruta"] ?>" alt="<?= $producto["titulo"] ?>" width="100%">
+                                            </div>
                                             <?php
                                         }
                                     }
@@ -88,7 +95,7 @@ $template->themeInit();
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-5 col-sm-12 col-xs-12">
+                    <div class="col-lg-7 col-md-5 col-sm-12 col-xs-12">
                         <div class="ps-product__info">
                             <h1><?= $producto["titulo"] ?></h1>
                             <p class="ps-product__category"><?= $categoria["titulo"] ?></a></p>
@@ -102,6 +109,9 @@ $template->themeInit();
                             <form method="post">
                                 <?php
                                 if (isset($_POST["enviar"])) {
+                                    if ($carroPago != '') {
+                                        $carrito->delete($carroPago);
+                                    }
                                     if ($carroEnvio != '') {
                                         $carrito->delete($carroEnvio);
                                     }
@@ -109,61 +119,17 @@ $template->themeInit();
                                     $carrito->set("cantidad", $_POST["cantidad"]);
                                     $carrito->set("titulo", $producto['titulo']);
                                     $carrito->set("peso", $producto['variable4']);
-                                    $opciones = isset($_POST["cuerina"]) ? $_POST["cuerina"] : $_POST["telas"];
-                                    $opciones_tipo = isset($_POST["cuerina"]) ? "CUERINA: " : "TELA: ";
-                                    $carrito->set("opciones", array($opciones_tipo . $opciones, "LUSTRE: " . $_POST["lustre"]));
+                                    $carrito->set("opciones", array("LUSTRE: " . $_POST["lustre"]));
                                     $carrito->set("precio", $_POST["precio"]);
                                     $carrito->add();
 
-                                    $funciones->headerMove(CANONICAL . "?success");
-                                }
-                                if (strpos(CANONICAL, "success") == true) {
-                                    echo "<div class='alert alert-success'>Agregaste un producto a tu carrito, querés <a href='" . URL . "/carrito'><b>pasar por caja</b></a> o <a href='" . URL . "/productos'><b>seguir comprando</b></a></div>";
+                                    $funciones->headerMove(URL . "/carrito");
                                 }
                                 ?>
-                                <input type="hidden" value="" id="precioForm" name="precio"/>
+                                <input type="hidden" value="<?= $producto["precio"] ?>" name="precio"/>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <h5>Cuerinas</h5>
-                                        <select class="form-control" name="cuerina" id="cuerina" onchange="$('#precio').html('<?= $producto["precio_cuerina"] ?>');$('#precioForm').val('<?= $producto["precio_cuerina"] ?>');$('#telas').val('')">
-                                            <option selected disabled>Seleccionar cuerina</option>
-                                            <?php
-                                            if (count($variable_1_explode) >= 1) {
-                                                foreach ($variable_1_explode as $var1) {
-                                                    $cod = rand(0, 999999999);
-                                                    if ($var1 != '') {
-                                                        ?>
-                                                        <option value="<?= $var1 ?>"><?= $var1 ?></option>
-                                                        <?php
-                                                    }
-                                                }
-                                            }
-                                            ?>
-                                        </select>
-                                        <a href="<?= URL ?>/c/cuerinas-para-tapizados" target="_blank"><i>* Ver Cuerinas</i></a>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h5>Telas</h5>
-                                        <select class="form-control" name="telas" id="telas" onchange="$('#precio').html('<?= $producto["precio_telas"] ?>');$('#precioForm').val('<?= $producto["precio_telas"] ?>');$('#cuerina').val('')">
-                                            <option selected disabled>Seleccionar telas</option>
-                                            <?php
-                                            if (count($variable_2_explode) >= 1) {
-                                                foreach ($variable_2_explode as $var2) {
-                                                    $cod = rand(0, 999999999);
-                                                    if ($var2 != '') {
-                                                        ?>
-                                                        <option value="<?= $var2 ?>"><?= $var2 ?></option>
-                                                        <?php
-                                                    }
-                                                }
-                                            }
-                                            ?>
-                                        </select>
-                                        <div class="clearfix"></div>
-                                        <a href="<?= URL ?>/c/telas-para-tapizados" target="_blank"><i>* Ver Telas</i></a>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <h5 class="mt-20">Lustre</h5>
+                                        <h5 class="">Lustre</h5>
                                         <select class="form-control" name="lustre" required>
                                             <option value="" selected disabled>Seleccionar Lustre</option>
                                             <?php
@@ -182,9 +148,11 @@ $template->themeInit();
                                         <div class="clearfix"></div>
                                         <a href="<?= URL ?>/c/lustres-para-madera" target="_blank"><i>* Ver lustres</i></a>
                                     </div>
+                                    <div class="col-md-6">
+                                        <h5>Cantidad</h5>
+                                        <input class="form-control pt-5 pb-5 pl-5" type="number" name="cantidad" value="1" required/>
+                                    </div>
                                 </div>
-                                <h5 class="mt-20">Cantidad</h5>
-                                <input class="form-control pt-5 pb-5 pl-5" type="number" name="cantidad" value="1" required/>
                                 <div class="clearfix"></div>
                                 <hr/>
                                 <input type="submit" class="ps-btn" name="enviar" value="Agregar al carrito"/>
@@ -200,10 +168,11 @@ $template->themeInit();
                     </div>
                 </div>
 
-                <div class="col-md-12 mt-20">
+                <div class="col-md-12 mt-40 pt-20">
+                    <hr/>
                     <?php
                     if ($producto["desarrollo"] != '') {
-                        echo "<h3>Descripción</h3>" . $producto["desarrollo"];
+                        echo "<h3>DESCRIPCIÓN DEL PRODUCTO</h3>" . $producto["desarrollo"];
                     }
                     ?>
                 </div>

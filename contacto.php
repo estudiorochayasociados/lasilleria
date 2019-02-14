@@ -3,7 +3,7 @@ require_once "Config/Autoload.php";
 Config\Autoload::runSitio();
 $template = new Clases\TemplateSite();
 $funciones = new Clases\PublicFunction();
-$template->set("title", "SAN JOSÉ MUEBLES - CONTACTO");
+$template->set("title", "La Sillería - CONTACTO");
 $template->set("description", "Envianos un formulario de consulta y solicitá tu pedido de sillas de madera guatambu");
 $template->set("keywords", "fábrica de sillas de madera guatambu,mayorista de sillas de madera guatambu");
 $template->set("favicon", LOGO);

@@ -15,6 +15,13 @@ $galeria = $galerias->view();
 $imagenes->set("cod", $galeria["cod"]);
 $imagenes->set("link", "galerias&accion=modificar");
 
+if (isset($_GET["ordenImg"]) && isset($_GET["cod"])) {
+    $imagenes->set("cod", $_GET["cod"]);
+    $imagenes->set("id", $_GET["ordenImg"]);
+    $imagenes->orden();
+    $funciones->headerMove(URL . "/index.php?op=galerias&accion=modificar&cod=$cod");
+}
+
 if ($borrarImg != '') {
     $imagenes->set("id", $borrarImg);
     $imagenes->delete();

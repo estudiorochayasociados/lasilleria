@@ -9,6 +9,13 @@ RewriteRule ^productos/(.*)/(.*)$ ./productos.php?categoria=$2
 RewriteRule ^producto/(.*)/(.*)$ ./producto.php?id=$2
 RewriteRule ^c/(.*)/(.*)$ ./contenidos.php?id=$2
 RewriteRule ^checkout(.*)/(.*)/(.*)$ ./checkout.php?cod_pedido=$2&tipo_pedido=$3
-RewriteRule ^blog/(.*)/(.*)$ ./blog.php?id=$2
-RewriteRule ^nota/(.*)/(.*)$ ./nota.php?cod=$2
+RewriteRule ^blog/(.*)/(.*)$ ./nota.php?cod=$2
+#RewriteRule ^nota/(.*)/(.*)$ ./nota.php?cod=$2
 RewriteRule ^sesion/(.*)/(.*)$ ./sesion.php?op=$2
+RewriteRule ^carrito/(.*)/(.*)$ ./carrito.php?metodos-pago=$2
+RewriteRule ^pagar/(.*)/(.*)$ ./pagar.php?metodos-pago=$2
+
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^lasilleria.com.ar [NC]
+RewriteRule ^(.*)$ https://www.lasilleria.com.ar/$1 [L,R=301,NC]
+

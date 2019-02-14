@@ -14,10 +14,17 @@ $imagenes->set("link", "servicios&accion=modificar");
 $categorias = new Clases\Categorias();
 $data = $categorias->list(array("area = 'servicios'"));
 
+if (isset($_GET["ordenImg"]) && isset($_GET["cod"])) {
+    $imagenes->set("cod", $_GET["cod"]);
+    $imagenes->set("id", $_GET["ordenImg"]);
+    $imagenes->orden();
+    $funciones->headerMove(URL . "/index.php?op=servicios&accion=modificar&cod=$cod");
+}
+
 if ($borrarImg != '') {
     $imagenes->set("id", $borrarImg);
     $imagenes->delete();
-    $funciones->headerMove(URL . "/index.php?op=productos&accion=modificar&cod=$cod");
+    $funciones->headerMove(URL . "/index.php?op=servicios&accion=modificar&cod=$cod");
 }
 
 if (isset($_POST["agregar"])) {

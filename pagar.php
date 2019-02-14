@@ -3,16 +3,23 @@ require_once "Config/Autoload.php";
 Config\Autoload::runSitio();
 $template = new Clases\TemplateSite();
 $funciones = new Clases\PublicFunction();
-$template->set("title", "Admin");
-$template->set("description", "Admin");
+$template->set("title", "Finalizando Compra");
+$template->set("description", "La Sillería");
 $template->set("keywords", "Inicio");
 $template->set("favicon", LOGO);
 $template->themeInit();
 $carrito = new Clases\Carrito();
 $usuarios = new Clases\Usuarios();
 $usuarioSesion = $usuarios->view_sesion();
-$cod_pedido = $_SESSION["cod_pedido"];
-$tipo_pedido = $_POST["metodos-pago"];
+$cod_pedido   = $_SESSION["cod_pedido"];
+$tipo_pedido = isset($_GET["metodos-pago"]) ? $_GET["metodos-pago"] : '';
+
+if($tipo_pedido == '') {
+    $funciones->headerMove(URL . "/carrito");
+}
+if(count($usuarioSesion) != 0) {
+    $funciones->headerMove(URL."/checkout/".$cod_pedido."/".$tipo_pedido);
+}
 ?>
     <div class="ps-hero bg--cover mb-60">
         <div class="ps-container">
@@ -79,6 +86,7 @@ $tipo_pedido = $_POST["metodos-pago"];
 
             $funciones->headerMove(URL . "/checkout/" . $cod_pedido . "/" . $tipo_pedido);
         }
+
         ?>
         <div class="col-md-12">
             <form method="post" class="row">
@@ -120,7 +128,7 @@ $tipo_pedido = $_POST["metodos-pago"];
                     <div class="col-md-12 col-xs-12 factura" style="display: none;">CUIT:<br/>
                         <input class="form-control  mb-10" type="number" value="<?php echo isset($_POST["doc"]) ? $_POST["doc"] : '' ?>" placeholder="Escribir CUIT" name="doc"/>
                     </div>
-                    <div class="col-md-12 col-xs-12 mb-50">
+                    <div class="col-md-12 col-xs-12 mb-50 mt-20">
                         <input class="btn btn-success btn-lg" type="submit" value="¡Finalizar la compra!" name="registrarmeBtn"/>
                     </div>
                 </div>

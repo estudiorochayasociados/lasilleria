@@ -15,6 +15,13 @@ $imagenes->set("link", "sliders&accion=modificar");
 $categorias = new Clases\Categorias();
 $data = $categorias->list(array("area = 'sliders'"));
 
+if (isset($_GET["ordenImg"]) && isset($_GET["cod"])) {
+    $imagenes->set("cod", $_GET["cod"]);
+    $imagenes->set("id", $_GET["ordenImg"]);
+    $imagenes->orden();
+    $funciones->headerMove(URL . "/index.php?op=sliders&accion=modificar&cod=$cod");
+}
+
 if ($borrarImg != '') {
     $imagenes->set("id", $borrarImg);
     $imagenes->delete();
@@ -24,11 +31,11 @@ if ($borrarImg != '') {
 if (isset($_POST["agregar"])) {
     $count = 0;
     $cod = $slide["cod"];
-    $sliders->set("id", $id);
     $sliders->set("cod", $cod);
     $sliders->set("titulo", $funciones->antihack_mysqli(isset($_POST["titulo"]) ? $_POST["titulo"] : ''));
     $sliders->set("subtitulo", $funciones->antihack_mysqli(isset($_POST["subtitulo"]) ? $_POST["subtitulo"] : ''));
     $sliders->set("categoria", $funciones->antihack_mysqli(isset($_POST["categoria"]) ? $_POST["categoria"] : ''));
+    $sliders->set("link", $funciones->antihack_mysqli(isset($_POST["link"]) ? $_POST["link"] : ''));
     $sliders->set("fecha", $funciones->antihack_mysqli(isset($_POST["fecha"]) ? $_POST["fecha"] : date("Y-m-d")));
 
  
@@ -52,7 +59,7 @@ if (isset($_POST["agregar"])) {
             $zebra->enlarge_smaller_images = true;
             $zebra->preserve_time = true;
 
-            if ($zebra->resize(1920, 800, ZEBRA_IMAGE_NOT_BOXED)) {
+            if ($zebra->resize(800, 700, ZEBRA_IMAGE_NOT_BOXED)) {
                 unlink($destinoFinal);
             }
 
@@ -95,6 +102,10 @@ if (isset($_POST["agregar"])) {
                 }
                 ?>
             </select>
+        </label>
+        <label class="col-md-12">
+            Link:<br/>
+            <input type="text" value="<?=$slide["link"]?>" name="link">
         </label>
         <div class="col-md-12">
             <div class="row">

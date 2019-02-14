@@ -14,6 +14,13 @@ $imagenes->set("link", "portfolio&accion=modificar");
 $categorias = new Clases\Categorias();
 $data = $categorias->list(array("area = 'portfolio'"));
 
+if (isset($_GET["ordenImg"]) && isset($_GET["cod"])) {
+    $imagenes->set("cod", $_GET["cod"]);
+    $imagenes->set("id", $_GET["ordenImg"]);
+    $imagenes->orden();
+    $funciones->headerMove(URL . "/index.php?op=portfolio&accion=modificar&cod=$cod");
+}
+
 if ($borrarImg != '') {
     $imagenes->set("id", $borrarImg);
     $imagenes->delete();

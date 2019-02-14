@@ -15,6 +15,13 @@ $data = $categorias->list(array("area = 'banners'"));
 $imagenes->set("cod", $banner["cod"]);
 $imagenes->set("link", "banners&accion=modificar");
 
+if (isset($_GET["ordenImg"]) && isset($_GET["cod"])) {
+    $imagenes->set("cod", $_GET["cod"]);
+    $imagenes->set("id", $_GET["ordenImg"]);
+    $imagenes->orden();
+    $funciones->headerMove(URL . "/index.php?op=banners&accion=modificar&cod=$cod");
+}
+
 if ($borrarImg != '') {
     $imagenes->set("id", $borrarImg);
     $imagenes->delete();

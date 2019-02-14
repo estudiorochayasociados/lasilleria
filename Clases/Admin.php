@@ -76,9 +76,10 @@ class Admin {
             <div style="width: 400px;margin: auto">
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Ingresar al administrador</h3>
+                        <img src="<?= LOGO ?>" width="250"  />
+                        <h4 class="fs-19 panel-title mt-20">Ingresar al administrador</h4>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body mt-20">
                         <form role="form" method="post">
                             <?php
                             if (isset($_POST["login"])) {

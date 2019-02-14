@@ -67,6 +67,7 @@ class Pedidos
     {
         $sql = "SELECT * FROM `pedidos` WHERE cod = '{$this->cod}' ORDER BY id DESC";
         $pedidos = $this->con->sqlReturn($sql);
+        $array = array();
         if ($pedidos) {
             while ($row = mysqli_fetch_assoc($pedidos)) {
                 $array[] = $row;

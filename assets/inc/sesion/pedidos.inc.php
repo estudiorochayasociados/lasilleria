@@ -14,12 +14,14 @@
     $filterPedidosSinAgrupar = array("usuario = '" . $usuarioData['cod'] . "'");
     $pedidosArraySinAgrupar = $pedidos->list($filterPedidosSinAgrupar);
 
-    foreach ($pedidosArrayAgrupados as $key => $value): ?>
-        <?php $precioTotal = 0; ?>
-        <?php $fecha = explode(" ", $value["fecha"]); ?>
-        <?php $fecha1 = explode("-", $fecha[0]); ?>
-        <?php $fecha1 = $fecha1[2] . '-' . $fecha1[1] . '-' . $fecha1[0] . '-'; ?>
-        <?php $fecha = $fecha1 . $fecha[1]; ?>
+    if (is_array($pedidosArrayAgrupados)) {
+    foreach ($pedidosArrayAgrupados as $key => $value) {
+        $precioTotal = 0;
+        $fecha = explode(" ", $value["fecha"]);
+        $fecha1 = explode("-", $fecha[0]);
+        $fecha1 = $fecha1[2] . '-' . $fecha1[1] . '-' . $fecha1[0] . '-';
+        $fecha = $fecha1 . $fecha[1];
+        ?>
         <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="heading">
                 <h5 class="panel-title">
@@ -27,32 +29,19 @@
                        aria-expanded="false" aria-controls="collapse<?= $value["cod"] ?>" class="collapsed">
                         Pedido <?= $value["cod"] ?>
                         <span class="hidden-xs hidden-sm">- Fecha <?= $fecha ?></span>
-                        <?php if ($value["estado"] == 0): ?>
-                            <span style="padding:5px;font-size:13px;margin-top:-3px;border-radius: 10px;"
-                                  class="btn-primary pull-right">
-                            Estado: Carrito no cerrado
-                             </span>
-                        <?php elseif ($value["estado"] == 1): ?>
-                            <span style="padding:5px;font-size:13px;margin-top:-3px;border-radius: 10px;"
-                                  class="btn-warning pull-right">
-                            Estado: Pago pendiente
-                             </span>
-                        <?php elseif ($value["estado"] == 2): ?>
-                            <span style="padding:5px;font-size:13px;margin-top:-3px;border-radius: 10px;"
-                                  class="btn-success pull-right">
-                            Estado: Pago aprobado
-                             </span>
-                        <?php elseif ($value["estado"] == 3): ?>
-                            <span style="padding:5px;font-size:13px;margin-top:-3px;border-radius: 10px;"
-                                  class="btn-info pull-right">
-                            Estado: Pago enviado
-                             </span>
-                        <?php elseif ($value["estado"] == 4): ?>
-                            <span style="padding:5px;font-size:13px;margin-top:-3px;border-radius: 10px;"
-                                  class="btn-danger pull-right">
-                            Estado: Pago rechazado
-                             </span>
-                        <?php endif; ?>
+                        <?php
+                        if ($value["estado"] == 0) {
+                            echo '<span class="btn-primary pull-right">Estado: Carrito no cerrado</span>';
+                        } elseif ($value["estado"] == 1) {
+                            echo '<span class="btn-warning pull-right">Estado: Pago pendiente</span>';
+                        } elseif ($value["estado"] == 2) {
+                            echo '<span class="btn-success pull-right">Estado: Pago aprobado</span>';
+                        } elseif ($value["estado"] == 3) {
+                            echo '<span class="btn-info pull-right">Estado: Pago enviado</span>';
+                        } elseif ($value["estado"] == 4) {
+                            echo '<span class="btn-danger pull-right">Estado: Pago rechazado</span>';
+                        }
+                        ?>
                     </a>
                 </h5>
             </div>
@@ -77,8 +66,10 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <?php foreach ($pedidosArraySinAgrupar as $key2 => $value2): ?>
-                            <?php if ($value2['cod'] == $value["cod"]): ?>
+                        <?php
+                        foreach ($pedidosArraySinAgrupar as $key2 => $value2) {
+                            if ($value2['cod'] == $value["cod"]) {
+                                ?>
                                 <tr>
                                     <td><?= $value2["producto"] ?></td>
                                     <td><?= $value2["cantidad"] ?></td>
@@ -86,8 +77,10 @@
                                     <td>$<?= $value2["precio"] * $value2["cantidad"] ?></td>
                                     <?php $precioTotal = $precioTotal + ($value2["precio"] * $value2["cantidad"]); ?>
                                 </tr>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
+                                <?php
+                            }
+                        }
+                        ?>
                         <tr>
                             <td><b>TOTAL DE LA COMPRA</b></td>
                             <td></td>
@@ -100,17 +93,26 @@
                     <span style="font-size:16px">
                     <b>FORMA DE PAGO</b>
                     <span class="alert-info" style="border-radius: 10px; padding: 10px;">
-                        <?php if ($value["tipo"] == 0): ?>
-                            Transferencia bancaria
-                        <?php elseif ($value["tipo"] == 1): ?>
-                            Coordinar con vendedor
-                        <?php elseif ($value["tipo"] == 2): ?>
-                            Tarjeta de crédito o débito
-                        <?php endif; ?>
+                        <?php
+                        if ($value["tipo"] == 0) {
+                            echo 'Transferencia bancaria';
+                        } elseif ($value["tipo"] == 1) {
+                            echo 'Coordinar con vendedor';
+                        } elseif ($value["tipo"] == 2) {
+                            echo 'Tarjeta de crédito o débito';
+                        }
+                        ?>
                     </span>
                 </span>
                 </div>
             </div>
         </div>
-    <?php endforeach; ?>
+        <?php
+    }
+    ?>
 </div>
+
+<?php
+} else {
+    echo "<h4 class='mt-20 mb-150 '>No hay pedidos registrados hasta el momento</h4>";
+}

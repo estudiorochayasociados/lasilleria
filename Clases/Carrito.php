@@ -67,7 +67,7 @@ class Carrito
     {
         $peso = 0;
         foreach ($_SESSION["carrito"] as $carrito) {
-            $peso += ($carrito["peso"]*$carrito["cantidad"]);
+            $peso += ($carrito["peso"] * $carrito["cantidad"]);
         }
         return $peso;
     }
@@ -76,7 +76,7 @@ class Carrito
     {
         $precio = 0;
         for ($i = 0; $i < count($_SESSION["carrito"]); $i++) {
-            $precio += ($_SESSION["carrito"][$i]["precio"]*$_SESSION["carrito"][$i]["cantidad"]);
+            $precio += ($_SESSION["carrito"][$i]["precio"] * $_SESSION["carrito"][$i]["cantidad"]);
         }
         return $precio;
     }
@@ -86,6 +86,17 @@ class Carrito
         $precio = 0;
         for ($i = 0; $i < count($_SESSION["carrito"]); $i++) {
             $precio += $_SESSION["carrito"][$i]["precio"];
+        }
+        return $precio;
+    }
+
+    public function precioSinMetodoDePago()
+    {
+        $precio = 0;
+        foreach ($_SESSION["carrito"] as $key => $val) {
+            if ($val['id'] != "Metodo-Pago") {
+                $precio += ($val["precio"]*$val["cantidad"]);
+            }
         }
         return $precio;
     }

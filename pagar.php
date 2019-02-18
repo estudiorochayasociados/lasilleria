@@ -11,14 +11,14 @@ $template->themeInit();
 $carrito = new Clases\Carrito();
 $usuarios = new Clases\Usuarios();
 $usuarioSesion = $usuarios->view_sesion();
-$cod_pedido   = $_SESSION["cod_pedido"];
+$cod_pedido = $_SESSION["cod_pedido"];
 $tipo_pedido = isset($_GET["metodos-pago"]) ? $_GET["metodos-pago"] : '';
 
-if($tipo_pedido == '') {
+if ($tipo_pedido == '') {
     $funciones->headerMove(URL . "/carrito");
 }
-if(count($usuarioSesion) != 0) {
-    $funciones->headerMove(URL."/checkout/".$cod_pedido."/".$tipo_pedido);
+if (count($usuarioSesion) != 0) {
+    $funciones->headerMove(URL . "/checkout/" . $cod_pedido . "/" . $tipo_pedido);
 }
 ?>
     <div class="ps-hero bg--cover mb-60">
@@ -29,7 +29,9 @@ if(count($usuarioSesion) != 0) {
     </div>
     <div id="sns_wrapper">
     <div class="ps-container mt-30">
-        <h4>¿Ya tenés tu cuenta de cliente? Ingresá haciendo <a href="<?= URL ?>/login" style="color:forestgreen"><b>click aquí</b></a>.<hr/></h4>
+        <h4>¿Ya tenés tu cuenta de cliente? Ingresá haciendo <a href="<?= URL ?>/login" style="color:forestgreen"><b>click aquí</b></a>.
+            <hr/>
+        </h4>
         <div class="mb-20"><b>En caso de no tener cuenta y queres realizar esta compra, únicamente tenes que completar el siguiente formulario con tus datos.</b></div>
         <?php
         if (count($usuarioSesion) != 0) {
@@ -76,15 +78,20 @@ if(count($usuarioSesion) != 0) {
                     echo "Error las contraseñas no coinciden.<br/>";
                 } else {
                     $error = 0;
-                    $usuarios->add();
+                    if ($usuarios->add()) {
+                        $usuarios->login();
+                        $funciones->headerMove(URL . "/checkout/" . $cod_pedido . "/" . $tipo_pedido);
+                    } else {
+                        echo "<div class='alert alert-danger'>Este correo ya existe como usuario.</div>";
+                    }
                 }
             } else {
                 if ($error == 0) {
-                    $usuarios->invitado_sesion();
+                    if ($usuarios->invitado_sesion()) {
+                        $funciones->headerMove(URL . "/checkout/" . $cod_pedido . "/" . $tipo_pedido);
+                    }
                 }
             }
-
-            $funciones->headerMove(URL . "/checkout/" . $cod_pedido . "/" . $tipo_pedido);
         }
 
         ?>

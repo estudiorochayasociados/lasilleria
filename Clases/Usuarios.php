@@ -45,9 +45,9 @@ class Usuarios
         if (!is_array($validar)) {
             $sql   = "INSERT INTO `usuarios` (`cod`, `nombre`, `apellido`, `doc`, `email`, `password`, `postal`, `localidad`, `provincia`, `pais`, `telefono`, `celular`, `invitado`, `descuento`, `fecha`) VALUES ('{$this->cod}', '{$this->nombre}', '{$this->apellido}', '{$this->doc}', '{$this->email}', '{$this->password}', '{$this->postal}', '{$this->localidad}', '{$this->provincia}', '{$this->pais}', '{$this->telefono}', '{$this->celular}', '{$this->invitado}', '{$this->descuento}', '{$this->fecha}')";
             $query = $this->con->sql($sql);
-            return $query;
+            return true;
         } else {
-            echo "<div class='col-md-12'><div class='alert alert-danger'>Este correo ya existe como usuario.</div></div>";
+            return false;
         }
     }
 
@@ -88,8 +88,9 @@ class Usuarios
             'invitado' => $this->invitado,
             'descuento' => $this->descuento,
             'fecha' => $this->fecha
-        );        
+        );
 
+        return true;
     }
 
 

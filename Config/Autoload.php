@@ -14,9 +14,9 @@ class autoload
         define('TELEFONO', "(03564) 481249 / 481166 / 15631300");
         define('CIUDAD', "Devoto");
         define('PROVINCIA', "Córdoba");
-        define('EMAIL', "lasilleriadevoto@gmail.com");
-        define('PASS_EMAIL', "");
-        define('SMTP_EMAIL', "");
+        define('EMAIL', "info@lasilleria.com.ar");
+        define('PASS_EMAIL', "inLa2019");
+        define('SMTP_EMAIL', "c1470578.ferozo.com");
         define('DIRECCION', "25 de Mayo 339");
         define('LOGO', URL . "/assets/images/logo.png");
         define('APP_ID_FB', "");

@@ -14,7 +14,7 @@ $slider = new Clases\Sliders();
 $categorias = new Clases\Categorias();
 $imagenes = new Clases\Imagenes();
 $novedades = new Clases\Novedades();
-$productos_data = $productos->list_opciones('', '', '0,12');
+$productos_data = $productos->list_opciones('', '', '0,8');
 $novedades_data = $novedades->listWithOps('', '', '4');
 $sliders = $slider->list('');
 $template->themeInit();
@@ -48,10 +48,10 @@ $template->themeInit();
                         $categoria = $categorias->view();
                         $imagenes_productos = $imagenes->listForProduct();
                         ?>
-                        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-12 ">
+                        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 ">
                             <div class="ps-product">
                                 <div class="ps-product__thumbnail">
-                                    <div style="background:url('<?= URL ?>/<?= $imagenes_productos[0]["ruta"] ?>') no-repeat center center/contain;width:100%;height:200px"></div>
+                                    <div style="background:url('<?= URL ?>/<?= $imagenes_productos[0]["ruta"] ?>') no-repeat center center/contain;width:100%;height:400px"></div>
                                     <div class="ps-product__content full">
                                         <a class="ps-product__title" href="<?= URL . "/producto/" . $funciones->normalizar_link($producto["titulo"]) . "/" . $producto["id"] ?>">
                                             <?= $producto["titulo"] ?>

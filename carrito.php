@@ -174,20 +174,31 @@ if ($remover != '') {
                         echo "<p class='mt-10'><b>Seleccioná tu medio de pago</b></p>";
                         $lista_pagos = $pagos->list(array(" estado = 0 "));
                         foreach ($lista_pagos as $pago) {
+                            $precio_total = $carrito->precioSinMetodoDePago();
+                            if ($pago["aumento"] != 0 || $pago["disminuir"] != 0) {
+                                if ($pago["aumento"] > 0) {
+                                    $precio_total = (($precio_total * $pago["aumento"]) / 100) + $precio_total;
+                                } else {
+                                    $precio_total = $precio_total - (($precio_total * $pago["disminuir"]) / 100);
+                                }
+                            }
                             ?>
                             <div class="radioButtonPay mt-10 mb-10">
                                 <input type="radio" id="<?= ($pago["cod"]) ?>" name="metodos-pago" value="<?= ($pago["cod"]) ?>" onclick="this.form.submit()" <?php if ($metodo_get === $pago["cod"]) {
                                     echo " checked ";
                                 } ?>>
                                 <label for="<?= ($pago["cod"]) ?>"><b><?= mb_strtoupper($pago["titulo"]) ?></b></label>
-                                <span><br/><?= $pago["leyenda"] ?></span>
+                                <div class="block">
+                                    <?= $pago["leyenda"] . " | Total: $" . $precio_total; ?>
+
+                                </div>
                             </div>
                             <?php
                         }
                         ?>
                     <?php } ?>
                     <?php if ($metodo_get != '') { ?>
-                        <a href="<?= URL ?>/pagar/<?= $metodo_get ?>" class="mb-40 btn btn-success mt-20"><i class="fa fa-shopping-cart"></i> IR A PAGAR EL CARRITO</a>
+                        <a href="<?= URL ?>/pagar/<?= $metodo_get ?>" class="btn btn-lg btn-success mt-20"><i class="fa fa-shopping-cart"></i> IR A PAGAR EL CARRITO</a>
                     <?php } ?>
                 </div>
             </form>

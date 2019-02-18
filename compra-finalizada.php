@@ -3,14 +3,17 @@ require_once "Config/Autoload.php";
 Config\Autoload::runSitio();
 $template = new Clases\TemplateSite();
 $funciones = new Clases\PublicFunction();
+$pedidos = new Clases\Pedidos();
+$carritos = new Clases\Carrito();
+$correo = new Clases\Email();
+
 $template->set("title", "Admin");
 $template->set("description", "Admin");
 $template->set("keywords", "Inicio");
 $template->set("favicon", LOGO);
 $template->themeInit();
 $estado_get = isset($_GET["estado"]) ? $_GET["estado"] : '';
-$pedidos = new Clases\Pedidos();
-$carritos = new Clases\Carrito();
+
 $cod_pedido = $_SESSION["cod_pedido"];
 $pedidos->set("cod", $cod_pedido);
 
@@ -19,40 +22,26 @@ if ($estado_get != '') {
     $pedidos->cambiar_estado();
 }
 
-echo $estado_get;
-
 $pedido = $pedidos->view();
 
-switch ($pedido[0]["estado"]) {
-    case "0":
-        $estado = "Carrito No Cerrado";
-        break;
-    case "1":
-        $estado = "Pendiente";
-        break;
-    case "2":
-        $estado = "Exitoso";
-        break;
-    case "3":
-        $estado = "Enviado";
-    break;
-    case "4":
-        $estado = "Rechazado";
-        break;
-}
+$estado = $pedidos->ver_estado($pedido[0]["estado"]);
+
+$clase = '';
+$none = '';
 
 ?>
     <div class="ps-404">
-        <div class="container">
+        <div class="container" >
             <div class="well well-lg pt-100 pb-100">
+                <?php ob_start() ?>
                 <h2>COMPRA FINALIZADA
                     <hr/>
                     CÓDIGO: <span> <?= $cod_pedido ?></span></h2>
                 <p>
-                    <b>Estado:</b> <?= $estado ?><br/>
-                    <b>Método de pago:</b> <?= $pedido[0]["tipo"] ?>
+                    <b>Estado del Pago:</b> <?= $estado ?><br/>
+                    <b>Método de Pago:</b> <?= $pedido[0]["tipo"] ?>
                 </p>
-                <table class="table table-hover text-left hidden-xs hidden-sm">
+                <table class="table table-hover text-left hidden-xs hidden-sm"  id="pedido">
                     <thead>
                     <th><b>PRODUCTO</b></th>
                     <th><b>PRECIO UNITARIO</b></th>
@@ -67,9 +56,6 @@ switch ($pedido[0]["estado"]) {
                         if ($pedido_["id"] == "Envio-Seleccion") {
                             $clase = "text-bold";
                             $none = "hidden";
-                        } else {
-                            $clase;
-                            $none;
                         }
                         ?>
                         <tr class="<?= $clase ?>">
@@ -99,6 +85,11 @@ switch ($pedido[0]["estado"]) {
                     </tr>
                     </tbody>
                 </table>
+                <?php
+                $tabla = ob_get_contents();
+                ob_end_clean();
+                echo $tabla;
+                ?>
                 <div class="table table-hover hidden-lg hidden-md">
                     <?php
                     if (isset($_POST["eliminarCarrito"])) {
@@ -141,6 +132,34 @@ switch ($pedido[0]["estado"]) {
         </div>
     </div>
 <?php
+//MENSAJE = DATOS USUARIO COMPRADOR
+$datos_usuario = "<b>Nombre y apellido:</b> " . $_SESSION["usuarios"]["nombre"] . "<br/>";
+$datos_usuario .= "<b>Email:</b> " . $_SESSION["usuarios"]["email"] . "<br/>";
+$datos_usuario .= "<b>Provincia:</b> " . $_SESSION["usuarios"]["provincia"] . "<br/>";
+$datos_usuario .= "<b>Localidad:</b> " . $_SESSION["usuarios"]["localidad"] . "<br/>";
+$datos_usuario .= "<b>Teléfono:</b> " . $_SESSION["usuarios"]["telefono"] . "<br/>";
+
+//USUARIO EMAIL
+$carroDetalle = $tabla;
+$carroDetalle .= '<br/><hr/>';
+$carroDetalle .= '<h3>Datos de usuario:</h3>';
+$carroDetalle .= $datos_usuario;
+
+$mensajeCompraUsuario = '¡Muchas gracias por tu nueva compra!<br/>En el transcurso de las 24 hs un operador se estará contactando con usted para pactar la entrega y/o pago del pedido. A continuación te dejamos el pedido que nos realizaste.<hr/>'.$carroDetalle;
+$mensajeCompraAdmin = '¡Nueva compra desde la web!<br/>A continuación te dejamos el detalle del pedido.<hr/>'.$carroDetalle;
+
+$correo->set("asunto", "Muchas gracias por tu nueva compra");
+$correo->set("receptor", $_SESSION["usuarios"]["email"]);
+$correo->set("emisor", EMAIL);
+$correo->set("mensaje", $mensajeCompraUsuario);
+$correo->emailEnviar();
+
+$correo->set("asunto", "NUEVA COMPRA ONLINE");
+$correo->set("receptor", EMAIL);
+$correo->set("emisor", EMAIL);
+$correo->set("mensaje", $mensajeCompraAdmin);
+$correo->emailEnviar();
+
 $carritos->destroy();
 unset($_SESSION["cod_pedido"]);
 $template->themeEnd();

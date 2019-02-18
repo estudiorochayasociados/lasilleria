@@ -4173,7 +4173,7 @@ textarea.form-control:-ms-input-placeholder {
 .ps-product {
   position: relative;
   margin-bottom: 50px;
-  min-height: 350px;
+  min-height: 500px;
 }
 
 .ps-product:before {

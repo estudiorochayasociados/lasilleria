@@ -327,3 +327,7 @@
 .pr-150 {
     padding-right: 150px !important;
 }
+
+.block {
+    display: block;
+}

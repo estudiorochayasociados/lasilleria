@@ -17,6 +17,7 @@ $pedido = $pedidos->view();
 $pagos->set("cod", $tipo_pedido);
 $pago = $pagos->view();
 $usuarioSesion = $usuarios->view_sesion();
+
 $carro = $carrito->return();
 $precio = $carrito->precio_total();
 $fecha = date("Y-m-j H:i:s");
@@ -53,7 +54,6 @@ if (count($pedido) != 0) {
 
 switch ($pago["tipo"]) {
     case 0:
-        $pedidos->set("cod", $cod_pedido);
         $pedidos->set("estado", $pago["defecto"]);
         $pedidos->cambiar_estado();
         $funciones->headerMove(URL . "/compra-finalizada.php");

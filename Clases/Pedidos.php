@@ -49,9 +49,31 @@ class Pedidos
         return $query;
     }
 
+    public function ver_estado($pedido)
+    {
+        switch ($pedido) {
+            case "0":
+                $estado = "Carrito No Cerrado";
+                break;
+            case "1":
+                $estado = "Pendiente";
+                break;
+            case "2":
+                $estado = "Exitoso";
+                break;
+            case "3":
+                $estado = "Enviado";
+                break;
+            case "4":
+                $estado = "Rechazado";
+                break;
+        }
+        return $estado;
+    }
+
     public function cambiar_estado()
     {
-        $sql = "UPDATE `pedidos` SET `estado`='{$this->estado}',`tipo`='{$this->tipo}',`usuario`='{$this->usuario}' WHERE `cod`='{$this->cod}'";
+        $sql = "UPDATE `pedidos` SET `estado`='{$this->estado}' WHERE `cod`='{$this->cod}'";
         $query = $this->con->sql($sql);
         return $query;
     }

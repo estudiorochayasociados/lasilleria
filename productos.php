@@ -91,7 +91,7 @@ $template->themeInit();
                                 <div class="ps-product">
                                     <div class="ps-product__thumbnail">
                                         <a href="<?= URL . "/producto/" . $funciones->normalizar_link($producto["titulo"]) . "/" . $producto["id"] ?>">
-                                            <div style="background:url('<?= URL ?>/<?= $imagenes_productos[0]["ruta"] ?>') no-repeat center center/cover;width:100%;height:300px"></div>
+                                            <div style="background:url('<?= URL ?>/<?= $imagenes_productos[0]["ruta"] ?>') no-repeat center center/cover;width:100%;height:400px"></div>
                                         </a>
                                         <div class="ps-product__content full">
                                             <a class="ps-product__title" href="<?= URL . "/producto/" . $funciones->normalizar_link($producto["titulo"]) . "/" . $producto["id"] ?>">

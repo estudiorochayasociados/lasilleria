@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="format-detection" content="telephone=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link href="apple-touch-icon.png" rel="apple-touch-icon">
+<link href="favicon.png" rel="apple-touch-icon">
 <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700%7CLibre+Baskerville:400,700" rel="stylesheet">
 <link rel="stylesheet" href="<?= URL ?>/assets/plugins/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="<?= URL ?>/assets/plugins/furniture-icon/style.css">
@@ -41,3 +41,6 @@
 
     gtag('config', 'UA-132323521-1');
 </script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="<?= URL ?>/assets/js/jquery.cookie.js"></script>

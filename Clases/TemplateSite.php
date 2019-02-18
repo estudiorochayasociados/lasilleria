@@ -20,7 +20,7 @@ class TemplateSite
         echo '<meta name="author" content="La Sillería">';
         echo '<meta name="keywords" content="'.$this->keywords.'">';
         echo '<meta name="description" content="'.$this->description.'">';
-        echo '<link href="'.LOGO.'" rel="icon">';
+        echo '<link href="'.URL.'/favicon.png" rel="icon">';
         echo '<link rel=”canonical” href="'.CANONICAL.'" />';
         echo '<title>'.mb_strtoupper($this->title).'</title>';
         include("assets/inc/header.inc.php");

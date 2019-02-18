@@ -6,6 +6,7 @@ class TemplateSite
 {
 
     public $title;
+    public $imagen;
     public $keywords;
     public $description;
     public $favicon;
@@ -18,15 +19,19 @@ class TemplateSite
         echo '<html lang = "es" >';
         echo '<head >';
         echo '<meta name="author" content="La Sillería">';
-        echo '<meta name="keywords" content="'.$this->keywords.'">';
-        echo '<meta name="description" content="'.$this->description.'">';
-        echo '<link href="'.URL.'/favicon.png" rel="icon">';
-        echo '<link rel=”canonical” href="'.CANONICAL.'" />';
-        echo '<title>'.mb_strtoupper($this->title).'</title>';
+        echo '<meta name="keywords" content="' . $this->keywords . '">';
+        echo '<meta name="description" content="' . $this->description . '">';
+        echo '<link href="' . URL . '/favicon.png" rel="icon">';
+        echo '<link rel=”canonical” href="' . CANONICAL . '" />';
+        echo '<title>' . mb_strtoupper($this->title) . '</title>';
+        echo '<meta property="og:image" content="' . ($this->imagen) . '"/>';
+        echo '<meta property="og:description" content="' . ($this->description) . '"/>';
+        echo '<meta property="og:url" content="' . CANONICAL . '"/>';
+        echo '<meta property="og:title" content="' . mb_strtoupper($this->title) . '"/>';
         include("assets/inc/header.inc.php");
-        echo '</head>';
-        echo '<!--[if IE 7]><body class="ie7 lt-ie8 lt-ie9 lt-ie10"><![endif]--><!--[if IE 8]><body class="ie8 lt-ie9 lt-ie10"><![endif]--><!--[if IE 9]><body class="ie9 lt-ie10"><![endif]-->';
-        echo '<body>';
+        echo ' </head > ';
+        echo '<!--[if IE 7]><body class="ie7 lt-ie8 lt-ie9 lt-ie10" ><![endif]--><!--[if IE 8]><body class="ie8 lt-ie9 lt-ie10" ><![endif]--><!--[if IE 9]><body class="ie9 lt-ie10" ><![endif]-->';
+        echo '<body > ';
         include("assets/inc/nav.inc.php");
     }
 

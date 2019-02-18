@@ -38,9 +38,10 @@ $carro = $carrito->return();
 $carroEnvio = $carrito->checkEnvio();
 $carroPago = $carrito->checkPago();
 
-$template->set("title", $producto["titulo"] . " - La Sillería");
+$template->set("title", $producto["titulo"] . "");
 $template->set("description", $producto["description"]);
 $template->set("keywords", $producto["keywords"]);
+$template->set("imagen", URL."/".$imagenes_productos[0]["ruta"]);
 $template->set("favicon", LOGO);
 
 $template->themeInit();
@@ -158,13 +159,17 @@ $template->themeInit();
                                 <input type="submit" class="ps-btn" name="enviar" value="Agregar al carrito"/>
                             </form>
                         </div>
-                        <div class="ps-product__sharing">
-                            <p>Compartir en:
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-dribbble"></i></a>
-                            </p>
+                        <!-- AddToAny BEGIN -->
+                        <div class="a2a_kit a2a_kit_size_32 a2a_default_style mt-20">
+                            <h5>Compartir en:</h5>
+                            <a class="a2a_button_facebook"></a>
+                            <a class="a2a_button_twitter"></a>
+                            <a class="a2a_button_google_plus"></a>
+                            <a class="a2a_button_pinterest"></a>
+                            <a class="a2a_button_whatsapp"></a>
+                            <a class="a2a_button_google_gmail"></a>
                         </div>
+                        <script async src="https://static.addtoany.com/menu/page.js"></script>
                     </div>
                 </div>
 

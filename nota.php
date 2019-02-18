@@ -12,9 +12,10 @@ $novedad=$novedades->view();
 $imagenes->set("cod",$cod);
 $img = $imagenes->view();
 
-$template->set("title", $novedad["titulo"]." - La Sillería");
+$template->set("title", $novedad["titulo"] . "");
 $template->set("description", $novedad["description"]);
 $template->set("keywords", $novedad["keywords"]);
+$template->set("imagen", URL."/".$img["ruta"]);
 $template->set("favicon", LOGO);
 
 

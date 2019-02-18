@@ -14,16 +14,16 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
 		{ name: 'links' },
 		{ name: 'insert' },
-		{ name: 'forms' },
 		{ name: 'tools' },
 		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
 		{ name: 'others' },
 		'/',
 		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
+		{ name: 'paragraph',   groups: [ 'align','list', 'indent', 'blocks',  'bidi' ] },
 		{ name: 'styles' },
 		{ name: 'colors' },
-		{ name: 'about' }
+		{ name: 'tools' },
+		{ name: 'others' }
 	];
 
 	// Remove some buttons provided by the standard plugins, which are
@@ -37,7 +37,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.removeDialogTabs = 'image:advanced;link:advanced';
 
 
-	config.extraPlugins = 'widgetselection,lineutils,dialog,btgrid,bootstrapTabs,accordionList,collapsibleItem,lightbox,youtube';
+	config.extraPlugins = 'widgetselection,lineutils,dialog,btgrid,bootstrapTabs,accordionList,collapsibleItem,lightbox,youtube,justify,colorbutton,panelbutton,floatpanel,font';
 	config.language = 'es';
 	config.extraAllowedContent = 'a[data-lightbox,data-title,data-lightbox-saved]';
 	config.protectedSource.push(/<\?[\s\S]*?\?>/g);

@@ -204,8 +204,7 @@ if (isset($_POST["agregar"])) {
                 </div>
             </div>
         </div>
-        <div class="clearfix">
-        </div>
+        <div class="clearfix"></div>
         <label class="col-md-12">
             Desarrollo:<br/>
             <textarea name="desarrollo" class="ckeditorTextarea">
@@ -225,8 +224,7 @@ if (isset($_POST["agregar"])) {
                 PAGALAS HASTA EN <b>12 CUOTAS</b><br/>
             </textarea>
         </label>
-        <div class="clearfix">
-        </div>
+        <div class="clearfix"></div>
         <label class="col-md-12">
             Palabras claves dividas por ,<br/>
             <input type="text" name="keywords">
@@ -261,7 +259,7 @@ if (isset($_POST["agregar"])) {
                             }
                         }
                     }
-                    echo '<input type="checkbox" class="form-check-input" id="meli" name="meli"> <label class="form-check-label" for="meli">¿Publicar en MercadoLibre?</label>';
+                    echo '<input type="checkbox" class="form-check-input" id="meli" name="meli" value="1"> <label class="form-check-label " style="font-size:19px" for="meli">¿Publicar en MercadoLibre?</label>';
                 } else {
                     echo '<div class="ml-0 pl-0 mt-20 mb-20"><a  target="_blank" href="' . $meli->getAuthUrl($redirectURI, Meli::$AUTH_URL[$siteId]) . '"><img src="' . URL . '/img/meli.png" width="30" /> ¿Ingresar a Mercadolibre para publicar el producto <i class="fa fa-square green">?</i></a></div>';
                 }

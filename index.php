@@ -1,4 +1,5 @@
 <?php
+
 require_once "Config/Autoload.php";
 Config\Autoload::runSitio();
 $template = new Clases\TemplateSite();
@@ -14,25 +15,41 @@ $slider = new Clases\Sliders();
 $categorias = new Clases\Categorias();
 $imagenes = new Clases\Imagenes();
 $novedades = new Clases\Novedades();
-$productos_data = $productos->list_opciones('', '', '0,8');
+$productos_data = $productos->list_opciones('', '', '0,6');
 $novedades_data = $novedades->listWithOps('', '', '4');
-$sliders = $slider->list('');
+$sliders_web = $slider->list(array("categoria = 'd36712555d'"));
+$sliders_mobile = $slider->list(array("categoria = '97e2189e30'"));
 $template->themeInit();
 ?>
-    <div class="ps-slider--banner owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="2000"
+    <div class="ps-slider--banner owl-slider hidden-xs hidden-sm" data-owl-auto="true" data-owl-loop="true" data-owl-speed="2000"
          data-owl-gap="0" data-owl-nav="false" data-owl-dots="false" data-owl-item="1" data-owl-item-xs="1"
          data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="500"
          data-owl-mousedrag="on">
         <?php
-        foreach ($sliders as $sliders_) {
+        foreach ($sliders_web as $sliders_) {
             $imagenes->set("cod", $sliders_['cod']);
             $img = $imagenes->view();
             ?>
-            <img src="<?= URL . "/" . $img["ruta"]; ?>" width="100%" />
+            <a href="<?= $sliders_["link"]; ?>"> <img src="<?= URL . "/" . $img["ruta"]; ?>" width="100%"/></a>
             <?php
         }
         ?>
     </div>
+    <div class="ps-slider--banner owl-slider hidden-md hidden-lg" data-owl-auto="true" data-owl-loop="true" data-owl-speed="2000"
+         data-owl-gap="0" data-owl-nav="false" data-owl-dots="false" data-owl-item="1" data-owl-item-xs="1"
+         data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="500"
+         data-owl-mousedrag="on">
+        <?php
+        foreach ($sliders_mobile as $sliders_) {
+            $imagenes->set("cod", $sliders_['cod']);
+            $img = $imagenes->view();
+            ?>
+            <img src="<?= URL . "/" . $img["ruta"]; ?>" width="100%"/>
+            <?php
+        }
+        ?>
+    </div>
+
     <div class="ps-section ps-home-best-product">
         <div class="ps-container">
             <div class="ps-section__header text-center">
@@ -48,40 +65,18 @@ $template->themeInit();
                         $categoria = $categorias->view();
                         $imagenes_productos = $imagenes->listForProduct();
                         ?>
-                        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 ">
+                        <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6 ">
                             <div class="ps-product">
-                                <div class="ps-product__thumbnail">
-                                    <div style="background:url('<?= URL ?>/<?= $imagenes_productos[0]["ruta"] ?>') no-repeat center center/contain;width:100%;height:400px"></div>
-                                    <div class="ps-product__content full">
-                                        <a class="ps-product__title" href="<?= URL . "/producto/" . $funciones->normalizar_link($producto["titulo"]) . "/" . $producto["id"] ?>">
-                                            <?= $producto["titulo"] ?>
-                                        </a>
-                                        <div class="ps-product__categories">
-                                        <a href="<?= URL . "/productos/" . $funciones->normalizar_link($categoria["titulo"]) ?>"><?= $categoria["titulo"] ?>
-                                        </a>
-                                        </div>
-                                        <p class="ps-product__price">
-                                            $<?= $producto["precio"] ?>
-                                        </p>
-                                        <a class="ps-btn ps-btn--sm"
-                                           href="<?= URL . "/producto/" . $funciones->normalizar_link($producto["titulo"]) . "/" . $producto["id"] ?>">
-                                            Ver más
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="ps-product__content">
-                                    <a class="ps-product__title"
-                                       href="<?= URL . "/producto/" . $funciones->normalizar_link($producto["titulo"]) . "/" . $producto["id"] ?>">
+                                <a href="<?= URL . "/producto/" . $funciones->normalizar_link($producto["titulo"]) . "/" . $producto["id"] ?>">
+                                    <div class="mb-10" style="background:url('<?= URL ?>/<?= $imagenes_productos[0]["ruta"] ?>') no-repeat center center/contain;width:100%;height:250px"></div>
+                                </a>
+                                <div class="pl-10 pr-10">
+                                    <a class=" fs-14" href="<?= URL . "/producto/" . $funciones->normalizar_link($producto["titulo"]) . "/" . $producto["id"] ?>">
                                         <?= $producto["titulo"] ?>
                                     </a>
-                                    <div class="ps-product__categories">
-                                        <a href="<?= URL . "/productos/" . $funciones->normalizar_link($producto["categoria"]); ?>">
-                                            <?= $categoria["titulo"] ?>
-                                        </a>
-                                    </div>
-                                    <p class="ps-product__price">
-                                        $<?= $producto["precio"] ?>
-                                    </p>
+                                    <div class="ps-product__categories"><a href="<?= URL . "/productos/" . $funciones->normalizar_link($categoria["titulo"]) ?>"><?= $categoria["titulo"] ?></a></div>
+                                    <span class="fs-17 verde block">$<?= number_format(($producto["precio"] * 0.75), 2, ",", "."); ?>  <span class="fs-12">(contado)</span> </span>
+                                    <span class="fs-13">6 cuotas de $<?= number_format(($producto["precio"] / 6), 2, ",", "."); ?></span>
                                 </div>
                             </div>
                         </div>
@@ -89,7 +84,7 @@ $template->themeInit();
                     }
                     ?>
                 </div>
-                <div class="text-center mt-65"><a class="ps-btn" href="<?= URL ?>/blog">Ver todos los productos</a></div>
+                <div class="text-center mt-65"><a class="ps-btn" href="<?= URL ?>/productos">Ver todos los productos</a></div>
             </div>
         </div>
     </div>

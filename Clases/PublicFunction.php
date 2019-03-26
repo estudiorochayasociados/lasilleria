@@ -6,10 +6,13 @@ class PublicFunction
 
     public function antihack_mysqli($str)
     {
+        if(!empty($str)) {
+        //$str = $this->antihack($str);
         $con = new Conexion();
         $conexion = $con->con();
         $str = mysqli_real_escape_string($conexion, $str);
-        return $str;
+        return trim($str);
+        }
     }
 
     public function antihack($str)
@@ -171,6 +174,11 @@ class PublicFunction
                 break;
             case "PUT":
                 curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
+                if ($data)
+                    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                break;
+            case "DELETE":
+                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
                 if ($data)
                     curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
                 break;

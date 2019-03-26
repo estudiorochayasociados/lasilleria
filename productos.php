@@ -15,6 +15,8 @@ $filter = array();
 
 if ($categoria != '') {
     array_push($filter, "categoria = '$categoria'");
+} else {
+    $filter = '';
 }
 
 $productos_data = $productos->list($filter, '', (24 * $pagina) . ',' . 24);
@@ -44,80 +46,28 @@ $template->themeInit();
     <main class="container-fluid">
         <div class="ps-container">
             <div class="row">
-                <aside class="ps-sidebar col-md-3">
-                    <aside class="widget widget_sidebar widget_category hidden-xs hidden-sm">
-                        <h3 class="widget-title">Categorias</h3>
-                        <ul class="ps-list--checked">
-                            <?php
-                            foreach ($categorias_side as $categorias_) {
-                                if ($categorias_["cod"] == $categoria) {
-                                    $current = "current";
-                                } else {
-                                    $current = '';
-                                }
-                                echo '<li class="' . $current . '" ><a  href="' . URL . '/productos/' . $funciones->normalizar_link($categorias_['titulo']) . '/' . $categorias_['cod'] . '">' . $categorias_['titulo'] . '</a></li>';
-                            }
-                            ?>
-                        </ul>
-                    </aside>
-                </aside>
-                <aside class="hidden-lg hidden-md">
-                    <h3 class="widget-title">Categorias</h3>
-                    <form method="get" action="<?= URL ?>/productos">
-                        <select name="categoria" class="form-control" onChange='this.form.submit()'>
-                            <option>Elegí la categoría que estás buscando</option>
-                            <?php
-                            foreach ($categorias_side as $categorias_) {
-                                if ($categorias_["cod"] == $categoria) {
-                                    echo '<option value="' . $categorias_['cod'] . '" selected>' . strtoupper($categorias_['titulo']) . '</option>';
-                                } else {
-                                    echo '<option value="' . $categorias_['cod'] . '">' . strtoupper($categorias_['titulo']) . '</option>';
-                                }
-                            }
-                            ?>
-                        </select>
-                    </form>
-                </aside>
-                <div class="col-md-9 col-sm-12">
+                <div class="col-md-12 col-sm-12">
                     <div class="ps-row">
                         <?php
+
                         foreach ($productos_data as $producto) {
                             $imagenes->set("cod", $producto['cod']);
                             $categorias->set("cod", $producto['categoria']);
                             $categoria = $categorias->view();
                             $imagenes_productos = $imagenes->listForProduct();
                             ?>
-                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6 ">
+                            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6 ">
                                 <div class="ps-product">
-                                    <div class="ps-product__thumbnail">
-                                        <a href="<?= URL . "/producto/" . $funciones->normalizar_link($producto["titulo"]) . "/" . $producto["id"] ?>">
-                                            <div style="background:url('<?= URL ?>/<?= $imagenes_productos[0]["ruta"] ?>') no-repeat center center/cover;width:100%;height:400px"></div>
-                                        </a>
-                                        <div class="ps-product__content full">
-                                            <a class="ps-product__title" href="<?= URL . "/producto/" . $funciones->normalizar_link($producto["titulo"]) . "/" . $producto["id"] ?>">
-                                                <?= $producto["titulo"] ?>
-                                            </a>
-                                            <div class="ps-product__categories"><a href="<?= URL . "/productos/" . $funciones->normalizar_link($categoria["titulo"]) ?>"><?= $categoria["titulo"] ?></a></div>
-                                            <p class="ps-product__price">
-                                                $<?= $producto["precio"] ?>
-                                            </p>
-                                            <a class="ps-btn ps-btn--sm" href="<?= URL . "/producto/" . $funciones->normalizar_link($producto["titulo"]) . "/" . $producto["id"] ?>">
-                                                Ver más
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="ps-product__content">
-                                        <a class="ps-product__title" href="<?= URL . "/producto/" . $funciones->normalizar_link($producto["titulo"]) . "/" . $producto["id"] ?>">
+                                    <a href="<?= URL . "/producto/" . $funciones->normalizar_link($producto["titulo"]) . "/" . $producto["id"] ?>">
+                                        <div class="mb-10" style="background:url('<?= URL ?>/<?= $imagenes_productos[0]["ruta"] ?>') no-repeat center center/contain;width:100%;height:250px"></div>
+                                    </a>
+                                    <div class="pl-10 pr-10">
+                                        <a class=" fs-14" href="<?= URL . "/producto/" . $funciones->normalizar_link($producto["titulo"]) . "/" . $producto["id"] ?>">
                                             <?= $producto["titulo"] ?>
                                         </a>
-                                        <div class="ps-product__categories">
-                                            <a href="<?= URL . "/productos/" . $funciones->normalizar_link($producto["categoria"]); ?>">
-                                                <?= $categoria["titulo"] ?>
-                                            </a>
-                                        </div>
-                                        <p class="ps-product__price">
-                                            $<?= $producto["precio"] ?>
-                                        </p>
+                                        <div class="ps-product__categories"><a href="<?= URL . "/productos/" . $funciones->normalizar_link($categoria["titulo"]) ?>"><?= $categoria["titulo"] ?></a></div>
+                                        <span class="fs-17 verde block">$<?= number_format(($producto["precio"] * 0.75), 2, ",", "."); ?>  <span class="fs-12">(contado)</span> </span>
+                                        <span class="fs-13">6 cuotas de $<?= number_format(($producto["precio"] / 6), 2, ",", "."); ?></span>
                                     </div>
                                 </div>
                             </div>

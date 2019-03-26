@@ -7,7 +7,7 @@ $carrito = new Clases\Carrito();
 $envios = new Clases\Envios();
 $pagos = new Clases\Pagos();
 
-$template->set("title", "La Sillería - CARRITO");
+$template->set("title", "La Sillería - Carrito");
 $template->set("description", "Finalizá tu carrito de compra");
 $template->set("keywords", "comprar sillas de madera guatambu, sillas de madera guatambu en el interior, compra sillas online");
 $template->set("favicon", LOGO);

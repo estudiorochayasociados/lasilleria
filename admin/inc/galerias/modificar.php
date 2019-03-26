@@ -109,7 +109,7 @@ if (isset($_POST["agregar"])) {
             <input type="text" name="keywords" value="<?=$galeria["keywords"]?>">
         </label>
         <label class="col-md-12">Descripción breve<br/>
-            <textarea name="description"><?=$galeria["description"]?></textarea>
+            <textarea name="description"><?=trim($galeria["description"])?></textarea>
         </label>
         <br/>
         <div class="col-md-12">

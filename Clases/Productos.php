@@ -150,7 +150,7 @@ class Productos
           "id": "BRAND",
           "name": "Marca",
           "value_id": null,
-          "value_name": "San José Muebles",
+          "value_name": "La Sileria",
           "value_struct": null,
           "attribute_group_id": "OTHERS",
           "attribute_group_name": "Otros"
@@ -172,6 +172,16 @@ class Productos
           "value_struct": null,
           "attribute_group_id": "OTHERS",
           "attribute_group_name": "Otros"
+        },
+         {
+          "id": "EAN",
+          "name": "EAN",
+          "value_name": "978020137962",
+          "type": "product_identifier",
+           "value_type": "string",
+           "value_max_length": 60,
+           "attribute_group_id": "DFLT",
+           "attribute_group_name": "Otros"
         },
         {
           "id": "CHAIR_WIDTH",
@@ -195,7 +205,7 @@ class Productos
           "id": "MANUFACTURER",
           "name": "Fabricante",
           "value_id": null,
-          "value_name": "San José Muebles",
+          "value_name": "La Silleria",
           "value_struct": null,
           "attribute_group_id": "OTHERS",
           "attribute_group_name": "Otros"
@@ -227,15 +237,41 @@ class Productos
 
     public function edit_meli()
     {
+        $variations_array = json_decode($this->get_variations($this->meli));
+        if (count($variations_array) > 0) {
+            foreach ($variations_array as $value) {
+                $this->delete_variations($this->meli, $value->id);
+            }
+        }
         $data = '{
-        "title": "' . $this->titulo . '",  
-        "price": ' . $this->precio . ', 
-        "available_quantity": ' . $this->stock . ',      
-        "pictures": [' . $this->img . ',{"source":"' . LOGO . '"}]
+                "title": "' . $this->titulo . '",  
+                "price": ' . $this->precio . ', 
+                "available_quantity": ' . $this->stock . ',      
+                "pictures": [' . $this->img . ',{"source":"' . LOGO . '"}]
         }';
         $meli = $this->funciones->curl("PUT", "https://api.mercadolibre.com/items/$this->meli?access_token=" . $_SESSION["access_token"], $data);
         return $meli;
     }
+
+    public function view_meli($id)
+    {
+        $meli = $this->funciones->curl("GET", "https://api.mercadolibre.com/items/$id?access_token=" . $_SESSION["access_token"], "");
+        return $meli;
+    }
+
+
+    public function get_variations($id)
+    {
+        $meli = $this->funciones->curl("GET", "https://api.mercadolibre.com/items/$id/variations?access_token=" . $_SESSION["access_token"], "");
+        return $meli;
+    }
+
+    public function delete_variations($id, $variation)
+    {
+        $meli = $this->funciones->curl("DELETE", "https://api.mercadolibre.com/items/$id/variations/$variation?access_token=" . $_SESSION["access_token"], "");
+        return $meli;
+    }
+
 
     public function delete_meli()
     {

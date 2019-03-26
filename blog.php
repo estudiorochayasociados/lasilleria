@@ -3,7 +3,7 @@ require_once "Config/Autoload.php";
 Config\Autoload::runSitio();
 $template = new Clases\TemplateSite();
 $funciones = new Clases\PublicFunction();
-$template->set("title", "La Sillería - BLOG");
+$template->set("title", "La Sillería - Blog");
 $template->set("description", "Enterate de las mejores novedades sobres las sillas , banquetas y bancos de guatambu");
 $template->set("keywords", "novedades de sillas de madera,tendencias de sillas de madera,sillas de madera guatambu");
 $template->set("favicon", LOGO);

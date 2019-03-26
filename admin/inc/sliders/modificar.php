@@ -35,11 +35,11 @@ if (isset($_POST["agregar"])) {
     $sliders->set("titulo", $funciones->antihack_mysqli(isset($_POST["titulo"]) ? $_POST["titulo"] : ''));
     $sliders->set("subtitulo", $funciones->antihack_mysqli(isset($_POST["subtitulo"]) ? $_POST["subtitulo"] : ''));
     $sliders->set("categoria", $funciones->antihack_mysqli(isset($_POST["categoria"]) ? $_POST["categoria"] : ''));
+    $sliders->set("ver_txt", isset($_POST["ver_txt"]) ? $_POST["ver_txt"] : '');
     $sliders->set("link", $funciones->antihack_mysqli(isset($_POST["link"]) ? $_POST["link"] : ''));
     $sliders->set("fecha", $funciones->antihack_mysqli(isset($_POST["fecha"]) ? $_POST["fecha"] : date("Y-m-d")));
 
- 
-    foreach ($_FILES['files']['name'] as $f => $name) {
+   foreach ($_FILES['files']['name'] as $f => $name) {
         $imgInicio = $_FILES["files"]["tmp_name"][0];
         $tucadena  = $name;
         $partes    = explode('.', $tucadena);
@@ -59,7 +59,7 @@ if (isset($_POST["agregar"])) {
             $zebra->enlarge_smaller_images = true;
             $zebra->preserve_time = true;
 
-            if ($zebra->resize(800, 700, ZEBRA_IMAGE_NOT_BOXED)) {
+            if ($zebra->resize(0, 0, ZEBRA_IMAGE_NOT_BOXED)) {
                 unlink($destinoFinal);
             }
 
@@ -103,9 +103,15 @@ if (isset($_POST["agregar"])) {
                 ?>
             </select>
         </label>
-        <label class="col-md-12">
+        <label class="col-md-6">
             Link:<br/>
             <input type="text" value="<?=$slide["link"]?>" name="link">
+        </label>
+        <label class="col-md-6">Mostrar Texto en Slide:<br/>
+            <select name="ver_txt" class="form-control">
+                <option value="1" <?php if($slide["ver_txt"] == 1) { echo "selected"; } ?>>Si</option>
+                <option value="0" <?php if($slide["ver_txt"] == 0) { echo "selected"; } ?>>No</option>
+            </select>
         </label>
         <div class="col-md-12">
             <div class="row">

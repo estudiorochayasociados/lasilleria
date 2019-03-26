@@ -14,6 +14,7 @@ if (isset($_POST["agregar"])) {
     $sliders->set("subtitulo", $funciones->antihack_mysqli(isset($_POST["subtitulo"]) ? $_POST["subtitulo"] : ''));
     $sliders->set("categoria", $funciones->antihack_mysqli(isset($_POST["categoria"]) ? $_POST["categoria"] : ''));
     $sliders->set("link", $funciones->antihack_mysqli(isset($_POST["link"]) ? $_POST["link"] : ''));
+    $sliders->set("ver_txt", isset($_POST["ver_txt"]) ? $_POST["ver_txt"] : '');
     $sliders->set("fecha", $funciones->antihack_mysqli(isset($_POST["fecha"]) ? $_POST["fecha"] : date("Y-m-d")));
 
     foreach ($_FILES['files']['name'] as $f => $name) {
@@ -36,7 +37,7 @@ if (isset($_POST["agregar"])) {
             $zebra->enlarge_smaller_images = true;
             $zebra->preserve_time          = true;
 
-            if ($zebra->resize(800, 700, ZEBRA_IMAGE_NOT_BOXED)) {
+            if ($zebra->resize(0, 0, ZEBRA_IMAGE_NOT_BOXED)) {
                 unlink($destinoFinal);
             }
 
@@ -70,8 +71,14 @@ if (isset($_POST["agregar"])) {
                 ?>
             </select>
         </label>
-        <label class="col-md-12">Link:<br/>
+        <label class="col-md-6">Link:<br/>
             <input type="text" name="link">
+        </label>
+        <label class="col-md-6">Mostrar Texto en Slide:<br/>
+            <select name="ver_txt" class="form-control">
+                <option value="1">Si</option>
+                <option value="0">No</option>
+            </select>
         </label>
         <label class="col-md-7">Imágen:<br/>
             <input type="file" id="file" name="files[]" accept="image/*" />

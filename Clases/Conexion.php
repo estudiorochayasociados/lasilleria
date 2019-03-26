@@ -2,22 +2,28 @@
 
 class Conexion
 {
-    private $datos = array("host" => "localhost", "user" => "root", "pass" => "root", "db" => "lasilleria");
-
+    //private $datos = array("host"=> "localhost","user"=> "root","pass"=> "","db"  => "pintureria_ariel");
+    //private $datos = array("host"=> "162.144.180.63","user"=> "estudfh2_ariel","pass"=> "faAr2010","db"  => "estudfh2_ariel");
+    private $datos = array("host"=> "localhost","user"=> "root","pass"=> "root","db"  => "lasilleria");
     private $con;
 
     public function __construct()
     {
         $this->con = mysqli_connect($this->datos["host"], $this->datos["user"], $this->datos["pass"], $this->datos["db"]);
-        mysqli_set_charset($this->con, 'utf8');
+        mysqli_set_charset($this->con,'utf8');
 
     }
 
     public function con()
     {
         $conexion = mysqli_connect($this->datos["host"], $this->datos["user"], $this->datos["pass"], $this->datos["db"]);
-        mysqli_set_charset($conexion, 'utf8');
+        mysqli_set_charset($conexion,'utf8');
         return $conexion;
+    }
+
+    public function backup()
+    {
+        return $this->datos;
     }
 
     public function sql($query)
@@ -29,25 +35,5 @@ class Conexion
     {
         $dato = $this->con->query($query);
         return $dato;
-    }
-
-    public function backup($archivo, $sql, $compress)
-    {
-        if ($compress) {
-            if (!($zf = gzopen($archivo, 'w9'))) {
-                $this->error = 'Can\'t create the output file.';
-                return false;
-            }
-            gzwrite($zf, $sql);
-            gzclose($zf);
-        } else {
-            if (!($f = fopen($archivo, 'w'))) {
-                $this->error = 'Can\'t create the output file.';
-                return false;
-            }
-            fwrite($f, $sql);
-            fclose($f);
-        }
-        return true;
     }
 }

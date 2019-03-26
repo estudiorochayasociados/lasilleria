@@ -101,7 +101,8 @@ $template->themeInit();
                             <h1><?= $producto["titulo"] ?></h1>
                             <p class="ps-product__category"><?= $categoria["titulo"] ?></a></p>
                             <h3 class="ps-product__price">
-                                <span>$</span> <span id="precio"><?= $producto["precio"] ?></span>
+                                <span class="fs-35 block bold">$<?= number_format(($producto["precio"] * 0.75), 2, ",", "."); ?> <span class="fs-14">(contado)</span></span>
+                                <span class="fs-17">6 cuotas de $<?= number_format(($producto["precio"] / 6), 2, ",", "."); ?> con tarjeta de crédito</span>
                             </h3>
                             <div class="ps-product__short-desc">
                                 <p><?= $producto["description"] ?></p>

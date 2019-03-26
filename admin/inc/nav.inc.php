@@ -5,7 +5,7 @@ $redirectURI = URL;
 $siteId = 'MLA';
 require_once '../Clases/Meli.php';
 $meli = new Meli($appId, $secretKey);
-$pages = ["ecommerce", "contenidos", "novedades", "multimedia", "usuarios", "banners", "productos", "portfolio", "servicios", "configuracion", "categorias", "marketing"];
+$pages = ["ecommerce", "contenidos", "novedades", "multimedia", "usuarios", "banners", "productos", "configuracion", "categorias", "marketing"];
 ?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-30">
     <div class="col-md-12">

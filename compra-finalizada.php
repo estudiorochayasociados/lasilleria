@@ -7,9 +7,9 @@ $pedidos = new Clases\Pedidos();
 $carritos = new Clases\Carrito();
 $correo = new Clases\Email();
 
-$template->set("title", "Admin");
-$template->set("description", "Admin");
-$template->set("keywords", "Inicio");
+$template->set("title", "La Sillería - Compra Finalizada");
+$template->set("description", "¡Gracias por tu compra!");
+$template->set("keywords", "compra de sillas de guatambu, madera guatambu, sillas de madera");
 $template->set("favicon", LOGO);
 $template->themeInit();
 $estado_get = isset($_GET["estado"]) ? $_GET["estado"] : '';
@@ -159,6 +159,7 @@ $correo->set("receptor", EMAIL);
 $correo->set("emisor", EMAIL);
 $correo->set("mensaje", $mensajeCompraAdmin);
 $correo->emailEnviar();
+
 
 $carritos->destroy();
 unset($_SESSION["cod_pedido"]);

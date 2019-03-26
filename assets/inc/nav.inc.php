@@ -14,7 +14,7 @@ $usuario = $usuarios->view_sesion();
         <div class="ps-container">
             <div class="row">
                 <div class="col-lg-6 col-md-8 col-sm-6 col-xs-12 ">
-                    <p><?= DIRECCION . ", " . PROVINCIA . ", " . CIUDAD . " - " . TELEFONO ?></p>
+                    <p><? //DIRECCION . ", " . PROVINCIA . ", " . CIUDAD . " - " . TELEFONO ?></p>
                     <i class="furniture-market"></i>
                 </div>
                 <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12 ">
@@ -27,7 +27,7 @@ $usuario = $usuarios->view_sesion();
                             <?php
                         } else {
                             ?>
-                            <a href="<?= URL ?>/sesion"> <i class="fa fa-user"></i> Hola <?= $usuario["nombre"] . " ".$usuario["apellido"]; ?></a>
+                            <a href="<?= URL ?>/sesion"> <i class="fa fa-user"></i> Hola <?= $usuario["nombre"] . " " . $usuario["apellido"]; ?></a>
                             <a href="<?= URL ?>/sesion/salir"><i class="fa fa-sign-out"></i> Salir</a>
                             <?php
                         }
@@ -82,7 +82,7 @@ $usuario = $usuarios->view_sesion();
                 <li>
                     <a href="<?= URL ?>/index">Inicio</a>
                 </li>
-                <li class="menu-item-has-children">
+                <li class="menu-item-has-children hidden-xs hidden-sm">
                     <a href="#">Productos</a>
                     <ul class="sub-menu">
                         <?php
@@ -92,6 +92,11 @@ $usuario = $usuarios->view_sesion();
                         ?>
                     </ul>
                 </li>
+                <?php
+                foreach ($categorias_side as $categorias_) {
+                    echo '<li class="hidden-lg hidden-md"><a href="' . URL . '/productos/' . $funciones->normalizar_link($categorias_['titulo']) . '/' . $categorias_['cod'] . '">' . $categorias_['titulo'] . '</a></li>';
+                }
+                ?>
                 <li class="menu-item-has-children">
                     <a href="#">Tapizados</a>
                     <ul class="sub-menu">

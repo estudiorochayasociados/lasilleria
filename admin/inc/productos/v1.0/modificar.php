@@ -141,7 +141,7 @@ if (isset($_POST["agregar"])) {
             <input type="text" name="keywords" value="<?= $producto["keywords"] ?>">
         </label>
         <label class="col-md-12">Descripción breve<br/>
-            <textarea name="description"><?= $producto["description"] ?></textarea>
+            <textarea name="description"><?=trim($producto["description"])?></textarea>
         </label>
         <br/>
         <div class="col-md-12">

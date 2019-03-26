@@ -4,25 +4,16 @@ namespace Clases;
 
 class DBBackup
 {
-    private $hostname = ''; /* DB Hostname */
-    private $username = ''; /* DB Username */
-    private $password = ''; /* DB Password */
-    private $database = ''; /* Database Name */
-    private $characterSet = 'utf8'; /* DB Character Set */
-    private $backupDirectory = 'backup'; /* Backup Directory */
-
-    /* Mysqli Connection Handle */
     private $link = '';
 
-    /* Class Constructor */
     function __construct()
     {
-        /* Initialization of DB variables */
-        $this->hostname = 'localhost';
-        $this->username = 'root';
-        $this->password = 'root';
-        $this->database = 'lasilleria';
-        /* Call DB Initialization Function */
+        $conexion = new \Clases\Conexion();
+        $datos = $conexion->backup();
+        $this->hostname = $datos["host"];
+        $this->username = $datos["user"];
+        $this->password = $datos["pass"];
+        $this->database = $datos["db"];
         $this->initalizeDB();
 
     }
@@ -30,55 +21,30 @@ class DBBackup
     /* Function used to Initialize the MySQL DB */
     private function initalizeDB()
     {
-        $this->link = mysqli_connect($this->hostname, $this->username, $this->password, $this->database);
-        /* If any error then display appropriate message */
-        if (mysqli_connect_error()) {
-            die('Connection Error - ' . mysqli_connect_errno() . ' : ' . mysqli_connect_error());
-        }
-        /* If the Character Set is not defined then set default defined one */
-        if (!mysqli_character_set_name($this->link)) {
-            mysqli_set_charset($this->link, $this->characterSet);
-        }
+        $conexion = new \Clases\Conexion();
+        $this->link = $conexion->con();
     }
 
     /* Function is used to Backup you Database */
     public function backupDatabase($tables = '*', $backupDirectory = '')
     {
-        /* If all the tables needed */
         if ($tables == '*') {
             $tables = array();
-            /* Fetch all the tables of the current database */
             $result = mysqli_query($this->link, "SHOW TABLES");
-            /* Loop through all the rows and assign to $tables array */
             while ($row = mysqli_fetch_row($result)) {
                 $tables[] = $row[0];
             }
         } else {
-            /* If $tables is an array then assign directly else explode the string */
             $tables = is_array($tables) ? $tables : explode(',', $tables);
         }
-        /* Create the database */
         $sql = 'SET FOREIGN_KEY_CHECKS = 0;' . "\n" . 'CREATE DATABASE IF NOT EXISTS `' . $this->database . "`;\n";
-        /* Use the database */
         $sql .= 'USE `' . $this->database . '`;';
-
-        /* Loop throug all the $tables */
         foreach ($tables as $table) {
-            /* Output message */
-            //echo 'Logging Table : `' . $table . '` : ';
-
-            /* Fetch the details of the table */
             $tableDetails = mysqli_query($this->link, "SELECT * FROM " . $table);
-
-            /* Check the Number of Coloumns in the table */
             $totalCols = mysqli_num_fields($tableDetails);
-
-            /* If the table exists then drop */
             $sql .= "\n\nDROP TABLE IF EXISTS `" . $table . "`;\n";
-            /* Create the table structure */
             $result1 = mysqli_fetch_row(mysqli_query($this->link, 'SHOW CREATE TABLE ' . $table));
             $sql .= $result1[1] . ";\n\n";
-
 
             while ($row = mysqli_fetch_row($tableDetails)) {
                 $sql .= 'INSERT INTO `' . $table . '` VALUES(';
@@ -96,10 +62,8 @@ class DBBackup
                 }
                 $sql .= "); \n";
             }
-            //echo 'Completed <br/>';
         }
         $sql .= 'SET FOREIGN_KEY_CHECKS = 1;';
-        /* If the 2nd parameter was not specified then default one will be passed */
         $backupDirectory = ($backupDirectory == '') ? $this->backupDirectory : $backupDirectory;
         if ($this->logDatabase($sql, $backupDirectory)) {
             echo '<h4>Exported Database</h4>';
@@ -111,7 +75,6 @@ class DBBackup
 
     }
 
-    /* Function used to Log the Database */
     private function logDatabase($sql, $backupDirectory = '')
     {
         if (!$sql) {
@@ -120,7 +83,7 @@ class DBBackup
 
         if (!file_exists($backupDirectory)) {
             if (mkdir($backupDirectory)) {
-                $filename = 'sql-'. date('d-m-Y');
+                $filename = 'sql-' . date('d-m-Y');
                 $fileHandler = fopen($backupDirectory . '/' . $filename . '.sql', 'w+');
                 fwrite($fileHandler, $sql);
                 fclose($fileHandler);

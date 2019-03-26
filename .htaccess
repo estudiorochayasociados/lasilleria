@@ -15,7 +15,7 @@ RewriteRule ^sesion/(.*)/(.*)$ ./sesion.php?op=$2
 RewriteRule ^carrito/(.*)/(.*)$ ./carrito.php?metodos-pago=$2
 RewriteRule ^pagar/(.*)/(.*)$ ./pagar.php?metodos-pago=$2
 
-RewriteEngine on
-RewriteCond %{HTTP_HOST} ^lasilleria.com.ar [NC]
-RewriteRule ^(.*)$ https://www.lasilleria.com.ar/$1 [L,R=301,NC]
+#RewriteEngine on
+#RewriteCond %{HTTP_HOST} ^lasilleria.com.ar [NC]
+#RewriteRule ^(.*)$ https://www.lasilleria.com.ar/$1 [L,R=301,NC]
 

@@ -109,7 +109,7 @@ if (isset($_POST["agregar"])) {
             <input type="text" name="keywords" value="<?=$serviciosInd["keywords"]?>">
         </label>
         <label class="col-md-12">Descripción breve<br/>
-            <textarea name="description"><?=$serviciosInd["description"]?></textarea>
+            <textarea name="description"><?=trim($serviciosInd["description"])?></textarea>
         </label>
         <br/>
         <div class="col-md-12">

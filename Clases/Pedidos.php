@@ -124,7 +124,7 @@ class Pedidos
             while ($row = mysqli_fetch_assoc($pedidos)) {
                 $array[] = $row;
             }
-            return $array;
         }
+        return $array;
     }
 }

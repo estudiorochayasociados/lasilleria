@@ -9,7 +9,7 @@
         </div>
     </div>
 </footer>
-
+<!--
 <div class="ps-loading">
     <div class="loader ">
         <div class="loader__item"></div>
@@ -19,7 +19,7 @@
         <div class="loader__item"></div>
     </div>
 </div>
-
+-->
 <div style="position: fixed;bottom:20px;left:15px;z-index: 999">
     <a target="_blank" href="https://m.me/1957224777906534" style="vertical-align:middle;box-shadow:0px 0px 10px #333;font-size:14px;padding:10px;border-radius:5px;background-color:#1787fb;color:white;text-shadow:none;">
         <i class="fa fa-lg fa-facebook-square"></i> <span class="hidden-xs hidden-sm">Comunicate vía</span> Facebook

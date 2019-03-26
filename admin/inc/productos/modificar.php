@@ -19,6 +19,30 @@ $imagenes->set("link", "productos&accion=modificar");
 $categorias = new Clases\Categorias();
 $data = $categorias->list(array("area = 'productos'"));
 
+
+$appId = MELI_ID;
+$secretKey = MELI_SECRET;
+$redirectURI = URL . "/index.php?op=productos&accion=modificar";
+$siteId = 'MLA';
+$url = 'https://api.mercadolibre.com/oauth/token';
+$context = stream_context_create(array(
+    'http' => array(
+        'method' => 'POST',
+        'header' => 'Content-type: application/x-www-form-urlencoded',
+        'content' => http_build_query(
+            array(
+                'grant_type' => 'client_credentials',
+                'client_id' => $appId,
+                'client_secret' => $secretKey,
+            )
+        ),
+        'timeout' => 60,
+    ),
+));
+
+$resp = json_decode(file_get_contents($url, false, $context));
+$meli = new Meli($appId, $secretKey, $resp->access_token, $resp->refresh_token);
+
 if (isset($_GET["ordenImg"]) && isset($_GET["cod"])) {
     $imagenes->set("cod", $_GET["cod"]);
     $imagenes->set("id", $_GET["ordenImg"]);
@@ -67,7 +91,7 @@ if (isset($_POST["agregar"])) {
     $productos->set("fecha", $funciones->antihack_mysqli(isset($_POST["fecha"]) ? $_POST["fecha"] : date("Y-m-d")));
     $productos->set("meli", $funciones->antihack_mysqli(isset($_POST["meli"]) ? $_POST["meli"] : ''));
     $productos->set("url", $funciones->antihack_mysqli(isset($_POST["url"]) ? $_POST["url"] : ''));
-
+    $img_meli = '';
     foreach ($_FILES['files']['name'] as $f => $name) {
         $imgInicio = $_FILES["files"]["tmp_name"][$f];
         $tucadena = $_FILES["files"]["name"][$f];
@@ -94,17 +118,24 @@ if (isset($_POST["agregar"])) {
 
             $imagenes->set("cod", $cod);
             $imagenes->set("ruta", str_replace("../", "", $destinoRecortado));
+            $img_meli .= '{"source":"' . URLSITE . str_replace("../", "/", $destinoRecortado) . '"},';
             $imagenes->add();
         }
 
         $count++;
     }
 
+
+
+
     if ($meli != '') {
         if ($producto["meli"] == '') {
-            $productos->set("img", substr($img_meli, 0, -1));
-            $_meli = $productos->add_meli();
-            $productos->set("meli", $_meli["id"]);
+            if ($_POST["meli"] == 1) {
+                echo $img_meli;
+                $productos->set("img", substr($img_meli, 0, -1));
+                $_meli = $productos->add_meli();
+                $productos->set("meli", $_meli["id"]);
+            }
         } else {
             $img_meli = $imagenes->list_meli(array("cod = '$cod'"));
             $productos->set("meli", $producto["meli"]);
@@ -112,9 +143,11 @@ if (isset($_POST["agregar"])) {
             $_meli = $productos->edit_meli();
         }
     }
-    $productos->edit();
-    $funciones->headerMove(URL . "/index.php?op=productos");
+
+     $productos->edit();
+     $funciones->headerMove(URL . "/index.php?op=productos");
 }
+
 ?>
 
 <div class="col-md-12 ">
@@ -164,42 +197,44 @@ if (isset($_POST["agregar"])) {
             Peso: (kg)<br/>
             <input type="number" value="<?= $producto["variable4"] ?>" name="peso" required>
         </label>
-        <div class="clearfix">
-            <div class="mt-10 col-md-12">
-                Lustres
-                <button type="button" class="ml-10 mb-5 btn btn-info pull-right" onclick="agregar_input('variaciones3Input','variable3')"> +</button>
-                <div class="">
-                    <div id="variaciones3Input" class="row">
-                        <?php
-                        if (count($variable_3_explode) >= 1) {
-                            foreach ($variable_3_explode as $var3) {
-                                $cod = rand(0, 999999999);
-                                if ($var3 != '') {
-                                    ?>
-                                    <div class="col-md-3 input-group" id="<?= $cod ?>"><input type="text" value="<?= $var3 ?>" class="form-control mb-10 mr-10" name="variable3[]">
-                                        <div class="input-group-addon"><a href="#" onclick="$('#<?= $cod ?>').remove()" class="btn btn-danger"> - </a></div>
-                                    </div>
-                                    <?php
-                                }
+        <div class="clearfix"></div>
+        <div class="mt-10 col-md-12">
+            Lustres
+            <button type="button" class="ml-10 mb-5 btn btn-info pull-right" onclick="agregar_input('variaciones3Input','variable3')"> +</button>
+            <div class="">
+                <div id="variaciones3Input" class="row">
+                    <?php
+                    if (count($variable_3_explode) >= 1) {
+                        foreach ($variable_3_explode as $var3) {
+                            $cod = rand(0, 999999999);
+                            if ($var3 != '') {
+                                ?>
+                                <div class="col-md-3 input-group" id="<?= $cod ?>"><input type="text" value="<?= $var3 ?>" class="form-control mb-10 mr-10" name="variable3[]">
+                                    <div class="input-group-addon"><a href="#" onclick="$('#<?= $cod ?>').remove()" class="btn btn-danger"> - </a></div>
+                                </div>
+                                <?php
                             }
                         }
-                        ?>
-                    </div>
+                    }
+                    ?>
                 </div>
             </div>
-            <div class="clearfix">
-            </div>
-            <label class="col-md-12">Desarrollo:<br/>
-                <textarea name="desarrollo" class="ckeditorTextarea"><?= $producto["desarrollo"] ?></textarea>
-            </label>
-            <div class="clearfix"></div>
-            <label class="col-md-12">Palabras claves dividas por ,<br/>
-                <input type="text" name="keywords" value="<?= $producto["keywords"] ?>">
-            </label>
-            <label class="col-md-12">Descripción breve<br/>
-                <textarea name="description"><?= $producto["description"] ?></textarea>
-            </label>
-            <br/>
+        </div>
+        <div class="clearfix"></div>
+        <label class="col-md-12">Desarrollo:<br/>
+            <textarea name="desarrollo" class="ckeditorTextarea"><?= $producto["desarrollo"] ?></textarea>
+        </label>
+        <div class="clearfix"></div>
+        <label class="col-md-12">Palabras claves dividas por ,<br/>
+            <input type="text" name="keywords" value="<?= $producto["keywords"] ?>">
+        </label>
+        <div class="clearfix"></div>
+        <label class="col-md-12">Descripción breve<br/>
+            <textarea name="description"><?= trim($producto["description"]) ?></textarea>
+        </label>
+        <br/>
+        <div class="clearfix"></div>
+        <div class="col-md-12">
             <div class="form-group form-check mt-10">
                 <?php if ($producto["meli"] == '') {
                     if (isset($_GET['code']) || isset($_SESSION['access_token'])) {
@@ -224,7 +259,7 @@ if (isset($_POST["agregar"])) {
                                 }
                             }
                         }
-                        echo '<input type="checkbox" class="form-check-input" id="meli" name="meli" value="1"> <label class="form-check-label" for="meli">¿Publicar en MercadoLibre?</label>';
+                        echo '<input type="checkbox" class="form-check-input" id="meli" name="meli" value="1"> <label class="form-check-label " style="font-size:19px" for="meli">¿Publicar en MercadoLibre?</label>';
                     } else {
                         echo '<div class="ml-0 pl-0 mt-20 mb-20"><a  target="_blank" href="' . $meli->getAuthUrl($redirectURI, Meli::$AUTH_URL[$siteId]) . '"><img src="' . URL . '/img/meli.png" width="30" /> ¿Ingresar a Mercadolibre para publicar el producto <i class="fa fa-square green">?</i></a></div>';
                     }
@@ -233,20 +268,21 @@ if (isset($_POST["agregar"])) {
                     <b>ID MERCADOLIBRE :</b> <?= $producto["meli"] ?>
                 <?php } ?>
             </div>
-            <br/>
-            <div class="col-md-12">
-                <div class="row">
-                    <?php
-                    $imagenes->imagenesAdmin();
-                    ?>
-                </div>
-            </div>
-            <label class="col-md-7">Imágenes:<br/>
-                <input type="file" id="file" name="files[]" multiple="multiple" accept="image/*"/>
-            </label>
-            <br/>
-            <div class="clearfix"><br/></div>
-            <div class="col-md-12">
-                <input type="submit" class="btn btn-primary" name="agregar" value="Modificar Productos"/>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-12">
+            <div class="row">
+                <?php
+                $imagenes->imagenesAdmin();
+                ?>
             </div>
         </div>
+        <label class="col-md-7">Imágenes:<br/>
+            <input type="file" id="file" name="files[]" multiple="multiple" accept="image/*"/>
+        </label>
+        <br/>
+        <div class="clearfix"><br/></div>
+        <div class="col-md-12">
+            <input type="submit" class="btn btn-primary" name="agregar" value="Modificar Productos"/>
+        </div>
+</div>
